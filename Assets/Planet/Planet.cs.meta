@@ -1,0 +1,13 @@
+fileFormatVersion: 2
+guid: 2191060f6c8fd044fa3e35cbaa05e1d0
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - earthTexture: {instanceID: 0}
+  - earthMaterial: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
