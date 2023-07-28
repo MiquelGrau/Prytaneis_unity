@@ -111,4 +111,27 @@ public class Planet : MonoBehaviour {
             }
         }
     }
+
+    public TerrainFace[] GetTerrainFaces()
+    {
+        return terrainFaces;
+    }
+
+    public float GetHeightAtLatLon(float lat, float lon)
+    {
+        // Convertir latitud i longitud a coordenades UV
+        float u = (lon + 180) / 360f;
+        float v = (lat + 90) / 180f;
+
+        // Accedir al píxel corresponent del heightMap
+        Color heightColor = heightMap.GetPixelBilinear(u, v);
+
+        // Convertir el color a una altura (suposant que l'altura està emmagatzemada en l'escala de grisos)
+        float height = heightColor.grayscale;
+
+        // Escalar l'altura amb el heightMultiplier
+        height *= heightMultiplier;
+
+        return height;
+    }
 }
