@@ -1,10 +1,20 @@
 using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 
 public class Marker : MonoBehaviour
 {
     public string cityName;
     public Vector3 position;
+    
+    private void OnMouseDown()
+    {
+        // Guarda el nom de la ciutat a PlayerPrefs per accedir-hi a la següent escena
+        PlayerPrefs.SetString("SelectedCity", cityName);
+
+        // Canvia a l'escena de la ciutat
+        SceneManager.LoadScene("CityScene");
+    }
 }
 
 public class MarkersManager : MonoBehaviour
