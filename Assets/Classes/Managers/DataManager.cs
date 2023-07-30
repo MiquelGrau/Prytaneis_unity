@@ -2,27 +2,29 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 
-public class DataManager<T> : MonoBehaviour where T : class
+public class DataManager<T> : MonoBehaviour where T : class, new() 
 {
     private string dataPath;
-    public List<T> dataItems;
+    public T dataItems;
 
     private void Awake()
     {
-        dataPath = Path.Combine(Application.persistentDataPath, typeof(T).Name + ".json");
+        dataPath = Path.Combine(Application.persistentDataPath, "CityData.json");
         LoadData();
     }
 
-    public void LoadData()
+   public void LoadData()
     {
         if (File.Exists(dataPath))
         {
             string json = File.ReadAllText(dataPath);
-            dataItems = JsonUtility.FromJson<List<T>>(json);
+            dataItems = JsonUtility.FromJson<T>(json);
+            Debug.Log("Dades carregades: " + json);
         }
         else
         {
-            dataItems = new List<T>();
+            dataItems = new T();
+            Debug.LogError("No es pot trobar el fitxer JSON. Es crea una nova instància buida de dataItems.");
         }
     }
 

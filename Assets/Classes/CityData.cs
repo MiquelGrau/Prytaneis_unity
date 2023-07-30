@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 [System.Serializable]
 public class CityData
 {
@@ -7,4 +9,8 @@ public class CityData
     // Afegir qualsevol altre camp que necessitis
 }
 
-
+[System.Serializable]
+public class CityDataList
+{
+    public List<CityData> cities;
+}
