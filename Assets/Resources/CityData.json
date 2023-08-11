@@ -1,0 +1,18 @@
+{
+    "cities": [
+      {
+        "cityName": "NomDeLaCiutat",
+        "latitude": 0.0,
+        "longitude": 0.0,
+        "buildings": [],
+        "grid": [
+          ["House1", "House2", "House1", "StoneRoad1", "House1"],
+          ["House1", "House2", "House1", "StoneRoad1", "House1"],
+          ["House1", "House2", "House1", "StoneRoad1", "House1"],
+          ["House1", "House2", "House1", "StoneRoad1", "House1"],
+          ["House1", "House2", "House1", "StoneRoad1", "House1"]
+        ]
+      }
+    ]
+  }
+  

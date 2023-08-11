@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
+using System.Linq;
+using Newtonsoft.Json;
 
 public class DataManager<T> : MonoBehaviour where T : class, new() 
 {
@@ -9,28 +11,35 @@ public class DataManager<T> : MonoBehaviour where T : class, new()
 
     private void Awake()
     {
-        dataPath = Path.Combine(Application.persistentDataPath, "CityData.json");
-        LoadData();
-    }
-
-   public void LoadData()
-    {
-        if (File.Exists(dataPath))
+        TextAsset cityDataAsset = Resources.Load<TextAsset>("CityData");
+        if(cityDataAsset != null)
         {
-            string json = File.ReadAllText(dataPath);
-            dataItems = JsonUtility.FromJson<T>(json);
-            Debug.Log("Dades carregades: " + json);
+            dataItems = JsonConvert.DeserializeObject<T>(cityDataAsset.text);
+            Debug.Log("Dades carregades: " + cityDataAsset.text);
+
+            if(dataItems == null)
+            {
+                Debug.LogError("La deserialització ha fallat. Es pot que el format JSON no coincideixi amb l'estructura de dades esperada.");
+            }
+            else
+            {
+                CityDataList dataList = dataItems as CityDataList;
+                if (dataList != null && dataList.cities != null && dataList.cities.Count > 0)
+                {
+                    Debug.Log("Detalls del grid de la ciutat: " + (dataList.cities[0].grid == null ? "NULL" : "NOT NULL"));
+                }
+            }
         }
         else
         {
             dataItems = new T();
-            Debug.LogError("No es pot trobar el fitxer JSON. Es crea una nova instància buida de dataItems.");
+            Debug.LogError("No es pot trobar el fitxer CityData.json a la carpeta Resources.");
         }
     }
 
     public void SaveData()
     {
-        string json = JsonUtility.ToJson(dataItems, prettyPrint: true);
+        string json = JsonConvert.SerializeObject(dataItems, Formatting.Indented); // Use Formatting.Indented for pretty print
         File.WriteAllText(dataPath, json);
     }
 }

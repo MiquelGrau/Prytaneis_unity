@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.IO;
+using Newtonsoft.Json;
 
 public class BuildingDataManager : MonoBehaviour
 {
@@ -20,7 +21,11 @@ public class BuildingDataManager : MonoBehaviour
         if (buildingData != null)
         {
             string json = buildingData.text;
-            buildingDefinitions = JsonUtility.FromJson<BuildingDefinitionCollection>(json);
+            buildingDefinitions = new BuildingDefinitionCollection();
+            
+            // Utilitza Newtonsoft.Json per a la deserialització
+            buildingDefinitions.buildings = JsonConvert.DeserializeObject<Dictionary<string, BuildingDefinition>>(json);
+            
             Debug.Log("Building data loaded: " + json);
         }
         else
@@ -36,6 +41,25 @@ public class BuildingDataManager : MonoBehaviour
             return buildingDefinitions.buildings[buildingType];
         }
         return null;
+    }
+
+    public GameObject GetBuildingPrefab(BuildingDefinition buildingDef)
+    {
+        if (buildingDef == null)
+            return null;
+
+        if (!buildingPrefabs.ContainsKey(buildingDef.prefabName))
+        {
+            // Aquí intentes carregar el prefab des dels recursos
+            GameObject prefab = Resources.Load<GameObject>("Prefab/Buildings/" + buildingDef.prefabName);
+            if (prefab == null)
+            {
+                Debug.LogError($"No es pot trobar el prefab amb el nom {buildingDef.prefabName}");
+                return null;
+            }
+            buildingPrefabs[buildingDef.prefabName] = prefab;
+        }
+        return buildingPrefabs[buildingDef.prefabName];
     }
 
     public void InstantiateHouse(Vector3 position)

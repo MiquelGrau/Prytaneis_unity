@@ -3,7 +3,10 @@ using UnityEngine;
 [System.Serializable]
 public class BuildingDefinition
 {
-    public string buildingType;  // Nom de l'edifici (e.g., "Hospital1")
-    public Vector2Int size;      // Mida de l'edifici dins de la matriu/grid (e.g., 4x3)
-    public GameObject prefab;    // Prefab d'Unity per representar visualment aquest edifici
+    public string buildingType; // nom del tipus d'edifici, ex: "House1"
+    public string prefabName;   // el nom del prefab a la carpeta Resources
+    public int width;
+    public int height;
+    // altres propietats si són necessàries
 }
+

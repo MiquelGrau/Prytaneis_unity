@@ -1,14 +1,17 @@
 {
     "House1": {
+      "prefabName": "House1",
       "width": 1,
       "height": 1
     },
-    "Hospital1": {
-      "width": 4,
-      "height": 3
+    "StoneRoad1": {
+      "prefabName": "StoneRoad1",
+      "width": 1,
+      "height": 1
     },
-    "Hospital2": {
-      "width": 2,
-      "height": 3
+    "House2": {
+      "prefabName": "House2",
+      "width": 1,
+      "height": 1
     }
 }

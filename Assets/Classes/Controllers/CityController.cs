@@ -37,13 +37,21 @@ public class CityController : MonoBehaviour
 
     void PlaceBuilding(BuildingDefinition buildingDef, Vector2Int position)
     {
-        if (buildingDef == null || buildingDef.prefab == null)
+        if (buildingDef == null)
         {
-            Debug.LogError($"No s'ha trobat el prefab per a l'edifici {buildingDef.buildingType}");
+            Debug.LogError("Definició d'edifici nul·la proporcionada.");
+            return;
+        }
+
+        GameObject buildingPrefab = buildingDataManager.GetBuildingPrefab(buildingDef);
+        if (buildingPrefab == null)
+        {
+            Debug.LogError($"No es pot trobar el prefab per a l'edifici {buildingDef.buildingType}");
             return;
         }
 
         Vector3 spawnPosition = new Vector3(position.x, 0, position.y);
-        Instantiate(buildingDef.prefab, spawnPosition, Quaternion.identity);
+        Instantiate(buildingPrefab, spawnPosition, Quaternion.identity);
     }
+
 }

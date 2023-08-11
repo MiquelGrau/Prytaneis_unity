@@ -7,9 +7,8 @@ public class CityData
     public string cityName;
     public float latitude;
     public float longitude;
-    public List<BuildingInstanceData> buildings; // Llista d'edificis a la ciutat
-
-    // Afegir qualsevol altre camp que necessitis
+    public List<BuildingInstanceData> buildings;
+    public string[][] grid;
 }
 
 [System.Serializable]
