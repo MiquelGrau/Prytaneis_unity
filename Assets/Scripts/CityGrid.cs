@@ -53,12 +53,10 @@ public class CityGrid : MonoBehaviour
             for (int x = 0; x < currentCity.grid[y].Length; x++)
             {
                 string buildingType = currentCity.grid[y][x];
-                
-                // Si és una referència a una altra posició, l'ignorem (com "ref-0,4")
+
                 if (buildingType.StartsWith("ref-"))
                     continue;
 
-                // Obtenir la definició de l'edifici
                 BuildingDefinition buildingDef = buildingDataManager.GetBuildingDefinition(buildingType);
                 if(buildingDef == null)
                 {
@@ -66,13 +64,6 @@ public class CityGrid : MonoBehaviour
                     continue;
                 }
 
-                // Calcular la posició
-                float isoX = (x - y) * cellSize;
-                float isoZ = (x + y) * cellSize * 0.5f;
-                Vector3 position = new Vector3(isoX, 0, isoZ);
-
-
-                // Obté el prefab basant-te en la definició de l'edifici
                 GameObject buildingPrefab = buildingDataManager.GetBuildingPrefab(buildingDef);
                 if (buildingPrefab == null)
                 {
@@ -80,10 +71,12 @@ public class CityGrid : MonoBehaviour
                     continue;
                 }
 
-                // Instanciar el prefab a la posició correcta
+                float posX = (x * cellSize + y * cellSize) / 2f;
+                float posZ = (x * cellSize - y * cellSize) / 4f;
+                Vector3 position = new Vector3(posX, 0, posZ);
+
                 Instantiate(buildingPrefab, position, Quaternion.identity, transform);
             }
         }
-
     }
 }
