@@ -6,10 +6,10 @@ public class ResourceManager : MonoBehaviour
 {
     public List<Resource> resources;
 
-    //public static List<Resource> AllResources = new List<Resource>();
+    public static List<Resource> AllResources = new List<Resource>();
     // blank, to be filled through the json 
     
-    public static List<Resource> AllResources = new List<Resource>
+    /* public static List<Resource> AllResources = new List<Resource>
     {   // ID, nom, current quantity, base price, current price, weight. Current values must be zero
         new Resource(0, "Fusta", 0, 10, 0, 10),
         new Resource(1, "Pedra", 0, 15, 0, 10),
@@ -20,7 +20,7 @@ public class ResourceManager : MonoBehaviour
         new Resource(6, "Peix", 0, 30, 0, 10),
         new Resource(7, "Carn", 0, 30, 0, 10),
         // Afegeix tots els recursos aquí...
-    };
+    }; */
 
     void Start() {
         LoadResources();
@@ -31,25 +31,35 @@ public class ResourceManager : MonoBehaviour
     public void LoadResources()
     {
         // Carrega el fitxer JSON. Nota: no incloguis l'extensió del fitxer
-        TextAsset jsonFile = Resources.Load<TextAsset>("DDBB_Resource/resource_definition_basic"); 
-        
-        ResourceListString resourceListString = JsonUtility.FromJson<ResourceListString>(jsonFile.text); 
-
-        foreach (ResourceString resourceString in resourceListString.resources)
+        TextAsset[] jsonFiles = Resources.LoadAll<TextAsset>("DDBB_Resource");  // ALL files in that folder
+        if (jsonFiles.Length == 0)
         {
-            // Convertim les strings a números
-            int id = int.Parse(resourceString.resourceID);
-            int qty = string.IsNullOrEmpty(resourceString.resourceQty) ? 0 : int.Parse(resourceString.resourceQty);
-            int bPrice = int.Parse(resourceString.basePrice);
-            int cPrice = string.IsNullOrEmpty(resourceString.currentPrice) ? 0 : int.Parse(resourceString.currentPrice);
-            float bWeight = float.Parse(resourceString.baseWeight);
+            Debug.Log("No s'han trobat fitxers JSON dins de DDBB_Resource.");
+            return;
+        }
+        foreach (TextAsset jsonFile in jsonFiles)
+        {
+            Debug.Log($"Processant fitxer {jsonFile.name}...");
+            // El següent codi processa un fitxer JSON tal com ho estaves fent
+            ResourceListString resourceListString = JsonUtility.FromJson<ResourceListString>(jsonFile.text); 
 
-            // Ara crea una nova instància de Resource amb les dades convertides
-            Resource resource = new Resource(id, resourceString.resourceName, qty, bPrice, cPrice, bWeight);
+        
+            foreach (ResourceString resourceString in resourceListString.resource_jsonfile)
+            {
+                // Convertim les strings a números
+                int id = int.Parse(resourceString.resourceID);
+                int qty = string.IsNullOrEmpty(resourceString.resourceQty) ? 0 : int.Parse(resourceString.resourceQty);
+                int bPrice = int.Parse(resourceString.basePrice);
+                int cPrice = string.IsNullOrEmpty(resourceString.currentPrice) ? 0 : int.Parse(resourceString.currentPrice);
+                float bWeight = float.Parse(resourceString.baseWeight);
 
-            // Assigna la nova instància a la llista de AllResources
-            AllResources.Add(resource);
-            Debug.Log("Resource ID: " + id + ", Name: " + resource.resourceName + ", Quantity: " + qty + ", Price: " + cPrice);
+                // Ara crea una nova instància de Resource amb les dades convertides
+                Resource resource = new Resource(id, resourceString.resourceName, qty, bPrice, cPrice, bWeight);
+
+                // Assigna la nova instància a la llista de AllResources
+                AllResources.Add(resource);
+                Debug.Log("Resource ID: " + id + ", Name: " + resource.resourceName + ", Quantity: " + qty + ", Price: " + cPrice);
+            }
         }
     }
 
