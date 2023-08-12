@@ -1,0 +1,22 @@
+{
+    "House1": {
+      "prefabName": "House1",
+      "width": 1,
+      "height": 1
+    },
+    "House2": {
+      "prefabName": "House2",
+      "width": 1,
+      "height": 1
+    },
+    "StoneRoad1": {
+      "prefabName": "StoneRoad1",
+      "width": 1,
+      "height": 1
+    },
+    "Market1": {
+      "prefabName": "Market1",
+      "width": 1,
+      "height": 1
+    }
+}

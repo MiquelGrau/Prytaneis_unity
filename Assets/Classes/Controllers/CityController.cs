@@ -4,6 +4,7 @@ using TMPro;
 public class CityController : MonoBehaviour
 {
     public CityDataManager cityDataManager;
+    public BuildingDataManager buildingDataManager; // Referència afegida
     public TMP_Text cityNameText;
 
     void Start()
@@ -20,8 +21,37 @@ public class CityController : MonoBehaviour
 
     void DisplayCityData(CityData cityData)
     {
-        // Aquí, actualitza la UI o qualsevol altre component de la cityScene amb la informació de cityData.
-        // Per exemple, si tens un text que mostra el nom de la ciutat:
         cityNameText.text = cityData.cityName;
+        
+        // Aquí, també hauries de carregar i mostrar els edificis basats en cityData.buildings
+        foreach (var building in cityData.buildings)
+        {
+            // Obtenir la definició de l'edifici a partir de BuildingDataManager
+            BuildingDefinition buildingDef = buildingDataManager.GetBuildingDefinition(building.buildingType);
+
+            // Utilitza aquesta informació per crear/instància els edificis en la posició correcta
+            // Potser necessitaràs una funció o lògica per fer això
+            PlaceBuilding(buildingDef, building.position);
+        }
     }
+
+    void PlaceBuilding(BuildingDefinition buildingDef, Vector2Int position)
+    {
+        if (buildingDef == null)
+        {
+            Debug.LogError("Definició d'edifici nul·la proporcionada.");
+            return;
+        }
+
+        GameObject buildingPrefab = buildingDataManager.GetBuildingPrefab(buildingDef);
+        if (buildingPrefab == null)
+        {
+            Debug.LogError($"No es pot trobar el prefab per a l'edifici {buildingDef.buildingType}");
+            return;
+        }
+
+        Vector3 spawnPosition = new Vector3(position.x, 0, position.y);
+        Instantiate(buildingPrefab, spawnPosition, Quaternion.identity);
+    }
+
 }
