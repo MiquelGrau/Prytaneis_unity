@@ -11,7 +11,9 @@ public class CityData
     public float longitude;
     public List<InventoryItem> cityInventory = new List<InventoryItem>();
     public int money;
-
+    
+    public List<BuildingInstanceData> buildings;
+    public string[][] grid;
     
 }
 
@@ -20,4 +22,11 @@ public class CityData
 public class CityDataList
 {
     public List<CityData> cities;
+}
+
+[System.Serializable]
+public class BuildingInstanceData
+{
+    public string buildingType; // per exemple: "Hospital1", "SmallHouse2", etc.
+    public Vector2Int position; // posició de l'edifici dins de la matriu/grid de la ciutat
 }
