@@ -1,10 +1,13 @@
 {
     "cities": [
       {
+        "cityID": "0",
         "cityName": "Barcelona",
         "latitude": 41.3888,
         "longitude": 2.1629,
         "buildings": [],
+        "money": "12000",
+        "inventoryID": "0",
         "grid": [
           ["House1", "House2", "Market1", "StoneRoad1", "House1"],
           ["House1", "House1", "House1", "StoneRoad1", "House2"],
@@ -13,10 +16,13 @@
         ]
       },
       {
+        "cityID": "1",
         "cityName": "Valencia",
         "latitude": 39.4623,
         "longitude": -0.3833,
         "buildings": [],
+        "money": "12000",
+        "inventoryID": "1",
         "grid": [
           ["House1", "House2", "Market1", "StoneRoad1", "House1"],
           ["House1", "House1", "House1", "StoneRoad1", "House2"],
@@ -25,10 +31,13 @@
         ]
       },
       {
+        "cityID": "2",
         "cityName": "Roma",
         "latitude": 41.9031,
         "longitude": 12.4742,
         "buildings": [],
+        "money": "12000",
+        "inventoryID": "2",
         "grid": [
           ["House1", "House2", "Market1", "StoneRoad1", "House1"],
           ["House1", "House1", "House1", "StoneRoad1", "House2"],
@@ -37,10 +46,13 @@
         ]
       },
       {
+        "cityID": "3",
         "cityName": "Firenze",
         "latitude": 43.7617,
         "longitude": 11.2904,
         "buildings": [],
+        "money": "12000",
+        "inventoryID": "3",
         "grid": [
           ["House1", "House2", "Market1", "StoneRoad1", "House1"],
           ["House1", "House1", "House1", "StoneRoad1", "House2"],
@@ -49,10 +61,13 @@
         ]
       },
       {
+        "cityID": "4",
         "cityName": "Marseilles",
         "latitude": 43.2933,
         "longitude": 5.3759,
         "buildings": [],
+        "money": "12000",
+        "inventoryID": "4",
         "grid": [
           ["House1", "House2", "House1", "House1", "House1"],
           ["House1", "House1", "House1", "House2", "House2"],

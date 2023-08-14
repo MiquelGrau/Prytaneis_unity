@@ -1,0 +1,32 @@
+{
+    "agents": [
+        {
+            "agentID": "1",
+            "agentName": "Morosini",
+            "currentCityID": "0",
+            "money": "500",
+            "inventoryID": "5"
+        },
+        {
+            "agentID": "2",
+            "agentName": "Medici",
+            "currentCityID": "0",
+            "money": "250",
+            "inventoryID": "6"
+        },
+        {
+            "agentID": "3",
+            "agentName": "de Bruyn",
+            "currentCityID": "1",
+            "money": "400",
+            "inventoryID": "7"
+        },
+        {
+            "agentID": "4",
+            "agentName": "Uccello",
+            "currentCityID": "1",
+            "money": "800",
+            "inventoryID": "8"
+        }
+    ]
+}

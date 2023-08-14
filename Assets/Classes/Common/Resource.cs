@@ -23,10 +23,12 @@ public class Resource
         currentPrice = currentP;
         baseWeight = baseW;
     }
-
     
-
-    
+    // Aquí afegeixes la teva funció ToString personalitzada
+    public override string ToString()
+    {
+        return $"{resourceID}: {resourceName}, {basePrice} €";
+    }
 
 }
 
@@ -50,6 +52,6 @@ public class ResourceString     // classe per llegir JSONs, primer tot string i 
 [System.Serializable]
 public class ResourceListString
 {
-    public List<ResourceString> resources;
+    public List<ResourceString> resource_jsonfile;
 }
 
