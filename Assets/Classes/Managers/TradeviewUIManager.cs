@@ -30,17 +30,7 @@ public class TradeviewUIManager : MonoBehaviour
         
         gameManager = FindObjectOfType<GameManager>();
 
-        // Configura els botons amb les seves funcions corresponents
-        Ag1toRoma.onClick.AddListener(MoveMorosiniToRoma);
-        Ag1toBarcelona.onClick.AddListener(MoveMorosiniToBarcelona);
-        Ag2toRoma.onClick.AddListener(MoveMediciToRoma);
-        Ag2toBarcelona.onClick.AddListener(MoveMediciToBarcelona);
-
-        // Defineix les posicions
-        morosiniBarcelonaPosition = new Vector2(50, 150);
-        morosiniRomaPosition = new Vector2(50, 150);
-        mediciBarcelonaPosition = new Vector2(150, 150);
-        mediciRomaPosition = new Vector2(150, 150);
+        
     }
     
     private void Update()
