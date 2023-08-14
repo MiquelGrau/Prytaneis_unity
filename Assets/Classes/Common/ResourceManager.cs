@@ -7,21 +7,7 @@ public class ResourceManager : MonoBehaviour
     public List<Resource> resources;
 
     public static List<Resource> AllResources = new List<Resource>();
-    // blank, to be filled through the json 
     
-    /* public static List<Resource> AllResources = new List<Resource>
-    {   // ID, nom, current quantity, base price, current price, weight. Current values must be zero
-        new Resource(0, "Fusta", 0, 10, 0, 10),
-        new Resource(1, "Pedra", 0, 15, 0, 10),
-        new Resource(2, "Ferro", 0, 30, 0, 10),
-        new Resource(3, "Bronze", 0, 30, 0, 10),
-        new Resource(4, "Or", 0, 30, 0, 10),
-        new Resource(5, "Plata", 0, 30, 0, 10),
-        new Resource(6, "Peix", 0, 30, 0, 10),
-        new Resource(7, "Carn", 0, 30, 0, 10),
-        // Afegeix tots els recursos aquí...
-    }; */
-
     void Start() {
         LoadResources();
     }
@@ -58,11 +44,11 @@ public class ResourceManager : MonoBehaviour
 
                 // Assigna la nova instància a la llista de AllResources
                 AllResources.Add(resource);
-                Debug.Log("Resource ID: " + id + ", Name: " + resource.resourceName + ", Quantity: " + qty + ", Price: " + cPrice);
+                //Debug.Log("Resource ID: " + id + ", Name: " + resource.resourceName + ", Quantity: " + qty + ", Price: " + cPrice);
             }
         }
     }
-
+    
     
     // es cridarà sempre que fem servir inventaris, per donar des del ID a la resta de propietats
     public static Resource GetResourceById(int resourceID)

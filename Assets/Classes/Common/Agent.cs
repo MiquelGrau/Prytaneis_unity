@@ -7,11 +7,29 @@ public class Agent
 {
     public int agentID;
     public string agentName;
-    public int currentCityID; // Canviat a un tipus int per emmagatzemar la ID de la ciutat actual
-    public List<InventoryItem> agentInventory = new List<InventoryItem>();
+    public int currentCityID; 
+    public int inventoryID; 
     public int money;
-
-
     
 }
+
+[System.Serializable]
+public class AgentString
+{
+    public string agentID;
+    public string agentName;
+    public string currentCityID;
+    public string inventoryID;
+    public string money;
+    
+}
+
+[System.Serializable]
+public class AgentListString
+{
+    public List<AgentString> agents;
+}
+
+
+
 

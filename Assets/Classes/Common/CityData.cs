@@ -9,7 +9,7 @@ public class CityData
     public string cityName;
     public float latitude;
     public float longitude;
-    public List<InventoryItem> cityInventory = new List<InventoryItem>();
+    public int inventoryID;  // Canviat, aixi va amb ID de inventari
     public int money;
     
     public List<BuildingInstanceData> buildings;
