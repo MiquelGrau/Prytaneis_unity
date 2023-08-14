@@ -41,10 +41,10 @@ public class TradeviewUIManager : MonoBehaviour
         Ag2toBarcelona.onClick.AddListener(MoveMediciToBarcelona);
 
         // Defineix les posicions
-        morosiniBarcelonaPosition = new Vector2(Screen.width / 2 - 150, Screen.height / 4);
-        morosiniRomaPosition = new Vector2(Screen.width / 2 - 150, -Screen.height / 4);
-        mediciBarcelonaPosition = new Vector2(Screen.width / 2 - 150, Screen.height / 4 - 30);
-        mediciRomaPosition = new Vector2(Screen.width / 2 - 150, -Screen.height / 4 - 30);
+        morosiniBarcelonaPosition = new Vector2(50, 150);
+        morosiniRomaPosition = new Vector2(50, 150);
+        mediciBarcelonaPosition = new Vector2(150, 150);
+        mediciRomaPosition = new Vector2(150, 150);
     }
     
     private void Update()

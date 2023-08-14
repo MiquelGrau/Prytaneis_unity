@@ -50,17 +50,21 @@ public class CityGrid : MonoBehaviour
 
         for (int y = 0; y < currentCity.grid.Length; y++)
         {
-            for (int x = 0; x < currentCity.grid[y].Length; x++)
+            for (int x = 0; x < currentCity.grid[y].Length;)
             {
                 string buildingType = currentCity.grid[y][x];
 
                 if (buildingType.StartsWith("ref-"))
+                {
+                    x++;
                     continue;
+                }
 
                 BuildingDefinition buildingDef = buildingDataManager.GetBuildingDefinition(buildingType);
                 if(buildingDef == null)
                 {
                     Debug.LogError($"No es pot trobar la definició per a l'edifici de tipus {buildingType}");
+                    x++;
                     continue;
                 }
 
@@ -68,6 +72,7 @@ public class CityGrid : MonoBehaviour
                 if (buildingPrefab == null)
                 {
                     Debug.LogError($"No es pot trobar el prefab per a l'edifici de tipus {buildingType}");
+                    x++;
                     continue;
                 }
 
@@ -75,8 +80,12 @@ public class CityGrid : MonoBehaviour
                 float posZ = (x * cellSize - y * cellSize) / 4f;
                 Vector3 position = new Vector3(posX, 0, posZ);
 
-                Instantiate(buildingPrefab, position, Quaternion.identity, transform);
+                GameObject instance = Instantiate(buildingPrefab, position, Quaternion.identity, transform);
+                instance.transform.localScale = new Vector3(buildingDef.width, 1, buildingDef.height);
+
+                x += buildingDef.width;
             }
         }
+
     }
 }

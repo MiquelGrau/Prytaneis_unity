@@ -54,10 +54,11 @@
         "longitude": 5.3759,
         "buildings": [],
         "grid": [
-          ["House1", "House2", "Market1", "StoneRoad1", "House1"],
-          ["House1", "House1", "House1", "StoneRoad1", "House2"],
-          ["House2", "House2", "House1", "StoneRoad1", "House1"],
-          ["House1", "House2", "House2", "Market1", "House1"]
+          ["House1", "House2", "House1", "House1", "House1"],
+          ["House1", "House1", "House1", "House2", "House2"],
+          ["House2", "House2", "Market1", "ref-", "House1"],
+          ["House1", "House2", "ref-", "ref-", "House1"],
+          ["House1", "House2", "House2", "House1", "House1"]
         ]
       }
     ]
