@@ -12,6 +12,9 @@ public class TradeviewUIManager : MonoBehaviour
     public TMP_Text citiesListText;
     public TMP_Text agentsListText;
 
+    public TMP_Dropdown agentDropdown;
+    private List<Agent> allAgents = new List<Agent>(); 
+
     private InventoryList inventoryList;
     private InventoryManager inventoryManager;
     private GameManager gameManager;
@@ -26,10 +29,10 @@ public class TradeviewUIManager : MonoBehaviour
         cityDataManager = FindObjectOfType<CityDataManager>();
         agentManager = FindObjectOfType<AgentManager>();
         inventoryManager = FindObjectOfType<InventoryManager>();
-        UpdateUI();  // Actualitza la UI al començar
-        
         gameManager = FindObjectOfType<GameManager>();
-
+        PopulateAgentDropdown();
+        
+        UpdateUI();  // Actualitza la UI al començar
         
     }
     
@@ -90,6 +93,41 @@ public class TradeviewUIManager : MonoBehaviour
         //Debug.Log("Començant a generar la cadena d'agents. Nombre d'agents: " + agentManager.agents.Count);
         return result;
         
+    }
+
+    private void PopulateAgentDropdown()
+    {
+        Debug.Log("AgentManager: " + agentManager);
+        if (agentManager == null)
+        {
+            Debug.LogError("agentManager és null!");
+            return;
+        }
+
+        allAgents = agentManager.GetAgents(); 
+        
+        if (allAgents == null)
+        {
+            Debug.LogError("allAgents és null després de cridar GetAgents!");
+            return;
+        }
+        
+        Debug.Log("Nombre d'agents: " + allAgents.Count);
+        
+        agentDropdown.ClearOptions();
+
+        List<string> agentNames = new List<string>();
+        foreach (Agent agent in allAgents)
+        {
+            agentNames.Add(agent.agentName); 
+        }
+
+        agentDropdown.AddOptions(agentNames);
+    }
+    private Agent GetCurrentAgent()
+    {
+        int index = agentDropdown.value;
+        return agentManager.agents[index];
     }
 
 }

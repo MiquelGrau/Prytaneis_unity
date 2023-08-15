@@ -40,10 +40,13 @@ public class AgentManager : MonoBehaviour
     }
 
 
-    // Agents
+    // Constructors varios
     public Agent GetAgentById(int id)
     {
         return agents.Find(agent => agent.agentID == id);
     }
-    
+    public List<Agent> GetAgents()
+    {
+        return agents;
+    }
 }
