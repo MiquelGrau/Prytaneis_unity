@@ -8,9 +8,11 @@ public class InventoryList
     public int inventoryID;
     public List<InventoryItem> inventoryitems; // No la diem Item directament per no barrejar amb els objectes
 
+    
     public InventoryList(int inventoryID)
     {
         this.inventoryID = inventoryID;
+        this.inventoryitems = new List<InventoryItem>();
     }
 
     public class InventoryItem
@@ -32,5 +34,20 @@ public class InventoryList
         return JsonUtility.FromJson<InventoryList>(jsonFile.text);
     }
 
+}
+
+[System.Serializable]
+public class InventoryListString
+{
+    public string inventoryID;
+    public List<InventoryItemString> inventoryitems;
+}
+
+[System.Serializable]
+public class InventoryItemString
+{
+    public string resourceID;
+    public string quantity;
+    public string currentPrice;
 }
 

@@ -6,7 +6,7 @@
         "latitude": 41.3888,
         "longitude": 2.1629,
         "buildings": [],
-        "money": "12000",
+        "money": "10000",
         "inventoryID": "0",
         "grid": [
           ["House1", "House2", "Market1", "StoneRoad1", "House1"],
@@ -21,7 +21,7 @@
         "latitude": 39.4623,
         "longitude": -0.3833,
         "buildings": [],
-        "money": "12000",
+        "money": "11000",
         "inventoryID": "1",
         "grid": [
           ["House1", "House2", "Market1", "StoneRoad1", "House1"],
@@ -51,7 +51,7 @@
         "latitude": 43.7617,
         "longitude": 11.2904,
         "buildings": [],
-        "money": "12000",
+        "money": "13000",
         "inventoryID": "3",
         "grid": [
           ["House1", "House2", "Market1", "StoneRoad1", "House1"],
@@ -66,7 +66,7 @@
         "latitude": 43.2933,
         "longitude": 5.3759,
         "buildings": [],
-        "money": "12000",
+        "money": "15000",
         "inventoryID": "4",
         "grid": [
           ["House1", "House2", "House1", "House1", "House1"],

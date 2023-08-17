@@ -1,8 +1,33 @@
 {
     "inventory_jsonfile": [
         {
+            "inventoryID": "0",
+            "inventoryitems": [
+                {
+                    "resourceID": "0",
+                    "quantity": "6",
+                    "currentPrice": "10"
+                },
+                {
+                    "resourceID": "1",
+                    "quantity": "6",
+                    "currentPrice": "10"
+                },
+                {
+                    "resourceID": "3",
+                    "quantity": "6",
+                    "currentPrice": "10"
+                },
+                {
+                    "resourceID": "5",
+                    "quantity": "20",
+                    "currentPrice": "8"
+                }
+            ]
+        },
+        {
             "inventoryID": "1",
-            "items": [
+            "inventoryitems": [
                 {
                     "resourceID": "0",
                     "quantity": "10",
@@ -17,7 +42,7 @@
         },
         {
             "inventoryID": "2",
-            "items": [
+            "inventoryitems": [
                 {
                     "resourceID": "1",
                     "quantity": "6",
@@ -32,7 +57,7 @@
         },
         {
             "inventoryID": "3",
-            "items": [
+            "inventoryitems": [
                 {
                     "resourceID": "3",
                     "quantity": "15",
@@ -47,7 +72,7 @@
         },
         {
             "inventoryID": "4",
-            "items": [
+            "inventoryitems": [
                 {
                     "resourceID": "3",
                     "quantity": "15",
@@ -62,7 +87,7 @@
         },
         {
             "inventoryID": "5",
-            "items": [
+            "inventoryitems": [
                 {
                     "resourceID": "3",
                     "quantity": "15",
@@ -77,7 +102,7 @@
         },
         {
             "inventoryID": "6",
-            "items": [
+            "inventoryitems": [
                 {
                     "resourceID": "3",
                     "quantity": "15",
@@ -92,7 +117,7 @@
         },
         {
             "inventoryID": "7",
-            "items": [
+            "inventoryitems": [
                 {
                     "resourceID": "3",
                     "quantity": "15",
@@ -107,7 +132,7 @@
         },
         {
             "inventoryID": "8",
-            "items": [
+            "inventoryitems": [
                 {
                     "resourceID": "1",
                     "quantity": "20",
