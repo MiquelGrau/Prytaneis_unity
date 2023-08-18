@@ -6,11 +6,13 @@ using UnityEngine.UI;
 public class TradeviewUIManager : MonoBehaviour
 {
     // Textos basics
-    public TMP_Text barcelonaNameText;
-    public TMP_Text barcelonaMoneyText;
-    
-    // Temporal mentre estem en proves
+    public TMP_Text currCityNameText;
+    public TMP_Text currCityMoneyText;
     public TMP_Text cityInventoryText;
+    private float updateInterval = 5f; // Interval d'actualització en segons
+    private float timer = 0f; // Comptador de temps
+
+    // Temporal mentre estem en proves
     public TMP_Text allResourcesText;
     public TMP_Text citiesListText;
     public TMP_Text agentsListText;
@@ -26,6 +28,7 @@ public class TradeviewUIManager : MonoBehaviour
     private AgentManager agentManager;
     
     // Visualitzacions d'inventaris de ciutat i agent
+    public GameObject tradeLinePrefab;
     public RectTransform cityResourceListContainer;
     public RectTransform agentResourceListContainer;
 
@@ -37,7 +40,9 @@ public class TradeviewUIManager : MonoBehaviour
         inventoryManager.DebugPrintAllInventories();
         gameManager = FindObjectOfType<GameManager>();
         PopulateCityDropdown();
+        cityDropdown.onValueChanged.AddListener(delegate { OnCityDropdownChange(); });
         PopulateAgentDropdown();
+        agentDropdown.onValueChanged.AddListener(delegate { OnAgentDropdownChange(); });
         
         UpdateUI();  // Actualitza la UI al començar
         
@@ -45,47 +50,69 @@ public class TradeviewUIManager : MonoBehaviour
     
     private void Update()
     {
-        // Mostrar les llistes existents
         allResourcesText.text = AllResourcesToString();
-        Debug.Log("Després de definir allResourcesText");  
-        UpdateUI(); 
-        Debug.Log("Després de cridar UpdateUI");  
+        
+        timer += Time.deltaTime; // Incrementa el comptador amb el temps transcorregut des de l'últim fotograma
+
+        if (timer >= updateInterval) // Comprova si s'ha arribat a l'interval desitjat
+        {
+            UpdateUI(); // Actualitza la UI
+            timer = 0f; // Reinicia el comptador
+        }
+
+        //UpdateUI(); 
+        
     }
     
     private void UpdateUI()
     {
-        CityData barcelona = cityDataManager.dataItems.cities.Find(city => city.cityName == "Barcelona"); // borrarem
-        CityData currentCity = GetCurrentCity();
-        Debug.Log("Després de definir barcelona"); 
 
+        
+        CityData currentCity = GetCurrentCity();
+        Agent currentAgent = GetCurrentAgent();
+        
         citiesListText.text = AllCitiesToString();
         agentsListText.text = AllAgentsToString();
 
-        barcelonaNameText.text = currentCity.cityName;
-        barcelonaMoneyText.text = "Money: " + currentCity.money.ToString();
+        currCityNameText.text = currentCity.cityName;
+        currCityMoneyText.text = "Money: " + currentCity.money.ToString();
         UpdateInventoryText(currentCity);
         
-        Agent currentAgent = GetCurrentAgent();
-        Debug.Log("Després de definir currentAgent");  
-        
+        foreach (Transform child in cityResourceListContainer)
+        {
+            Destroy(child.gameObject);
+        }
+        foreach (Transform child in agentResourceListContainer)
+        {
+            Destroy(child.gameObject);
+        }
+       
+
         var cityInventory = inventoryManager.GetCityInventory(currentCity);
         if (cityInventory == null)
         {
-            Debug.LogError("cityInventory és null");
+            Debug.LogError("cityInventory nul");
             return; // Retorna per evitar l'error NullReferenceException
         }
         if (cityInventory.inventoryitems == null)
         {
-            Debug.LogError("cityInventory.inventoryitems és null");
+            Debug.LogError("Sense existencies en aquest inventari (cityInventory.inventoryitems és nul)");
             return; // Retorna per evitar l'error NullReferenceException
         }
-        Debug.Log("Després de processar cityInventory");
-        
+        foreach (var item in cityInventory.inventoryitems)
+        {
+            AddResourceLine(item, true);
+        }
+        //Debug.Log("Després de processar cityInventory");
         
         var agentInventory = inventoryManager.GetInventoryById(currentAgent.inventoryID);
-        Debug.Log("Després de processar agentInventory"); 
+        foreach (var item in agentInventory.inventoryitems)
+        {
+            AddResourceLine(item, false);
+        }
         
-
+        Debug.Log("UI Updated"); 
+        
     }
 
     // Convert agents - cities to text
@@ -164,27 +191,19 @@ public class TradeviewUIManager : MonoBehaviour
     {
         int index = cityDropdown.value;
         return cityDataManager.dataItems.cities[index];
+        
     }
-    
+    private void OnCityDropdownChange()
+    {
+        UpdateUI();
+    }
+
     private void PopulateAgentDropdown()
     {
-        Debug.Log("AgentManager: " + agentManager);
-        if (agentManager == null)
-        {
-            Debug.LogError("agentManager és null!");
-            return;
-        }
-
+        
         allAgents = agentManager.GetAgents(); 
         
-        if (allAgents == null)
-        {
-            Debug.LogError("allAgents és null després de cridar GetAgents!");
-            return;
-        }
-        
         Debug.Log("Nombre d'agents: " + allAgents.Count);
-        
         agentDropdown.ClearOptions();
 
         List<string> agentNames = new List<string>();
@@ -199,9 +218,23 @@ public class TradeviewUIManager : MonoBehaviour
     {
         int index = agentDropdown.value;
         return agentManager.agents[index];
+        
     }
-
+    private void OnAgentDropdownChange()
+    {
+        UpdateUI();
+    }
     
+    private void AddResourceLine(InventoryList.InventoryItem item, bool isCity)
+    {
+        GameObject tradeLine = Instantiate(tradeLinePrefab);
+        tradeLine.transform.SetParent(isCity ? cityResourceListContainer.transform : agentResourceListContainer.transform, false);
+        TradeLineController tradeLineController = tradeLine.GetComponent<TradeLineController>();
+        tradeLineController.Setup(item);
+
+        //Debug.Log("Prefab instanciat i afegit al contenidor. Nom del recurs: " + tradeLineController.resourceNameText.text);
+        
+    }
     
 
 }
