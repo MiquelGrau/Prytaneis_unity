@@ -10,6 +10,7 @@ public class AgentManager : MonoBehaviour
     public List<Agent> agents;
     public GameObject agentItemPrefab; // Aquest serà el prefab que acabes de crear
     public Transform agentListParent;  // Aquest és el contenidor (parent) on vols que apareguin els ítems
+    public static int SelectedAgentID { get; private set; } = -1;
 
     void Start() {
         LoadAgents();
@@ -58,7 +59,7 @@ public class AgentManager : MonoBehaviour
 
     public void OnAgentActionButtonClicked(Agent agent)
     {
-        // Ací pots posar el codi que vols que s'execute quan es premi el botó d'un agent.
+        GameData.Instance.SelectedAgent = agent;
         Debug.Log($"El botó de l'agent {agent.agentName} ha estat premut.");
         SceneManager.LoadScene("RouteScene");
     }
