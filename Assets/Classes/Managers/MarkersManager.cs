@@ -9,8 +9,23 @@ public class Marker : MonoBehaviour
 
     private void OnMouseDown()
     {
-        PlayerPrefs.SetString("SelectedCity", cityName);
-        SceneManager.LoadScene("CityScene");
+        string currentScene = SceneManager.GetActiveScene().name;
+
+        switch (currentScene)
+        {
+            case "WorldScene":
+                PlayerPrefs.SetString("SelectedCity", cityName);
+                SceneManager.LoadScene("CityScene");
+                break;
+
+            case "RouteScene":
+                // Ací posa la nova funció que vols realitzar quan estàs a RouteScene
+                break;
+
+            default:
+                Debug.LogWarning("Acció no definida per a aquesta escena.");
+                break;
+        }
     }
 }
 
