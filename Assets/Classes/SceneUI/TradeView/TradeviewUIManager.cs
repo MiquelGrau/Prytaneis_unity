@@ -23,6 +23,8 @@ public class TradeviewUIManager : MonoBehaviour
     // Crides a les classes involucrades
     private InventoryList inventoryList;
     private InventoryManager inventoryManager;
+    private CityInventoryList cityInventoryList;
+    private CityInventoryManager cityInventoryManager;
     private GameManager gameManager;
     private CityDataManager cityDataManager;
     private AgentManager agentManager;
@@ -37,7 +39,8 @@ public class TradeviewUIManager : MonoBehaviour
         cityDataManager = FindObjectOfType<CityDataManager>();
         agentManager = FindObjectOfType<AgentManager>();
         inventoryManager = FindObjectOfType<InventoryManager>();
-        inventoryManager.DebugPrintAllInventories();
+        cityInventoryManager = FindObjectOfType<CityInventoryManager>();
+        //inventoryManager.DebugPrintAllInventories();
         gameManager = FindObjectOfType<GameManager>();
         PopulateCityDropdown();
         cityDropdown.onValueChanged.AddListener(delegate { OnCityDropdownChange(); });
@@ -64,6 +67,14 @@ public class TradeviewUIManager : MonoBehaviour
         
     }
     
+    public CityData CurrentCity 
+    { 
+        get 
+        {
+            return GetCurrentCity();
+        }
+    }
+        
     private void UpdateUI()
     {
 
@@ -88,18 +99,18 @@ public class TradeviewUIManager : MonoBehaviour
         }
        
 
-        var cityInventory = inventoryManager.GetCityInventory(currentCity);
+        var cityInventory = cityInventoryManager.GetCityInventory(currentCity);
         if (cityInventory == null)
         {
             Debug.LogError("cityInventory nul");
             return; // Retorna per evitar l'error NullReferenceException
         }
-        if (cityInventory.inventoryitems == null)
+        if (cityInventory.cityInventoryItems == null)
         {
-            Debug.LogError("Sense existencies en aquest inventari (cityInventory.inventoryitems és nul)");
+            Debug.LogError("Sense existencies en aquest inventari (cityInventory.cityInventoryItems és nul)");
             return; // Retorna per evitar l'error NullReferenceException
         }
-        foreach (var item in cityInventory.inventoryitems)
+        foreach (var item in cityInventory.cityInventoryItems)
         {
             AddResourceLine(item, true);
         }
@@ -155,16 +166,16 @@ public class TradeviewUIManager : MonoBehaviour
 
     private void UpdateInventoryText(CityData city)
     {
-        InventoryList inventory = inventoryManager.GetCityInventory(city);
+        CityInventoryList inventory = cityInventoryManager.GetCityInventory(city);
         string inventoryString = "Inventory:\n";
 
-        if (inventory == null || inventory.inventoryitems == null || inventory.inventoryitems.Count == 0)
+        if (inventory == null || inventory.cityInventoryItems == null || inventory.cityInventoryItems.Count == 0)
         {
             inventoryString += "No items in inventory.";
         }
         else
         {
-            foreach (var item in inventory.inventoryitems)
+            foreach (var item in inventory.cityInventoryItems)
             {
                 inventoryString += $"Resource {item.resourceID}, Quantity: {item.quantity}, Price: {item.currentPrice}\n";
             }
@@ -225,13 +236,27 @@ public class TradeviewUIManager : MonoBehaviour
         UpdateUI();
     }
     
-    private void AddResourceLine(InventoryList.InventoryItem item, bool isCity)
+    private void AddResourceLine(object item, bool isCity)
     {
         GameObject tradeLine = Instantiate(tradeLinePrefab);
         tradeLine.transform.SetParent(isCity ? cityResourceListContainer.transform : agentResourceListContainer.transform, false);
         TradeLineController tradeLineController = tradeLine.GetComponent<TradeLineController>();
-        tradeLineController.Setup(item);
-
+        
+        if (item is InventoryList.InventoryItem invItem)
+        {
+            tradeLineController.Setup(invItem);
+        }
+        else if (item is CityInventoryList.CityInventoryItem cityItem)
+        {
+            tradeLineController.Setup(cityItem);
+        }
+        else
+        {
+            Debug.LogError("Tipus d'item no reconegut");
+        }
+        
+        
+        //tradeLineController.Setup(item);
         //Debug.Log("Prefab instanciat i afegit al contenidor. Nom del recurs: " + tradeLineController.resourceNameText.text);
         
     }
