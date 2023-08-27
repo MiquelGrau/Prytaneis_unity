@@ -4,10 +4,10 @@ using System.Linq;
 [System.Serializable]
 public class CityInventoryList
 {
-    public int cityInventoryID;
+    public string cityInventoryID;
     public List<CityInventoryItem> cityInventoryItems;
 
-    public CityInventoryList(int cityInventoryID)
+    public CityInventoryList(string cityInventoryID)
     {
         this.cityInventoryID = cityInventoryID;
         this.cityInventoryItems = new List<CityInventoryItem>();

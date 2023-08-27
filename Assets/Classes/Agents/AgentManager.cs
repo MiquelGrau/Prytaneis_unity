@@ -35,7 +35,7 @@ public class AgentManager : MonoBehaviour
                 {
                     agentID = int.Parse(agentString.agentID),
                     agentName = agentString.agentName,
-                    currentCityID = int.Parse(agentString.currentCityID),
+                    currentCityID = agentString.currentCityID,
                     money = int.Parse(agentString.money),
                     inventoryID = int.Parse(agentString.inventoryID)
                 };

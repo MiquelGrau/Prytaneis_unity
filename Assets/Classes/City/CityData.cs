@@ -5,11 +5,12 @@ using UnityEngine;
 [System.Serializable]
 public class CityData
 {
-    public int cityID;
+    public string cityID;
+    public string nodeID;
     public string cityName;
     public float latitude;
     public float longitude;
-    public int cityInventoryID;  // Canviat, aixi va amb ID de inventari
+    public string cityInventoryID;
     public int money;
     
     public int PoorPopulation { get; set; }

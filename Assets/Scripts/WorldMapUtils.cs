@@ -31,6 +31,8 @@ public static class WorldMapUtils
         Dictionary<string, float> distances = new Dictionary<string, float>();
         Dictionary<string, IWorldMapPath> previousPaths = new Dictionary<string, IWorldMapPath>();
 
+        Debug.Log($"startNodeId {startNodeId}, endNodeId {endNodeId}");
+
         foreach (var node in nodes)
         {
             distances[node.Id] = node.Id == startNodeId ? 0 : float.MaxValue;

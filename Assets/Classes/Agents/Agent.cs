@@ -7,7 +7,7 @@ public class Agent
 {
     public int agentID;
     public string agentName;
-    public int currentCityID; 
+    public string currentCityID; 
     public int inventoryID; 
     public int money;
     

@@ -32,7 +32,7 @@ public class CityInventoryManager : MonoBehaviour
         
         foreach (var importedList in importedData.inventory_jsonfile)
         {
-            CityInventoryList newInventoryList = new CityInventoryList(int.Parse(importedList.inventoryID));
+            CityInventoryList newInventoryList = new CityInventoryList(importedList.inventoryID);
 
             foreach (var importedItem in importedList.inventoryitems)
             {
@@ -55,7 +55,7 @@ public class CityInventoryManager : MonoBehaviour
     {
         return GetCityInventoryById(city.cityInventoryID);
     }
-    public CityInventoryList GetCityInventoryById(int id)
+    public CityInventoryList GetCityInventoryById(string id)
     {
         return cityInventories.Find(inventory => inventory.cityInventoryID == id);
     }

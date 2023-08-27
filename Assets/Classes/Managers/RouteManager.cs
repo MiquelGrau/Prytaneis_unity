@@ -19,24 +19,6 @@ public class RouteManager : MonoBehaviour
         TextAsset nodeData = Resources.Load<TextAsset>("NodeData");
         TextAsset waterPathData = Resources.Load<TextAsset>("WaterPathData");
 
-        if(cityData) {
-            Debug.Log("cityData carregat amb èxit.");
-        } else {
-            Debug.Log("Error carregant cityData.");
-        }
-
-        if(nodeData) {
-            Debug.Log("nodeData carregat amb èxit.");
-        } else {
-            Debug.Log("Error carregant nodeData.");
-        }
-
-        if(waterPathData) {
-            Debug.Log("waterPathData carregat amb èxit.");
-        } else {
-            Debug.Log("Error carregant waterPathData.");
-        }
-
         // Parsejar les dades
         List<WorldMapCity> citiesList = JsonUtility.FromJson<List<WorldMapCity>>(cityData.text);
         List<WorldMapNode> nodesList = JsonUtility.FromJson<List<WorldMapNode>>(nodeData.text);
@@ -63,8 +45,14 @@ public class RouteManager : MonoBehaviour
         List<IWorldMapPath> waterPaths = worldMapSettings.waterPaths.Select(wp => (IWorldMapPath)wp).ToList();
 
         // Utilitzar l'algoritme de Dijkstra per determinar la ruta entre els dos nodes
-        List<IWorldMapPath> route = WorldMapUtils.DijkstraAlgorithm(startCity.cityID.ToString(), destinationCity.cityID.ToString(), nodes, waterPaths);
-        Debug.Log($"Ruta creada: {route[0]} ");
+        List<IWorldMapPath> route = WorldMapUtils.DijkstraAlgorithm(startCity.nodeID, destinationCity.nodeID, nodes, waterPaths);
+        if (route != null && route.Count > 0) {
+            Debug.Log($"Ruta creada: {route[0]} ");
+            // El codi restant per gestionar la ruta
+        } else {
+            Debug.Log("No s'ha trobat cap ruta entre les ciutats especificades.");
+        }
+
         
         // Imprimir la ruta (o fer qualsevol cosa que necessitis amb ella)
         foreach (var path in route)
