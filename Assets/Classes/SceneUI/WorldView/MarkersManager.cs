@@ -1,45 +1,18 @@
 using UnityEngine;
 using System.Collections.Generic;
-using UnityEngine.SceneManagement;
-
-public class Marker : MonoBehaviour
-{
-    public string cityName;
-    public Vector3 position;
-
-    private void OnMouseDown()
-    {
-        string currentScene = SceneManager.GetActiveScene().name;
-
-        switch (currentScene)
-        {
-            case "WorldScene":
-                PlayerPrefs.SetString("SelectedCity", cityName);
-                SceneManager.LoadScene("CityScene");
-                break;
-
-            case "RouteScene":
-                // Ací posa la nova funció que vols realitzar quan estàs a RouteScene
-                break;
-
-            default:
-                Debug.LogWarning("Acció no definida per a aquesta escena.");
-                break;
-        }
-    }
-}
 
 public class MarkersManager : MonoBehaviour
 {
     public Planet planet;
     public GameObject markerPrefab;
     public DataManager<CityDataList> dataManager;
+    public GameObject contextMenuPrefab;
 
     private List<Marker> allMarkers = new List<Marker>();
 
     private void Start()
     {
-        if(dataManager.dataItems == null)
+        if (dataManager.dataItems == null)
         {
             Debug.LogError("dataItems és nul. No s'han carregat les dades correctament des de DataManager.");
             return;
@@ -48,18 +21,19 @@ public class MarkersManager : MonoBehaviour
         // Utilitza dades del DataManager per afegir marcadors
         foreach (CityData city in dataManager.dataItems.cities)
         {
-            AddMarker(city.latitude, city.longitude, city.cityName);
+            AddMarker(city);
         }
     }
 
-    public void AddMarker(float lat, float lon, string name)
+    public void AddMarker(CityData city)
     {
-        Vector3 position = LatLongToPosition(lat, lon);
+        Vector3 position = LatLongToPosition(city.latitude, city.longitude);
         GameObject markerObj = Instantiate(markerPrefab, position, Quaternion.identity, this.transform);
-        markerObj.name = "Marker_" + name;
+        markerObj.name = "Marker_" + city.cityName;
         Marker marker = markerObj.AddComponent<Marker>();
-        marker.cityName = name;
+        marker.cityName = city.cityName;
         marker.position = position;
+        marker.contextMenuPrefab = contextMenuPrefab;
         allMarkers.Add(marker);
     }
 
