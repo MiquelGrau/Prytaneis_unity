@@ -31,44 +31,59 @@ public static class WorldMapUtils
         Dictionary<string, float> distances = new Dictionary<string, float>();
         Dictionary<string, IWorldMapPath> previousPaths = new Dictionary<string, IWorldMapPath>();
 
-        Debug.Log($"startNodeId {startNodeId}, endNodeId {endNodeId}");
+        Debug.Log($"startNodeId {startNodeId}, endNodeId {endNodeId}, nodes {nodes.Count}, paths {paths.Count}");
 
         foreach (var node in nodes)
         {
-            distances[node.Id] = node.Id == startNodeId ? 0 : float.MaxValue;
+            if (string.IsNullOrEmpty(node.id))
+            {
+                Debug.LogError("Node with null or empty ID found!");
+                Debug.Log($"Node details: {node.ToString()}");
+                continue;
+            }
+
+            distances[node.id] = node.id == startNodeId ? 0 : float.MaxValue;
             queue.Add(node);
-            previousPaths[node.Id] = null;
+            previousPaths[node.id] = null;
         }
+
+        Debug.Log($"queue = {queue}; c = {queue.Count}");
 
         while (queue.Count > 0)
         {
-            queue.Sort((a, b) => distances[a.Id].CompareTo(distances[b.Id]));
+            queue.Sort((a, b) => distances[a.id].CompareTo(distances[b.id]));
 
             var currentNode = queue.First();
             queue.Remove(currentNode);
 
-            if (currentNode.Id == endNodeId)
+            if (string.IsNullOrEmpty(currentNode.id))
+            {
+                Debug.LogError("Current node has null or empty ID!");
+                continue;
+            }
+
+            if (currentNode.id == endNodeId)
             {
                 List<IWorldMapPath> path = new List<IWorldMapPath>();
                 var previousPath = previousPaths[endNodeId];
                 while (previousPath != null)
                 {
                     path.Add(previousPath);
-                    previousPath = previousPaths[previousPath.StartNodeId == currentNode.Id ? previousPath.EndNodeId : previousPath.StartNodeId];
+                    previousPath = previousPaths[previousPath.StartNodeId == currentNode.id ? previousPath.EndNodeId : previousPath.StartNodeId];
                 }
                 path.Reverse();
                 return path;
             }
 
-            if (distances[currentNode.Id] == float.MaxValue) continue;
+            if (distances[currentNode.id] == float.MaxValue) continue;
 
-            foreach (var pathObj in paths.Where(path => path.StartNodeId == currentNode.Id || path.EndNodeId == currentNode.Id))
+            foreach (var pathObj in paths.Where(path => path.StartNodeId == currentNode.id || path.EndNodeId == currentNode.id))
             {
-                var connectedNodeId = pathObj.StartNodeId == currentNode.Id ? pathObj.EndNodeId : pathObj.StartNodeId;
-                var connectedNode = nodes.Find(node => node.Id == connectedNodeId);
+                var connectedNodeId = pathObj.StartNodeId == currentNode.id ? pathObj.EndNodeId : pathObj.StartNodeId;
+                var connectedNode = nodes.Find(node => node.id == connectedNodeId);
                 if (connectedNode != null)
                 {
-                    float distance = distances[currentNode.Id] + HaversineDistance(currentNode.Marker, connectedNode.Marker) / pathObj.Speed;
+                    float distance = distances[currentNode.id] + HaversineDistance(currentNode.Marker, connectedNode.Marker) / pathObj.Speed;
                     if (distance < distances[connectedNodeId])
                     {
                         distances[connectedNodeId] = distance;

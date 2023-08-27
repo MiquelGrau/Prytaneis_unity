@@ -54,3 +54,10 @@ public class WorldMapWaterPath : WorldMapPath
         TypeOfPath = typeOfPath;
     }
 }
+
+[System.Serializable]
+public class WaterPathDataWrapper
+{
+    public List<WorldMapWaterPath> waterpath_jsonfile;
+}
+

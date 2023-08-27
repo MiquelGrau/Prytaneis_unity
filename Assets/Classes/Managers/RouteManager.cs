@@ -21,8 +21,27 @@ public class RouteManager : MonoBehaviour
 
         // Parsejar les dades
         List<WorldMapCity> citiesList = JsonUtility.FromJson<List<WorldMapCity>>(cityData.text);
-        List<WorldMapNode> nodesList = JsonUtility.FromJson<List<WorldMapNode>>(nodeData.text);
-        List<WorldMapWaterPath> waterPathsList = JsonUtility.FromJson<List<WorldMapWaterPath>>(waterPathData.text);
+
+        var nodeDataWrapper = JsonUtility.FromJson<NodeDataWrapper>(nodeData.text);
+        List<WorldMapNode> nodesList = new List<WorldMapNode>();;
+        foreach (var nodeString in nodeDataWrapper.nodes_jsonfile)
+        {
+            WorldMapNode node = new WorldMapNode(
+                nodeString.id, 
+                nodeString.CityId, 
+                nodeString.NodeId, 
+                nodeString.Marker,  // Aquesta part pot ser més complexa si el marker no és directament compatible amb IWorldMapMarker
+                nodeString.Name, 
+                nodeString.RegionId, 
+                nodeString.NodeType, 
+                nodeString.IsSuperNode
+            );
+            nodesList.Add(node);
+            Debug.Log($"Node details: {node.ToString()}");
+        }
+
+        var waterPathDataWrapper = JsonUtility.FromJson<WaterPathDataWrapper>(waterPathData.text);
+        List<WorldMapWaterPath> waterPathsList = waterPathDataWrapper.waterpath_jsonfile;
 
         if (citiesList == null || nodesList == null || waterPathsList == null) {
             Debug.Log("Error deserialitzant les dades.");
@@ -43,6 +62,8 @@ public class RouteManager : MonoBehaviour
         List<WorldMapCity> cities = worldMapSettings.cities;
         List<IWorldMapNode> nodes = worldMapSettings.nodes.Select(n => (IWorldMapNode)n).ToList();
         List<IWorldMapPath> waterPaths = worldMapSettings.waterPaths.Select(wp => (IWorldMapPath)wp).ToList();
+
+        Debug.Log($"nodes {nodes.Count}, paths {waterPaths.Count}");
 
         // Utilitzar l'algoritme de Dijkstra per determinar la ruta entre els dos nodes
         List<IWorldMapPath> route = WorldMapUtils.DijkstraAlgorithm(startCity.nodeID, destinationCity.nodeID, nodes, waterPaths);

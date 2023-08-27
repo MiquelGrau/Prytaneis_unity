@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 public interface IWorldMapNode
 {
-    string Id { get; set; }
+    string id { get; set; }
     string CityId { get; set; }
     string NodeId { get; set; }
     IWorldMapMarker Marker { get; set; }
@@ -14,24 +14,36 @@ public interface IWorldMapNode
 [System.Serializable]
 public class WorldMapNode : IWorldMapNode
 {
-    public string Id { get; set; }
+    public string id { get; set; }
     public string CityId { get; set; }
     public string NodeId { get; set; }
-    public IWorldMapMarker Marker { get; set; }
+    public IWorldMapMarker Marker { get; set; }  // Assegura't que IWorldMapMarker estigui definit adequadament en un altre fitxer.
     public string Name { get; set; }
     public string RegionId { get; set; }
     public bool IsSuperNode { get; set; }
     public string NodeType { get; set; }
 
-    public WorldMapNode(string id, string cityId, string nodeId, IWorldMapMarker marker, string name = "", string regionId = "", string nodeType = "", bool isSuperNode = false)
+    // Constructor amb 8 arguments
+    public WorldMapNode(string id, string CityId, string NodeId, IWorldMapMarker Marker, string Name, string RegionId, string NodeType, bool IsSuperNode)
     {
-        Id = id;
-        CityId = cityId;
-        NodeId = nodeId;
-        Marker = marker;
-        Name = name;
-        RegionId = regionId;
-        NodeType = nodeType;
-        IsSuperNode = isSuperNode;
+        this.id = id;
+        this.CityId = CityId;
+        this.NodeId = NodeId;
+        this.Marker = Marker;
+        this.Name = Name;
+        this.RegionId = RegionId;
+        this.NodeType = NodeType;
+        this.IsSuperNode = IsSuperNode;
     }
+
+    public override string ToString()
+    {
+        return $"ID: {id}, CityId: {CityId}, NodeId: {NodeId}, Marker: {Marker}, Name: {Name}, RegionId: {RegionId}, IsSuperNode: {IsSuperNode}, NodeType: {NodeType}";
+    }
+}
+
+[System.Serializable]
+public class NodeDataWrapper
+{
+    public List<WorldMapNode> nodes_jsonfile;
 }
