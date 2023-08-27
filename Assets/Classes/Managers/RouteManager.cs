@@ -15,32 +15,32 @@ public class RouteManager : MonoBehaviour
     private void LoadWorldMapData()
     {
         // Carregar les dades
-        TextAsset citiesData = Resources.Load<TextAsset>("CitiesData");
-        TextAsset nodesData = Resources.Load<TextAsset>("NodesData");
-        TextAsset waterPathsData = Resources.Load<TextAsset>("WaterPathsData");
+        TextAsset cityData = Resources.Load<TextAsset>("CityData");
+        TextAsset nodeData = Resources.Load<TextAsset>("NodeData");
+        TextAsset waterPathData = Resources.Load<TextAsset>("WaterPathData");
 
-        if(citiesData) {
-            Debug.Log("CitiesData carregat amb èxit.");
+        if(cityData) {
+            Debug.Log("cityData carregat amb èxit.");
         } else {
-            Debug.Log("Error carregant CitiesData.");
+            Debug.Log("Error carregant cityData.");
         }
 
-        if(nodesData) {
-            Debug.Log("NodesData carregat amb èxit.");
+        if(nodeData) {
+            Debug.Log("nodeData carregat amb èxit.");
         } else {
-            Debug.Log("Error carregant NodesData.");
+            Debug.Log("Error carregant nodeData.");
         }
 
-        if(waterPathsData) {
-            Debug.Log("WaterPathsData carregat amb èxit.");
+        if(waterPathData) {
+            Debug.Log("waterPathData carregat amb èxit.");
         } else {
-            Debug.Log("Error carregant WaterPathsData.");
+            Debug.Log("Error carregant waterPathData.");
         }
 
         // Parsejar les dades
-        List<WorldMapCity> citiesList = JsonUtility.FromJson<List<WorldMapCity>>(citiesData.text);
-        List<WorldMapNode> nodesList = JsonUtility.FromJson<List<WorldMapNode>>(nodesData.text);
-        List<WorldMapWaterPath> waterPathsList = JsonUtility.FromJson<List<WorldMapWaterPath>>(waterPathsData.text);
+        List<WorldMapCity> citiesList = JsonUtility.FromJson<List<WorldMapCity>>(cityData.text);
+        List<WorldMapNode> nodesList = JsonUtility.FromJson<List<WorldMapNode>>(nodeData.text);
+        List<WorldMapWaterPath> waterPathsList = JsonUtility.FromJson<List<WorldMapWaterPath>>(waterPathData.text);
 
         if (citiesList == null || nodesList == null || waterPathsList == null) {
             Debug.Log("Error deserialitzant les dades.");
@@ -64,7 +64,8 @@ public class RouteManager : MonoBehaviour
 
         // Utilitzar l'algoritme de Dijkstra per determinar la ruta entre els dos nodes
         List<IWorldMapPath> route = WorldMapUtils.DijkstraAlgorithm(startCity.cityID.ToString(), destinationCity.cityID.ToString(), nodes, waterPaths);
-
+        Debug.Log($"Ruta creada: {route[0]} ");
+        
         // Imprimir la ruta (o fer qualsevol cosa que necessitis amb ella)
         foreach (var path in route)
         {
