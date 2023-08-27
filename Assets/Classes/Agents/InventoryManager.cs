@@ -40,11 +40,10 @@ public class InventoryManager : MonoBehaviour
 
         inventories = new List<InventoryList>();    // a zero, sense res. Li afegirem ara
         
-        //foreach (var inventoryListString in allInventories.inventory_jsonfile)
         foreach (var inventoryListString in jsonInventories.inventory_jsonfile)
         {
             InventoryList inventoryList = new InventoryList(int.Parse(inventoryListString.inventoryID));
-            Debug.Log("Inventory ID: " + inventoryListString.inventoryID);
+            //Debug.Log("Inventory ID: " + inventoryListString.inventoryID);
             foreach (var inventoryItemString in inventoryListString.inventoryitems)
             {
                 InventoryList.InventoryItem inventoryItem = new InventoryList.InventoryItem(
@@ -55,9 +54,9 @@ public class InventoryManager : MonoBehaviour
                 );
                 inventoryList.inventoryitems.Add(inventoryItem);
                 
-                Debug.Log("Resource ID: " + inventoryItemString.resourceID);
-                Debug.Log("Quantity: " + inventoryItemString.quantity);
-                Debug.Log("Current Price: " + inventoryItemString.currentPrice);
+                //Debug.Log("Resource ID: " + inventoryItemString.resourceID);
+                //Debug.Log("Quantity: " + inventoryItemString.quantity);
+                //Debug.Log("Current Price: " + inventoryItemString.currentPrice);
             }
             inventories.Add(inventoryList);
         }
@@ -68,11 +67,6 @@ public class InventoryManager : MonoBehaviour
     
 
     // Funcions amb Inventaris
-
-    public InventoryList GetCityInventory(CityData city)
-    {
-        return GetInventoryById(city.inventoryID);
-    }
 
     public InventoryList GetInventoryById(int id)
     {

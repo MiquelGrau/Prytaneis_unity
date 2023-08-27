@@ -34,6 +34,21 @@ public class TradeLineController : MonoBehaviour
             Debug.LogError("Error: No s'ha pogut trobar el recurs amb la ID " + item.resourceID);
         }
     }
+
+    public void Setup(CityInventoryList.CityInventoryItem item)
+    {
+        Resource resource = ResourceManager.GetResourceById(item.resourceID);
+        if (resource != null)
+        {
+            resourceNameText.text = resource.resourceName;
+            resourceQuantityText.text = item.quantity.ToString();
+            resourcePriceText.text = item.currentPrice.ToString();
+        }
+        else
+        {
+            Debug.LogError("Error: No s'ha pogut trobar el recurs amb la ID " + item.resourceID);
+        }
+    }
 }
 
 

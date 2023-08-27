@@ -1,0 +1,109 @@
+{
+    "inventory_jsonfile": [
+      {
+        "inventoryID": "0",
+        "inventoryitems": [
+          {
+            "resourceID": "0",
+            "quantity": "1",
+            "currentPrice": "10"
+          },
+          {
+            "resourceID": "1",
+            "quantity": "1",
+            "currentPrice": "5"
+          },
+          {
+            "resourceID": "2",
+            "quantity": "1",
+            "currentPrice": "6"
+          }
+        ]
+      },
+      {
+        "inventoryID": "1",
+        "inventoryitems": [
+          {
+            "resourceID": "0",
+            "quantity": "1",
+            "currentPrice": "20"
+          },
+          {
+            "resourceID": "1",
+            "quantity": "1",
+            "currentPrice": "15"
+          },
+          {
+            "resourceID": "3",
+            "quantity": "2",
+            "currentPrice": "18"
+          }
+        ]
+      },
+      {
+        "inventoryID": "2",
+        "inventoryitems": [
+          {
+            "resourceID": "1",
+            "quantity": "1",
+            "currentPrice": "20"
+          },
+          {
+            "resourceID": "2",
+            "quantity": "1",
+            "currentPrice": "24"
+          },
+          {
+            "resourceID": "4",
+            "quantity": "2",
+            "currentPrice": "15"
+          },
+          {
+            "resourceID": "5",
+            "quantity": "2",
+            "currentPrice": "18"
+          }
+        ]
+      },
+      {
+        "inventoryID": "3",
+        "inventoryitems": [
+          {
+            "resourceID": "0",
+            "quantity": "1",
+            "currentPrice": "20"
+          },
+          {
+            "resourceID": "1",
+            "quantity": "1",
+            "currentPrice": "24"
+          },
+          {
+            "resourceID": "5",
+            "quantity": "2",
+            "currentPrice": "8"
+          }
+        ]
+      },
+      {
+        "inventoryID": "4",
+        "inventoryitems": [
+          {
+            "resourceID": "0",
+            "quantity": "1",
+            "currentPrice": "10"
+          },
+          {
+            "resourceID": "3",
+            "quantity": "2",
+            "currentPrice": "5"
+          },
+          {
+            "resourceID": "5",
+            "quantity": "2",
+            "currentPrice": "25"
+          }
+        ]
+      }
+    ]
+  }

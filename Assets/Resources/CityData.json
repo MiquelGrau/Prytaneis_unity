@@ -7,7 +7,7 @@
         "longitude": 2.1629,
         "buildings": [],
         "money": "10000",
-        "inventoryID": "0",
+        "cityInventoryID": "0",
         "grid": [
           ["House1", "House2", "Market1", "StoneRoad1", "House1"],
           ["House1", "House1", "House1", "StoneRoad1", "House2"],
@@ -22,7 +22,7 @@
         "longitude": -0.3833,
         "buildings": [],
         "money": "11000",
-        "inventoryID": "1",
+        "cityInventoryID": "1",
         "grid": [
           ["House1", "House2", "Market1", "StoneRoad1", "House1"],
           ["House1", "House1", "House1", "StoneRoad1", "House2"],
@@ -37,7 +37,7 @@
         "longitude": 12.4742,
         "buildings": [],
         "money": "12000",
-        "inventoryID": "2",
+        "cityInventoryID": "2",
         "grid": [
           ["House1", "House2", "Market1", "StoneRoad1", "House1"],
           ["House1", "House1", "House1", "StoneRoad1", "House2"],
@@ -52,7 +52,7 @@
         "longitude": 11.2904,
         "buildings": [],
         "money": "13000",
-        "inventoryID": "3",
+        "cityInventoryID": "3",
         "grid": [
           ["House1", "House2", "Market1", "StoneRoad1", "House1"],
           ["House1", "House1", "House1", "StoneRoad1", "House2"],
@@ -67,7 +67,7 @@
         "longitude": 5.3759,
         "buildings": [],
         "money": "15000",
-        "inventoryID": "4",
+        "cityInventoryID": "4",
         "grid": [
           ["House1", "House2", "House1", "House1", "House1"],
           ["House1", "House1", "House1", "House2", "House2"],

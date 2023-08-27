@@ -8,6 +8,7 @@ public class Resource
     // Propietats dels recursos
     public int resourceID { get; set; }
     public string resourceName { get; set; }
+    public string resourceType { get; set; }
     public int resourceQty { get; set; }
     public int basePrice { get; set; }
     public int currentPrice { get; set; }
