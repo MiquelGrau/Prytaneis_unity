@@ -3,10 +3,9 @@ using UnityEngine;
 
 public class WorldMapSettings : MonoBehaviour
 {
-    public List<WorldMapCity> cities = new List<WorldMapCity>();
-    public List<WorldMapNode> nodes = new List<WorldMapNode>();
-    public List<WorldMapWaterPath> waterPaths = new List<WorldMapWaterPath>();
-    public List<WorldMapPath> landPaths = new List<WorldMapPath>();  // Aquesta es pot omplir quan tinguis el format de LandPathsData.json
+    public List<WorldMapCity> cities;
+    public List<WorldMapNode> nodes;  // Assegura't que això és una List<WorldMapNode>
+    public List<WorldMapWaterPath> waterPaths;
 }
 
 [System.Serializable]

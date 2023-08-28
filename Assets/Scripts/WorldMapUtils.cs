@@ -1,99 +1,123 @@
+using UnityEngine;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
 
 public static class WorldMapUtils
 {
-    private const float EarthRadius = 6371; // Radi de la Terra en km
+    private const double EarthRadius = 6371; // Radi de la Terra en km
 
-    public static float HaversineDistance(IWorldMapMarker marker1, IWorldMapMarker marker2)
+    public static double HaversineDistance(WorldMapMarker marker1, WorldMapMarker marker2)
     {
-        float dLat = DegreesToRadians(marker2.Latitude - marker1.Latitude);
-        float dLon = DegreesToRadians(marker2.Longitude - marker1.Longitude);
+        double dLat = DegreesToRadians(marker2.Latitude - marker1.Latitude);
+        double dLon = DegreesToRadians(marker2.Longitude - marker1.Longitude);
 
-        float a = Mathf.Sin(dLat / 2) * Mathf.Sin(dLat / 2) +
-                  Mathf.Cos(DegreesToRadians(marker1.Latitude)) * Mathf.Cos(DegreesToRadians(marker2.Latitude)) *
-                  Mathf.Sin(dLon / 2) * Mathf.Sin(dLon / 2);
+        double a = Math.Sin(dLat / 2) * Math.Sin(dLat / 2) +
+                   Math.Cos(DegreesToRadians(marker1.Latitude)) * Math.Cos(DegreesToRadians(marker2.Latitude)) *
+                   Math.Sin(dLon / 2) * Math.Sin(dLon / 2);
 
-        float c = 2 * Mathf.Atan2(Mathf.Sqrt(a), Mathf.Sqrt(1 - a));
+        double c = 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
 
         return EarthRadius * c;
     }
 
-    public static float DegreesToRadians(float degrees)
+    public static double DegreesToRadians(double degrees)
     {
-        return degrees * Mathf.PI / 180;
+        return degrees * Math.PI / 180;
     }
 
-    public static List<IWorldMapPath> DijkstraAlgorithm(string startNodeId, string endNodeId, List<IWorldMapNode> nodes, List<IWorldMapPath> paths)
+    public static List<WorldMapWaterPath> DijkstraAlgorithm(string startNodeId, string endNodeId, List<WorldMapNode> nodes, List<WorldMapWaterPath> paths)
     {
-        List<IWorldMapNode> queue = new List<IWorldMapNode>();
-        Dictionary<string, float> distances = new Dictionary<string, float>();
-        Dictionary<string, IWorldMapPath> previousPaths = new Dictionary<string, IWorldMapPath>();
+        List<WorldMapNode> queue = new List<WorldMapNode>(nodes);
+        Dictionary<string, double> distances = new Dictionary<string, double>();
+        Dictionary<string, WorldMapWaterPath> previousPaths = new Dictionary<string, WorldMapWaterPath>();
+        HashSet<string> visitedNodes = new HashSet<string>();
 
-        Debug.Log($"startNodeId {startNodeId}, endNodeId {endNodeId}, nodes {nodes.Count}, paths {paths.Count}");
+        Debug.Log($"Starting Dijkstra's Algorithm from Node {startNodeId} to Node {endNodeId}.");
 
         foreach (var node in nodes)
         {
-            if (string.IsNullOrEmpty(node.id))
-            {
-                Debug.LogError("Node with null or empty ID found!");
-                Debug.Log($"Node details: {node.ToString()}");
-                continue;
-            }
-
-            distances[node.id] = node.id == startNodeId ? 0 : float.MaxValue;
-            queue.Add(node);
+            distances[node.id] = node.id == startNodeId ? 0 : double.MaxValue;
             previousPaths[node.id] = null;
         }
 
-        Debug.Log($"queue = {queue}; c = {queue.Count}");
+        Debug.Log("Initialization complete.");
 
-        while (queue.Count > 0)
+        int maxIterations = 100;
+        int currentIteration = 0;
+
+        while (queue.Count > 0 && currentIteration < maxIterations)
         {
             queue.Sort((a, b) => distances[a.id].CompareTo(distances[b.id]));
 
             var currentNode = queue.First();
-            queue.Remove(currentNode);
+            queue.RemoveAt(0);
+            visitedNodes.Add(currentNode.id);
 
-            if (string.IsNullOrEmpty(currentNode.id))
-            {
-                Debug.LogError("Current node has null or empty ID!");
-                continue;
-            }
+            Debug.Log($"Processing Node {currentNode.id} with current distance {distances[currentNode.id]}.");
 
             if (currentNode.id == endNodeId)
             {
-                List<IWorldMapPath> path = new List<IWorldMapPath>();
+                Debug.Log("End Node found. Constructing path.");
+
+                List<WorldMapWaterPath> path = new List<WorldMapWaterPath>();
                 var previousPath = previousPaths[endNodeId];
                 while (previousPath != null)
                 {
                     path.Add(previousPath);
-                    previousPath = previousPaths[previousPath.StartNodeId == currentNode.id ? previousPath.EndNodeId : previousPath.StartNodeId];
+                    previousPath = previousPaths[previousPath.startNode == currentNode.id ? previousPath.endNode : previousPath.startNode];
                 }
                 path.Reverse();
+
+                // Calcular la distància total del camí
+                double totalDistance = 0;
+                foreach (var segment in path)
+                {
+                    var startNode = nodes.Find(node => node.id == segment.startNode);
+                    var endNode = nodes.Find(node => node.id == segment.endNode);
+                    totalDistance += HaversineDistance(new WorldMapMarker(startNode.latitude, startNode.longitude), new WorldMapMarker(endNode.latitude, endNode.longitude));
+                }
+
+                // Construir una cadena amb tots els IDs del camí
+                string pathIds = string.Join(" -> ", path.Select(p => p.waterpathId));
+
+                // Registrar la informació amb Debug.Log
+                Debug.Log($"Total path distance: {totalDistance} km");
+                Debug.Log($"Final path IDs: {pathIds}");
                 return path;
             }
 
-            if (distances[currentNode.id] == float.MaxValue) continue;
-
-            foreach (var pathObj in paths.Where(path => path.StartNodeId == currentNode.id || path.EndNodeId == currentNode.id))
+            if (distances[currentNode.id] == double.MaxValue)
             {
-                var connectedNodeId = pathObj.StartNodeId == currentNode.id ? pathObj.EndNodeId : pathObj.StartNodeId;
-                var connectedNode = nodes.Find(node => node.id == connectedNodeId);
-                if (connectedNode != null)
+                Debug.Log($"Node {currentNode.id} has max distance. Skipping.");
+                continue;
+            }
+
+            foreach (var pathObj in paths.Where(path => (path.startNode == currentNode.id) && !visitedNodes.Contains(path.startNode == currentNode.id ? path.endNode : path.startNode)))
+            {
+                var connectedNodeId = pathObj.startNode == currentNode.id ? pathObj.endNode : pathObj.startNode;
+
+                if (distances.ContainsKey(connectedNodeId))
                 {
-                    float distance = distances[currentNode.id] + HaversineDistance(currentNode.Marker, connectedNode.Marker) / pathObj.Speed;
+                    var connectedNode = nodes.Find(node => node.id == connectedNodeId);
+                    float distance = (float)(distances[currentNode.id] + HaversineDistance(new WorldMapMarker(currentNode.latitude, currentNode.longitude), new WorldMapMarker(connectedNode.latitude, connectedNode.longitude)) / pathObj.pathSpeed);
+
+                    Debug.Log($"Checking path from Node {currentNode.id} to Node {connectedNodeId}. Distance: {distance}.");
+
                     if (distance < distances[connectedNodeId])
                     {
+                        Debug.Log($"Updating distance for Node {connectedNodeId} to {distance}.");
                         distances[connectedNodeId] = distance;
                         previousPaths[connectedNodeId] = pathObj;
-                        queue.Add(connectedNode);
                     }
                 }
             }
+
+            currentIteration++;
+            Debug.Log($"Iteration {currentIteration} complete.");
         }
 
-        return new List<IWorldMapPath>(); // Return empty list if no path found
+        Debug.Log("No path found or max iterations reached. Returning empty path.");
+        return new List<WorldMapWaterPath>();
     }
 }

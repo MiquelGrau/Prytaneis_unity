@@ -6,6 +6,7 @@ public class RouteManager : MonoBehaviour
 {
     public WorldMapSettings worldMapSettings;  // Referència a WorldMapSettings
     public Material lineMaterial;  // Material per les línies de ruta
+    public Transform earthTransform; // Drag and drop your Earth object here in the inspector
 
     private void Awake()
     {
@@ -21,26 +22,9 @@ public class RouteManager : MonoBehaviour
 
         // Parsejar les dades
         List<WorldMapCity> citiesList = JsonUtility.FromJson<List<WorldMapCity>>(cityData.text);
-
-        var nodeDataWrapper = JsonUtility.FromJson<NodeDataWrapper>(nodeData.text);
-        List<WorldMapNode> nodesList = new List<WorldMapNode>();;
-        foreach (var nodeString in nodeDataWrapper.nodes_jsonfile)
-        {
-            WorldMapNode node = new WorldMapNode(
-                nodeString.id, 
-                nodeString.CityId, 
-                nodeString.NodeId, 
-                nodeString.Marker,  // Aquesta part pot ser més complexa si el marker no és directament compatible amb IWorldMapMarker
-                nodeString.Name, 
-                nodeString.RegionId, 
-                nodeString.NodeType, 
-                nodeString.IsSuperNode
-            );
-            nodesList.Add(node);
-            Debug.Log($"Node details: {node.ToString()}");
-        }
-
-        var waterPathDataWrapper = JsonUtility.FromJson<WaterPathDataWrapper>(waterPathData.text);
+        NodeDataWrapper nodeDataWrapper = JsonUtility.FromJson<NodeDataWrapper>(nodeData.text);
+        List<WorldMapNode> nodesList = nodeDataWrapper.nodes_jsonfile;
+        var waterPathDataWrapper = JsonUtility.FromJson<PathDataWrapper>(waterPathData.text);
         List<WorldMapWaterPath> waterPathsList = waterPathDataWrapper.waterpath_jsonfile;
 
         if (citiesList == null || nodesList == null || waterPathsList == null) {
@@ -60,64 +44,92 @@ public class RouteManager : MonoBehaviour
         Debug.Log($"Creant ruta des de {startCity.cityName} fins a {destinationCity.cityName}.");
 
         List<WorldMapCity> cities = worldMapSettings.cities;
-        List<IWorldMapNode> nodes = worldMapSettings.nodes.Select(n => (IWorldMapNode)n).ToList();
-        List<IWorldMapPath> waterPaths = worldMapSettings.waterPaths.Select(wp => (IWorldMapPath)wp).ToList();
+        List<WorldMapNode> nodes = worldMapSettings.nodes;
+        List<WorldMapWaterPath> waterPaths = worldMapSettings.waterPaths;
 
-        Debug.Log($"nodes {nodes.Count}, paths {waterPaths.Count}");
+        WorldMapNode startNode = nodes.Find(n => n.id == startCity.nodeID);
+        Vector3 startPosition = LatLongToPosition(startNode.latitude, startNode.longitude);
 
-        // Utilitzar l'algoritme de Dijkstra per determinar la ruta entre els dos nodes
-        List<IWorldMapPath> route = WorldMapUtils.DijkstraAlgorithm(startCity.nodeID, destinationCity.nodeID, nodes, waterPaths);
+        List<WorldMapWaterPath> route = WorldMapUtils.DijkstraAlgorithm(startCity.nodeID, destinationCity.nodeID, nodes, waterPaths);
         if (route != null && route.Count > 0) {
             Debug.Log($"Ruta creada: {route[0]} ");
-            // El codi restant per gestionar la ruta
         } else {
             Debug.Log("No s'ha trobat cap ruta entre les ciutats especificades.");
         }
 
-        
-        // Imprimir la ruta (o fer qualsevol cosa que necessitis amb ella)
         foreach (var path in route)
         {
-            Debug.Log($"Cami des de {path.StartNodeId} fins a {path.EndNodeId} amb velocitat {path.Speed}.");
-
-            // Per pintar el path basat en l'objecte de ruta actual
-            WorldMapPath pathObj = waterPaths.Find(p => p.Id == path.Id) as WorldMapPath;
+            WorldMapWaterPath pathObj = waterPaths.Find(p => p.waterpathId == path.waterpathId);
             if (pathObj != null)
             {
-                Vector3[] pathMarkerArray = pathObj.Path.Select(marker => new Vector3(marker.Longitude, marker.Latitude, 0)).ToArray();
+                foreach (var marker in pathObj.pathArray)
+                {
+                    Debug.Log($"Marker: Longitude = {marker.Longitude}, Latitude = {marker.Latitude}");
+                }
+
+                Vector3[] pathMarkerArray = pathObj.pathArray.Select(marker => LatLongToPosition(marker.Latitude, marker.Longitude)).ToArray();
+                Debug.Log($"Punts de la ruta: {string.Join(", ", pathMarkerArray.Select(p => p.ToString()))}");
+
                 Vector3[] curve = CreatePathFromPoints(pathMarkerArray);
-                GameObject line = CreatePathLine(curve);
-                line.transform.SetParent(this.transform, false);  // Attach to RouteManager object
+                GameObject line = CreatePathLine(curve, startPosition);
+                line.transform.SetParent(earthTransform, false);
             }
         }
     }
 
+    private float GetHeightAtLatLon(float lat, float lon)
+    {
+        // Si el teu earthTransform no té una funció anomenada 'GetHeightAtLatLon' o similar,
+        // llavors hauràs d'implementar la lògica aquí o simplement retornar 0.
+        // En aquest exemple, suposarem que la teva terra és plana i no té elevacions, així que retornarem 0.
+        return 0f;
+    }
+
+    private Vector3 LatLongToPosition(float lat, float lon)
+    {
+        float baseRadius = earthTransform.localScale.x / 2;  // Agafem el radi a partir de la mitat de l'escala en x.
+        float heightOffset = GetHeightAtLatLon(lat, lon);  // Obtenim l'altitud en aquesta latitud/longitud.
+        float radius = baseRadius + heightOffset + 0.01f;  // Afegim un petit desplaçament de 0.01 per assegurar-nos que està lleugerament per sobre del terreny.
+
+        lat = Mathf.Deg2Rad * lat;
+        lon = Mathf.Deg2Rad * lon;
+
+        Vector3 direction = new Vector3(
+            Mathf.Cos(lat) * Mathf.Cos(lon),
+            Mathf.Sin(lat),
+            Mathf.Cos(lat) * Mathf.Sin(lon)
+        ).normalized;
+
+        Vector3 position = direction * radius;
+
+        return position;
+    }
+
     private Vector3[] CreatePathFromPoints(Vector3[] points)
     {
-        // En aquesta implementació, simplement retornem els punts originals. 
-        // Podries afegir lògica per suavitzar o modificar el camí si ho necessites.
         return points;
     }
 
-    private GameObject CreatePathLine(Vector3[] curve)
+    private GameObject CreatePathLine(Vector3[] curve, Vector3 startPosition)
     {
-        // 1. Creació d'un nou GameObject.
         Debug.Log("Intentant crear l'objecte RoutePath...");
         GameObject lineObject = new GameObject("RoutePath");
-
-        // 2. Afegir LineRenderer al GameObject.
         LineRenderer lineRenderer = lineObject.AddComponent<LineRenderer>();
 
-        // 3. Configuració de punts de la línia.
-        lineRenderer.positionCount = curve.Length;
-        lineRenderer.SetPositions(curve);
+        Vector3[] adjustedCurve = new Vector3[curve.Length + 1];
+        adjustedCurve[0] = startPosition;
+        for (int i = 0; i < curve.Length; i++)
+        {
+            adjustedCurve[i + 1] = curve[i];
+        }
 
-        // 4. Configuració del material i aparença de la línia.
+        lineRenderer.positionCount = adjustedCurve.Length;
+        lineRenderer.SetPositions(adjustedCurve);
+
         lineRenderer.material = lineMaterial;
-        lineRenderer.startWidth = 0.1f;  // Pots ajustar aquest valor segons les teves necessitats.
-        lineRenderer.endWidth = 0.1f;
+        lineRenderer.startWidth = 0.01f;
+        lineRenderer.endWidth = 0.01f;
 
-        // 5. Retornar l'objecte.
         return lineObject;
     }
 }

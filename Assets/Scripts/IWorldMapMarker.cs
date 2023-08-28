@@ -1,18 +1,17 @@
-public interface IWorldMapMarker
-{
-    float Latitude { get; set; }
-    float Longitude { get; set; }
-}
-
 [System.Serializable]
-public class WorldMapMarker : IWorldMapMarker
+public class WorldMapMarker
 {
-    public float Latitude { get; set; }
-    public float Longitude { get; set; }
+    public float Latitude;
+    public float Longitude;
 
     public WorldMapMarker(float latitude = 0, float longitude = 0)
     {
         Latitude = latitude;
         Longitude = longitude;
+    }
+
+    public override string ToString()
+    {
+        return $"Latitude: {Latitude}, Longitude: {Longitude}";
     }
 }
