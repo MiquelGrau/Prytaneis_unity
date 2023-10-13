@@ -1,0 +1,72 @@
+{ 
+  "Items":[ 
+    {
+      "CityInvID": "CV0001", "CityID": "C0001", "CityInvMoney": 12000,
+      "InventoryItems": [
+        { "ResourceID": "R003","Quantity": 170,"CurrentValue": 112 }, 
+        { "ResourceID": "R007","Quantity": 154,"CurrentValue": 41 }, 
+        { "ResourceID": "R016","Quantity": 191,"CurrentValue": 72 }, 
+        { "ResourceID": "R022","Quantity": 109,"CurrentValue": 82 }, 
+        { "ResourceID": "R026","Quantity": 193,"CurrentValue": 66 }, 
+        { "ResourceID": "R034","Quantity": 74,"CurrentValue": 60 }
+      ]
+    }, 
+    {
+      "CityInvID": "CV0002", "CityID": "C0002", "CityInvMoney": 15000,
+      "InventoryItems": [
+        { "ResourceID": "R001","Quantity": 156,"CurrentValue": 144 }, 
+        { "ResourceID": "R002","Quantity": 93,"CurrentValue": 144 }, 
+        { "ResourceID": "R006","Quantity": 5,"CurrentValue": 45 }, 
+        { "ResourceID": "R007","Quantity": 139,"CurrentValue": 40 }, 
+        { "ResourceID": "R010","Quantity": 153,"CurrentValue": 36 }, 
+        { "ResourceID": "R014","Quantity": 190,"CurrentValue": 78 }, 
+        { "ResourceID": "R017","Quantity": 150,"CurrentValue": 82 }, 
+        { "ResourceID": "R023","Quantity": 34,"CurrentValue": 19 }, 
+        { "ResourceID": "R024","Quantity": 100,"CurrentValue": 62 }, 
+        { "ResourceID": "R033","Quantity": 52,"CurrentValue": 213 }, 
+        { "ResourceID": "R037","Quantity": 50,"CurrentValue": 50 }, 
+        { "ResourceID": "R043","Quantity": 161,"CurrentValue": 148 }, 
+        { "ResourceID": "R050","Quantity": 90,"CurrentValue": 500 }
+      ]
+    }, 
+    {
+      "CityInvID": "CV0003", "CityID": "C0003", "CityInvMoney": 21000,
+      "InventoryItems": [
+        { "ResourceID": "R005","Quantity": 163,"CurrentValue": 135 }, 
+        { "ResourceID": "R010","Quantity": 93,"CurrentValue": 35 }, 
+        { "ResourceID": "R016","Quantity": 63,"CurrentValue": 74 }, 
+        { "ResourceID": "R026","Quantity": 53,"CurrentValue": 62 }, 
+        { "ResourceID": "R045","Quantity": 174,"CurrentValue": 78 }
+      ]
+    }, 
+    {
+      "CityInvID": "CV0004", "CityID": "C0004", "CityInvMoney": 8500,
+      "InventoryItems": [
+        { "ResourceID": "R003","Quantity": 173,"CurrentValue": 105 }, 
+        { "ResourceID": "R005","Quantity": 171,"CurrentValue": 131 }, 
+        { "ResourceID": "R008","Quantity": 192,"CurrentValue": 31 }, 
+        { "ResourceID": "R016","Quantity": 19,"CurrentValue": 72 }, 
+        { "ResourceID": "R036","Quantity": 35,"CurrentValue": 35 }, 
+        { "ResourceID": "R053","Quantity": 161,"CurrentValue": 288 }
+      ]
+    }, 
+    {
+      "CityInvID": "CV0005", "CityID": "C0005", "CityInvMoney": 34000,
+      "InventoryItems": [
+        { "ResourceID": "R002","Quantity": 73,"CurrentValue": 142 }, 
+        { "ResourceID": "R004","Quantity": 123,"CurrentValue": 121 }, 
+        { "ResourceID": "R009","Quantity": 22,"CurrentValue": 52 }, 
+        { "ResourceID": "R011","Quantity": 182,"CurrentValue": 39 }, 
+        { "ResourceID": "R012","Quantity": 69,"CurrentValue": 52 }, 
+        { "ResourceID": "R019","Quantity": 171,"CurrentValue": 260 }, 
+        { "ResourceID": "R021","Quantity": 50,"CurrentValue": 40 }, 
+        { "ResourceID": "R022","Quantity": 145,"CurrentValue": 78 }, 
+        { "ResourceID": "R029","Quantity": 147,"CurrentValue": 52 }, 
+        { "ResourceID": "R037","Quantity": 56,"CurrentValue": 49 }, 
+        { "ResourceID": "R038","Quantity": 10,"CurrentValue": 26 }, 
+        { "ResourceID": "R052","Quantity": 65,"CurrentValue": 294 }, 
+        { "ResourceID": "R055","Quantity": 172,"CurrentValue": 80 }
+      ]
+    }
+  ]
+}

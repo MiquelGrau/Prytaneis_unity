@@ -6,8 +6,7 @@
         "latitude": 41.3888,
         "longitude": 2.1629,
         "buildings": [],
-        "money": "10000",
-        "cityInventoryID": "0",
+        "cityInventoryID": "CV0001",
         "nodeId": "N00021",
         "grid": [
           ["House1", "House2", "Market1", "StoneRoad1", "House1"],
@@ -22,8 +21,7 @@
         "latitude": 39.4623,
         "longitude": -0.3833,
         "buildings": [],
-        "money": "11000",
-        "cityInventoryID": "1",
+        "cityInventoryID": "CV0005",
         "nodeId": "N00025",
         "grid": [
           ["House1", "House2", "Market1", "StoneRoad1", "House1"],
@@ -38,8 +36,7 @@
         "latitude": 41.9031,
         "longitude": 12.4742,
         "buildings": [],
-        "money": "12000",
-        "cityInventoryID": "2",
+        "cityInventoryID": "CV0002",
         "nodeId": "N00022",
         "grid": [
           ["House1", "House2", "Market1", "StoneRoad1", "House1"],
@@ -54,8 +51,7 @@
         "latitude": 43.7617,
         "longitude": 11.2904,
         "buildings": [],
-        "money": "13000",
-        "cityInventoryID": "3",
+        "cityInventoryID": "CV0003",
         "nodeId": "N00023",
         "grid": [
           ["House1", "House2", "Market1", "StoneRoad1", "House1"],
@@ -70,8 +66,7 @@
         "latitude": 43.2933,
         "longitude": 5.3759,
         "buildings": [],
-        "money": "15000",
-        "cityInventoryID": "4",
+        "cityInventoryID": "CV0004",
         "nodeId": "N00024",
         "grid": [
           ["House1", "House2", "House1", "House1", "House1"],
