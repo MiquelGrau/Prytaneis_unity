@@ -1,0 +1,67 @@
+{
+  "Items":[ 
+    {
+      "TierID": 1, "TierName": "Starving",
+      "LifestyleDemands": [
+        { "resourceType": "Basic food","quantityPerThousand": 6,"monthsCritical": 1,"monthsTotal": 2,"resourceVariety": 1 }, 
+        { "resourceType": "Heating","quantityPerThousand": 3,"monthsCritical": 0,"monthsTotal": 1,"resourceVariety": 1 }, 
+        { "resourceType": "Textiles","quantityPerThousand": 2,"monthsCritical": 0,"monthsTotal": 1,"resourceVariety": 1 }
+      ]
+    }, 
+    {
+      "TierID": 2, "TierName": "Struggling",
+      "LifestyleDemands": [
+        { "resourceType": "Basic food","quantityPerThousand": 8,"monthsCritical": 1,"monthsTotal": 2,"resourceVariety": 1 }, 
+        { "resourceType": "Everyday food","quantityPerThousand": 4,"monthsCritical": 1,"monthsTotal": 2,"resourceVariety": 1 }, 
+        { "resourceType": "Heating","quantityPerThousand": 3,"monthsCritical": 1,"monthsTotal": 2,"resourceVariety": 1 }, 
+        { "resourceType": "Beverage","quantityPerThousand": 6,"monthsCritical": 0,"monthsTotal": 1,"resourceVariety": 1 }, 
+        { "resourceType": "Textiles","quantityPerThousand": 3,"monthsCritical": 0,"monthsTotal": 1,"resourceVariety": 1 }, 
+        { "resourceType": "Utensils","quantityPerThousand": 0.6,"monthsCritical": 0,"monthsTotal": 1,"resourceVariety": 1 }
+      ]
+    }, 
+    {
+      "TierID": 3, "TierName": "Frugal",
+      "LifestyleDemands": [
+        { "resourceType": "Basic food","quantityPerThousand": 10,"monthsCritical": 1,"monthsTotal": 3,"resourceVariety": 2 }, 
+        { "resourceType": "Everyday food","quantityPerThousand": 5,"monthsCritical": 1,"monthsTotal": 2,"resourceVariety": 1 }, 
+        { "resourceType": "Seasonings","quantityPerThousand": 1,"monthsCritical": 0,"monthsTotal": 1,"resourceVariety": 1 }, 
+        { "resourceType": "Heating","quantityPerThousand": 3,"monthsCritical": 1,"monthsTotal": 2,"resourceVariety": 1 }, 
+        { "resourceType": "Beverage","quantityPerThousand": 7,"monthsCritical": 1,"monthsTotal": 2,"resourceVariety": 1 }, 
+        { "resourceType": "Textiles","quantityPerThousand": 4,"monthsCritical": 1,"monthsTotal": 2,"resourceVariety": 1 }, 
+        { "resourceType": "Clothing","quantityPerThousand": 2,"monthsCritical": 0,"monthsTotal": 1,"resourceVariety": 1 }, 
+        { "resourceType": "Utensils","quantityPerThousand": 0.8,"monthsCritical": 0,"monthsTotal": 1,"resourceVariety": 1 }
+      ]
+    }, 
+    {
+      "TierID": 4, "TierName": "Modest",
+      "LifestyleDemands": [
+        { "resourceType": "Basic food","quantityPerThousand": 10,"monthsCritical": 2,"monthsTotal": 3,"resourceVariety": 2 }, 
+        { "resourceType": "Everyday food","quantityPerThousand": 6,"monthsCritical": 1,"monthsTotal": 2,"resourceVariety": 1 }, 
+        { "resourceType": "Seasonings","quantityPerThousand": 1,"monthsCritical": 0,"monthsTotal": 1,"resourceVariety": 1 }, 
+        { "resourceType": "Heating","quantityPerThousand": 3,"monthsCritical": 2,"monthsTotal": 3,"resourceVariety": 1 }, 
+        { "resourceType": "Beverage","quantityPerThousand": 8,"monthsCritical": 1,"monthsTotal": 4,"resourceVariety": 1 }, 
+        { "resourceType": "Textiles","quantityPerThousand": 4,"monthsCritical": 1,"monthsTotal": 2,"resourceVariety": 1 }, 
+        { "resourceType": "Clothing","quantityPerThousand": 3,"monthsCritical": 0,"monthsTotal": 1,"resourceVariety": 1 }, 
+        { "resourceType": "Utensils","quantityPerThousand": 0.8,"monthsCritical": 1,"monthsTotal": 2,"resourceVariety": 1 }, 
+        { "resourceType": "House goods","quantityPerThousand": 1,"monthsCritical": 0,"monthsTotal": 1,"resourceVariety": 1 }, 
+        { "resourceType": "Medicine","quantityPerThousand": 0.5,"monthsCritical": 0,"monthsTotal": 1,"resourceVariety": 1 }
+      ]
+    }, 
+    {
+      "TierID": 5, "TierName": "Satisfied",
+      "LifestyleDemands": [
+        { "resourceType": "Basic food","quantityPerThousand": 11,"monthsCritical": 2,"monthsTotal": 4,"resourceVariety": 2 }, 
+        { "resourceType": "Everyday food","quantityPerThousand": 8,"monthsCritical": 2,"monthsTotal": 3,"resourceVariety": 2 }, 
+        { "resourceType": "Luxury food","quantityPerThousand": 1,"monthsCritical": 1,"monthsTotal": 4,"resourceVariety": 1 }, 
+        { "resourceType": "Seasonings","quantityPerThousand": 1.1,"monthsCritical": 1,"monthsTotal": 4,"resourceVariety": 1 }, 
+        { "resourceType": "Heating","quantityPerThousand": 4,"monthsCritical": 2,"monthsTotal": 4,"resourceVariety": 1 }, 
+        { "resourceType": "Beverage","quantityPerThousand": 8,"monthsCritical": 1,"monthsTotal": 4,"resourceVariety": 2 }, 
+        { "resourceType": "Textiles","quantityPerThousand": 4,"monthsCritical": 2,"monthsTotal": 3,"resourceVariety": 2 }, 
+        { "resourceType": "Clothing","quantityPerThousand": 3,"monthsCritical": 1,"monthsTotal": 2,"resourceVariety": 1 }, 
+        { "resourceType": "Utensils","quantityPerThousand": 1,"monthsCritical": 1,"monthsTotal": 2,"resourceVariety": 1 }, 
+        { "resourceType": "House goods","quantityPerThousand": 2,"monthsCritical": 1,"monthsTotal": 2,"resourceVariety": 1 }, 
+        { "resourceType": "Medicine","quantityPerThousand": 0.6,"monthsCritical": 0,"monthsTotal": 1,"resourceVariety": 1 }
+      ]
+    }
+  ]
+}

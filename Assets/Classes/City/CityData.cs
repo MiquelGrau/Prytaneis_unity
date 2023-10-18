@@ -11,7 +11,7 @@ public class CityData
     public float latitude;
     public float longitude;
     public string cityInventoryID;
-    public int money;
+    //public int money; //money inside inventory, now
     
     public int PoorPopulation { get; set; }
     public int MidPopulation { get; set; }
