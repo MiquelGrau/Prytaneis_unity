@@ -10,10 +10,10 @@
         "cityInventoryID": "0",
         "nodeId": "N00021",
         "grid": [
-          ["House1", "House2", "Market1", "StoneRoad1", "House1"],
-          ["House1", "House1", "House1", "StoneRoad1", "House2"],
-          ["House2", "House2", "House1", "StoneRoad1", "House1"],
-          ["House1", "House2", "House2", "Market1", "House1"]
+          ["House1", "House1", "House1", "House1", "House1"],
+          ["House1", "House1", "House1", "House1", "House1"],
+          ["House1", "House1", "House1", "House1", "House1"],
+          ["House1", "House1", "House1", "House1", "House1"]
         ]
       },
       {
@@ -26,10 +26,10 @@
         "cityInventoryID": "1",
         "nodeId": "N00025",
         "grid": [
-          ["House1", "House2", "Market1", "StoneRoad1", "House1"],
-          ["House1", "House1", "House1", "StoneRoad1", "House2"],
-          ["House2", "House2", "House1", "StoneRoad1", "House1"],
-          ["House1", "House2", "House2", "Market1", "House1"]
+          ["House1", "House1", "House1", "House1", "House1"],
+          ["House1", "House1", "House1", "House1", "House1"],
+          ["House1", "House1", "House1", "House1", "House1"],
+          ["House1", "House1", "House1", "House1", "House1"]
         ]
       },
       {
@@ -42,10 +42,10 @@
         "cityInventoryID": "2",
         "nodeId": "N00022",
         "grid": [
-          ["House1", "House2", "Market1", "StoneRoad1", "House1"],
-          ["House1", "House1", "House1", "StoneRoad1", "House2"],
-          ["House2", "House2", "House1", "StoneRoad1", "House1"],
-          ["House1", "House2", "House2", "Market1", "House1"]
+          ["House1", "House1", "House1", "House1", "House1"],
+          ["House1", "House1", "House1", "House1", "House1"],
+          ["House1", "House1", "House1", "House1", "House1"],
+          ["House1", "House1", "House1", "House1", "House1"]
         ]
       },
       {
@@ -58,10 +58,10 @@
         "cityInventoryID": "3",
         "nodeId": "N00023",
         "grid": [
-          ["House1", "House2", "Market1", "StoneRoad1", "House1"],
-          ["House1", "House1", "House1", "StoneRoad1", "House2"],
-          ["House2", "House2", "House1", "StoneRoad1", "House1"],
-          ["House1", "House2", "House2", "Market1", "House1"]
+          ["House1", "House1", "House1", "House1", "House1"],
+          ["House1", "House1", "House1", "House1", "House1"],
+          ["House1", "House1", "House1", "House1", "House1"],
+          ["House1", "House1", "House1", "House1", "House1"]
         ]
       },
       {
@@ -74,11 +74,10 @@
         "cityInventoryID": "4",
         "nodeId": "N00024",
         "grid": [
-          ["House1", "House2", "House1", "House1", "House1"],
-          ["House1", "House1", "House1", "House2", "House2"],
-          ["House2", "House2", "Market1", "ref-", "House1"],
-          ["House1", "House2", "ref-", "ref-", "House1"],
-          ["House1", "House2", "House2", "House1", "House1"]
+          ["House1", "House1", "House1", "House1", "House1"],
+          ["House1", "House1", "House1", "House1", "House1"],
+          ["House1", "House1", "House1", "House1", "House1"],
+          ["House1", "House1", "House1", "House1", "House1"]
         ]
       }
     ]

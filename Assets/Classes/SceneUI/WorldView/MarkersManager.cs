@@ -6,7 +6,6 @@ public class MarkersManager : MonoBehaviour
     public Planet planet;
     public GameObject markerPrefab;
     public DataManager<CityDataList> dataManager;
-    public GameObject contextMenuPrefab;
 
     private List<Marker> allMarkers = new List<Marker>();
 
@@ -33,7 +32,6 @@ public class MarkersManager : MonoBehaviour
         Marker marker = markerObj.AddComponent<Marker>();
         marker.cityName = city.cityName;
         marker.position = position;
-        marker.contextMenuPrefab = contextMenuPrefab;
         allMarkers.Add(marker);
     }
 

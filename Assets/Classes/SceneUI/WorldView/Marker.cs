@@ -12,54 +12,6 @@ public class Marker : MonoBehaviour
 
     private void OnMouseOver()
     {
-        if (Input.GetMouseButtonDown(1)) // 1 és el botó dret del ratolí
-        {
-            RouteManager routeManager = FindObjectOfType<RouteManager>();
-            if (routeManager)
-            {
-                CityData agentCityData = GetCurrentAgentCityData();
-                if (agentCityData != null)
-                {
-                    CityData destinationCityData = GetCityDataByName(cityName);
-                    if(destinationCityData != null)
-                    {
-                        routeManager.CreateRoute(agentCityData, destinationCityData);
-                    }
-                    else
-                    {
-                        Debug.LogError($"No es pot trobar les dades de la ciutat amb el nom {cityName}.");
-                    }
-                }
-            }
-            else
-            {
-                Debug.LogError("No s'ha trobat RouteManager a l'escena.");
-            }
-        }
-    }
-
-    private CityData GetCurrentAgentCityData()
-    {
-        Agent currentAgent = GameData.Instance.SelectedAgent;
-        if (currentAgent != null)
-        {
-            CityDataManager cityDataManager = FindObjectOfType<CityDataManager>();
-            if (cityDataManager && cityDataManager.dataItems != null)
-            {
-                return cityDataManager.dataItems.cities.FirstOrDefault(city => city.cityID == currentAgent.currentCityID);
-            }
-        }
-        return null;
-    }
-
-    private CityData GetCityDataByName(string name)
-    {
-        CityDataManager cityDataManager = FindObjectOfType<CityDataManager>();
-        if (cityDataManager && cityDataManager.dataItems != null)
-        {
-            return cityDataManager.dataItems.cities.FirstOrDefault(city => city.cityName == name);
-        }
-        return null;
     }
 
     private void OnMouseDown()

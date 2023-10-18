@@ -24,10 +24,6 @@ public class DataManager<T> : MonoBehaviour where T : class, new()
             else
             {
                 CityDataList dataList = dataItems as CityDataList;
-                if (dataList != null && dataList.cities != null && dataList.cities.Count > 0)
-                {
-                    Debug.Log("Detalls del grid de la ciutat: " + (dataList.cities[0].grid == null ? "NULL" : "NOT NULL"));
-                }
             }
         }
         else

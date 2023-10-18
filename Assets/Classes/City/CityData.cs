@@ -26,9 +26,6 @@ public class CityData
     public int midLifestyleID; 
     public int richLifestyleID; 
     
-    public List<BuildingInstanceData> buildings;
-    public string[][] grid;
-    
 }
 
 
@@ -36,11 +33,4 @@ public class CityData
 public class CityDataList
 {
     public List<CityData> cities;
-}
-
-[System.Serializable]
-public class BuildingInstanceData
-{
-    public string buildingType; // per exemple: "Hospital1", "SmallHouse2", etc.
-    public Vector2Int position; // posició de l'edifici dins de la matriu/grid de la ciutat
 }
