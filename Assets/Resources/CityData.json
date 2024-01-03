@@ -7,27 +7,18 @@
         "longitude": 2.1629,
         "buildings": [],
         "cityInventoryID": "CV0001",
+        "PoorPopulation": 12000, 
+        "MidPopulation": 5000, 
+        "RichPopulation": 2000, 
+        "poorLifestyleID": 2, 
+        "midLifestyleID": 3,  
+        "richLifestyleID": 4, 
         "nodeId": "N00021",
         "grid": [
-          ["House1", "House1", "House1", "House1", "House1"],
-          ["House1", "House1", "House1", "House1", "House1"],
-          ["House1", "House1", "House1", "House1", "House1"],
-          ["House1", "House1", "House1", "House1", "House1"]
-        ]
-      },
-      {
-        "cityID": "C0005",
-        "cityName": "Valencia",
-        "latitude": 39.4623,
-        "longitude": -0.3833,
-        "buildings": [],
-        "cityInventoryID": "CV0005",
-        "nodeId": "N00025",
-        "grid": [
-          ["House1", "House1", "House1", "House1", "House1"],
-          ["House1", "House1", "House1", "House1", "House1"],
-          ["House1", "House1", "House1", "House1", "House1"],
-          ["House1", "House1", "House1", "House1", "House1"]
+          ["House1", "House2", "Market1", "StoneRoad1", "House1"],
+          ["House1", "House1", "House1", "StoneRoad1", "House2"],
+          ["House2", "House2", "House1", "StoneRoad1", "House1"],
+          ["House1", "House2", "House2", "Market1", "House1"]
         ]
       },
       {
@@ -37,12 +28,18 @@
         "longitude": 12.4742,
         "buildings": [],
         "cityInventoryID": "CV0002",
+        "PoorPopulation": 18000, 
+        "MidPopulation": 6000, 
+        "RichPopulation": 4000, 
+        "poorLifestyleID": 2, 
+        "midLifestyleID": 3,  
+        "richLifestyleID": 5, 
         "nodeId": "N00022",
         "grid": [
-          ["House1", "House1", "House1", "House1", "House1"],
-          ["House1", "House1", "House1", "House1", "House1"],
-          ["House1", "House1", "House1", "House1", "House1"],
-          ["House1", "House1", "House1", "House1", "House1"]
+          ["House1", "House2", "Market1", "StoneRoad1", "House1"],
+          ["House1", "House1", "House1", "StoneRoad1", "House2"],
+          ["House2", "House2", "House1", "StoneRoad1", "House1"],
+          ["House1", "House2", "House2", "Market1", "House1"]
         ]
       },
       {
@@ -52,12 +49,18 @@
         "longitude": 11.2904,
         "buildings": [],
         "cityInventoryID": "CV0003",
+        "PoorPopulation": 10000, 
+        "MidPopulation": 4500, 
+        "RichPopulation": 1500, 
+        "poorLifestyleID": 2, 
+        "midLifestyleID": 3,  
+        "richLifestyleID": 4, 
         "nodeId": "N00023",
         "grid": [
-          ["House1", "House1", "House1", "House1", "House1"],
-          ["House1", "House1", "House1", "House1", "House1"],
-          ["House1", "House1", "House1", "House1", "House1"],
-          ["House1", "House1", "House1", "House1", "House1"]
+          ["House1", "House2", "Market1", "StoneRoad1", "House1"],
+          ["House1", "House1", "House1", "StoneRoad1", "House2"],
+          ["House2", "House2", "House1", "StoneRoad1", "House1"],
+          ["House1", "House2", "House2", "Market1", "House1"]
         ]
       },
       {
@@ -67,12 +70,40 @@
         "longitude": 5.3759,
         "buildings": [],
         "cityInventoryID": "CV0004",
+        "PoorPopulation": 12000, 
+        "MidPopulation": 4000, 
+        "RichPopulation": 3000, 
+        "poorLifestyleID": 1, 
+        "midLifestyleID": 3,  
+        "richLifestyleID": 5, 
         "nodeId": "N00024",
         "grid": [
-          ["House1", "House1", "House1", "House1", "House1"],
-          ["House1", "House1", "House1", "House1", "House1"],
-          ["House1", "House1", "House1", "House1", "House1"],
-          ["House1", "House1", "House1", "House1", "House1"]
+          ["House1", "House2", "House1", "House1", "House1"],
+          ["House1", "House1", "House1", "House2", "House2"],
+          ["House2", "House2", "Market1", "ref-", "House1"],
+          ["House1", "House2", "ref-", "ref-", "House1"],
+          ["House1", "House2", "House2", "House1", "House1"]
+        ]
+      },
+      {
+        "cityID": "C0005",
+        "cityName": "Valencia",
+        "latitude": 39.4623,
+        "longitude": -0.3833,
+        "buildings": [],
+        "cityInventoryID": "CV0005",
+        "PoorPopulation": 7000, 
+        "MidPopulation": 2000, 
+        "RichPopulation": 1000, 
+        "poorLifestyleID": 1, 
+        "midLifestyleID": 2,  
+        "richLifestyleID": 4, 
+        "nodeId": "N00025",
+        "grid": [
+          ["House1", "House2", "Market1", "StoneRoad1", "House1"],
+          ["House1", "House1", "House1", "StoneRoad1", "House2"],
+          ["House2", "House2", "House1", "StoneRoad1", "House1"],
+          ["House1", "House2", "House2", "Market1", "House1"]
         ]
       }
     ]

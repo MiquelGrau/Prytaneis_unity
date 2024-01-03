@@ -3,8 +3,9 @@
     {
       "CityInvID": "CV0001", "CityID": "C0001", "CityInvMoney": 12000,
       "InventoryItems": [
-        { "ResourceID": "R003","Quantity": 170,"CurrentValue": 112 }, 
-        { "ResourceID": "R007","Quantity": 154,"CurrentValue": 41 }, 
+        { "ResourceID": "R001","Quantity": 170,"CurrentValue": 112 }, 
+        { "ResourceID": "R003","Quantity": 154,"CurrentValue": 41 }, 
+        { "ResourceID": "R005","Quantity": 74,"CurrentValue": 41 }, 
         { "ResourceID": "R016","Quantity": 191,"CurrentValue": 72 }, 
         { "ResourceID": "R022","Quantity": 109,"CurrentValue": 82 }, 
         { "ResourceID": "R026","Quantity": 193,"CurrentValue": 66 }, 
