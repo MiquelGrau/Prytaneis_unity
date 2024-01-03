@@ -4107,6 +4107,7 @@ GameObject:
   - component: {fileID: 1301510090}
   - component: {fileID: 1301510089}
   - component: {fileID: 1301510091}
+  - component: {fileID: 1301510092}
   m_Layer: 0
   m_Name: GOLoaders
   m_TagString: Untagged
@@ -4126,6 +4127,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91ff1f54b3dc49d498b15395354410d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lifestyleTiers: []
+  resources: []
+  cities: []
+  cityInventories: []
 --- !u!4 &1301510090
 Transform:
   m_ObjectHideFlags: 0
@@ -4155,6 +4160,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dataItems:
     cities: []
+--- !u!114 &1301510092
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1301510088}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3cae09f9d3f718458d1e8fc9a34891a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dataManager: {fileID: 1301510091}
+  cities: []
+  databaseImporter: {fileID: 1301510089}
+  lifestyleTiers: []
+  inventoryDisplayText: {fileID: 1812656526}
 --- !u!1 &1304097682
 GameObject:
   m_ObjectHideFlags: 0
@@ -6083,8 +6105,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 14
-  m_fontSizeBase: 14
+  m_fontSize: 12
+  m_fontSizeBase: 12
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -6119,7 +6141,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: -2.5755997, w: -2.4961243}
+  m_margin: {x: 0, y: 60.83474, z: -297.1087, w: -2.4961243}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
