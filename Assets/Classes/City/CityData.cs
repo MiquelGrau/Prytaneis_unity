@@ -11,6 +11,7 @@ public class CityData
     public float latitude;
     public float longitude;
     public string cityInventoryID;
+    public CityInventory CityInventory { get; set; } // Referència directa a CityInventory
     //public int money; //money inside inventory, now
     
     public int PoorPopulation { get; set; }
@@ -22,9 +23,12 @@ public class CityData
         get { return PoorPopulation + MidPopulation + RichPopulation; }
     }
 
-    public int poorLifestyleID; 
-    public int midLifestyleID; 
-    public int richLifestyleID; 
+    public int PoorLifestyleID; 
+    public int MidLifestyleID; 
+    public int RichLifestyleID; 
+    
+    public List<BuildingInstanceData> buildings;
+    public string[][] grid;
     
 }
 

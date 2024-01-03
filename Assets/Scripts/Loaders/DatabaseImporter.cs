@@ -1,20 +1,46 @@
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 using System.IO;
 
 public class DatabaseImporter : MonoBehaviour
 {
     private const string LifestyleDataPath = "Statics/LifestyleData";
-    private List<LifestyleTier> lifestyleTiers;
+    public List<LifestyleTier> lifestyleTiers;
     private const string ResourceDataPath = "Statics/ResourceData";
-    private List<Resource> resources;
+    public static List<Resource> resources;
+    public List<CityData> cities;
+    public List<CityInventory> cityInventories; 
 
-    private void Start()
+    private void Awake()
     {
         LoadLifestyleData();
         LoadResourceData();
+        cityInventories = new List<CityInventory>(); 
         LoadCityInventory();
+
+        // Obté la referència de DataManager i carrega les ciutats
+        DataManager<CityDataList> dataManager = FindObjectOfType<DataManager<CityDataList>>();
+        if (dataManager != null)
+        {
+            cities = dataManager.GetCities();
+            // Afegim el Debug.Log aquí per mostrar tot el contingut de la llista cities
+            string citiesJson = JsonConvert.SerializeObject(cities, Formatting.Indented);
+            Debug.Log("Ciutats carregades: " + citiesJson);
+        }
+        else
+        {
+            Debug.LogError("No s'ha trobat DataManager.");
+        }
+
+        Debug.Log("Acabada fase Awake de l'importador! Lifestyle, Resource, CityInventory");
+    }
+
+    private void Start()
+    {
+        ConnectCityAndCityInv();
+        Debug.Log("Acabada fase Start de l'importador! Connectar City i CityInventory");
     }
 
     private void LoadLifestyleData()
@@ -87,6 +113,8 @@ public class DatabaseImporter : MonoBehaviour
             {
                 foreach (CityInventory cityInventory in wrapper.Items)
                 {
+                    cityInventories.Add(cityInventory); // Afegeix cada CityInventory a la llista
+                    
                     int totalItems = cityInventory.InventoryItems.Count;
                     float totalQuantity = 0;
 
@@ -100,12 +128,59 @@ public class DatabaseImporter : MonoBehaviour
                     
                 }
             }
+
+            /* if (wrapper != null && wrapper.Items != null)
+            {
+                foreach (CityInventory cityInventory in wrapper.Items)
+                {
+                    int totalItems = cityInventory.InventoryItems.Count;
+                    float totalQuantity = 0;
+
+                    //Debug.Log($"CityInvID: {cityInventory.CityInvID}, CityID: {cityInventory.CityID}, CityInvMoney: {cityInventory.CityInvMoney}");
+                    foreach (CityInventoryItem item in cityInventory.InventoryItems)
+                    {
+                        totalQuantity += item.Quantity;
+                        //Debug.Log($"ResourceID: {item.ResourceID}, Quantity: {item.Quantity}, CurrentValue: {item.CurrentValue}");
+                    }
+                    Debug.Log($"CityInvID: {cityInventory.CityInvID}, CityID: {cityInventory.CityID}, CityInvMoney: {cityInventory.CityInvMoney}, {totalQuantity} unitats de recursos en  {totalItems} línies. ");
+                    
+                }
+            } */
            
         }
         Debug.Log("Llistat d'inventaris de ciutat carregats");
     }
 
-    
+    private void ConnectCityAndCityInv()
+    {
+        Debug.Log("ConnectCityAndCityInv: Començant a connectar ciutats");
+        
+        if (cities == null || cities.Count == 0)
+        {
+            Debug.LogError("ConnectCityAndCityInv: La llista de ciutats és nul·la o buida.");
+            return;
+        }
+        foreach (var cityData in cities)
+        {
+            Debug.Log($"ConnectCityAndCityInv: Processant la ciutat {cityData.cityName} amb ID d'inventari {cityData.cityInventoryID}");
+
+            // Troba l'objecte CityInventory que coincideix amb la cityInventoryID de CityData
+            var matchingInventory = cityInventories.FirstOrDefault(ci => ci.CityInvID == cityData.cityInventoryID);
+            
+            if (matchingInventory != null)
+            {
+                // Estableix la referència de CityData a CityInventory
+                cityData.CityInventory = matchingInventory;
+
+                // Mostra un missatge indicant que la connexió ha estat exitosa
+                Debug.Log($"Connexió ciutat-inventari: {cityData.cityID} {cityData.cityName}, Inventari: {matchingInventory.CityInvID}");
+            }
+            else
+            {
+                Debug.LogError($"No s'ha trobat Inventari amb ID {cityData.cityInventoryID} per la ciutat {cityData.cityName}");
+            }
+        }
+    }
     
 
 

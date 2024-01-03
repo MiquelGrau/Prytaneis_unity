@@ -5,8 +5,8 @@ using UnityEngine;
 [System.Serializable]
 public class LifestyleTier
 {
-    public int TierID; //{ get; set; } // integre aixi es pot "pujar de nivell"
-    public string TierName; //{ get; set; }
+    public int TierID; 
+    public string TierName; 
     public List<LifestyleNeed> LifestyleDemands;
     
     public LifestyleTier(int tierID)
