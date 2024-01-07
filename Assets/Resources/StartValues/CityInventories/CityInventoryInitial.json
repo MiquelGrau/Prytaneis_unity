@@ -2,7 +2,7 @@
   "Items":[ 
     {
       "CityInvID": "CV0001", "CityID": "C0001", "CityInvMoney": 12000,
-      "InventoryItems": [
+      "InventoryResources": [
         { "ResourceID": "R001","Quantity": 170,"CurrentValue": 112 }, 
         { "ResourceID": "R003","Quantity": 154,"CurrentValue": 41 }, 
         { "ResourceID": "R005","Quantity": 74,"CurrentValue": 41 }, 
@@ -14,7 +14,7 @@
     }, 
     {
       "CityInvID": "CV0002", "CityID": "C0002", "CityInvMoney": 15000,
-      "InventoryItems": [
+      "InventoryResources": [
         { "ResourceID": "R001","Quantity": 156,"CurrentValue": 144 }, 
         { "ResourceID": "R002","Quantity": 93,"CurrentValue": 144 }, 
         { "ResourceID": "R006","Quantity": 5,"CurrentValue": 45 }, 
@@ -32,7 +32,7 @@
     }, 
     {
       "CityInvID": "CV0003", "CityID": "C0003", "CityInvMoney": 21000,
-      "InventoryItems": [
+      "InventoryResources": [
         { "ResourceID": "R005","Quantity": 163,"CurrentValue": 135 }, 
         { "ResourceID": "R010","Quantity": 93,"CurrentValue": 35 }, 
         { "ResourceID": "R016","Quantity": 63,"CurrentValue": 74 }, 
@@ -42,7 +42,7 @@
     }, 
     {
       "CityInvID": "CV0004", "CityID": "C0004", "CityInvMoney": 8500,
-      "InventoryItems": [
+      "InventoryResources": [
         { "ResourceID": "R003","Quantity": 173,"CurrentValue": 105 }, 
         { "ResourceID": "R005","Quantity": 171,"CurrentValue": 131 }, 
         { "ResourceID": "R008","Quantity": 192,"CurrentValue": 31 }, 
@@ -53,7 +53,7 @@
     }, 
     {
       "CityInvID": "CV0005", "CityID": "C0005", "CityInvMoney": 34000,
-      "InventoryItems": [
+      "InventoryResources": [
         { "ResourceID": "R002","Quantity": 73,"CurrentValue": 142 }, 
         { "ResourceID": "R004","Quantity": 123,"CurrentValue": 121 }, 
         { "ResourceID": "R009","Quantity": 22,"CurrentValue": 52 }, 

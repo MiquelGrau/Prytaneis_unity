@@ -103,7 +103,8 @@ public class DatabaseImporter : MonoBehaviour
         string[] files = Directory.GetFiles(path, "*.json");
         
         foreach (string file in files)
-        {
+        {   
+            
             string jsonContent = File.ReadAllText(file);
             CityInventoryWrapper wrapper = JsonConvert.DeserializeObject<CityInventoryWrapper>(jsonContent);
             //Debug.Log($"Llegint el fitxer: {Path.GetFileName(file)}");
@@ -115,37 +116,22 @@ public class DatabaseImporter : MonoBehaviour
                 {
                     cityInventories.Add(cityInventory); // Afegeix cada CityInventory a la llista
                     
-                    int totalItems = cityInventory.InventoryItems.Count;
+                    int totalResLines = cityInventory.InventoryResources.Count;
                     float totalQuantity = 0;
 
                     //Debug.Log($"CityInvID: {cityInventory.CityInvID}, CityID: {cityInventory.CityID}, CityInvMoney: {cityInventory.CityInvMoney}");
-                    foreach (CityInventoryItem item in cityInventory.InventoryItems)
+                    foreach (var resline in cityInventory.InventoryResources)
+                    //foreach (CityInventoryItem resline in cityInventory.InventoryResources)
                     {
-                        totalQuantity += item.Quantity;
-                        //Debug.Log($"ResourceID: {item.ResourceID}, Quantity: {item.Quantity}, CurrentValue: {item.CurrentValue}");
+                        totalQuantity += resline.Quantity;
+                        //Debug.Log($"ResourceID: {resline.ResourceID}, Quantity: {resline.Quantity}, CurrentValue: {resline.CurrentValue}");
                     }
-                    Debug.Log($"CityInvID: {cityInventory.CityInvID}, CityID: {cityInventory.CityID}, CityInvMoney: {cityInventory.CityInvMoney}, {totalQuantity} unitats de recursos en  {totalItems} línies. ");
+                    Debug.Log($"CityInvID: {cityInventory.CityInvID}, CityID: {cityInventory.CityID}, CityInvMoney: {cityInventory.CityInvMoney}, {totalQuantity} unitats de recursos en  {totalResLines} línies. ");
                     
                 }
             }
 
-            /* if (wrapper != null && wrapper.Items != null)
-            {
-                foreach (CityInventory cityInventory in wrapper.Items)
-                {
-                    int totalItems = cityInventory.InventoryItems.Count;
-                    float totalQuantity = 0;
-
-                    //Debug.Log($"CityInvID: {cityInventory.CityInvID}, CityID: {cityInventory.CityID}, CityInvMoney: {cityInventory.CityInvMoney}");
-                    foreach (CityInventoryItem item in cityInventory.InventoryItems)
-                    {
-                        totalQuantity += item.Quantity;
-                        //Debug.Log($"ResourceID: {item.ResourceID}, Quantity: {item.Quantity}, CurrentValue: {item.CurrentValue}");
-                    }
-                    Debug.Log($"CityInvID: {cityInventory.CityInvID}, CityID: {cityInventory.CityID}, CityInvMoney: {cityInventory.CityInvMoney}, {totalQuantity} unitats de recursos en  {totalItems} línies. ");
-                    
-                }
-            } */
+            
            
         }
         Debug.Log("Llistat d'inventaris de ciutat carregats");

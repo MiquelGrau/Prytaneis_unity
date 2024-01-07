@@ -110,25 +110,25 @@ public class DemandManager : MonoBehaviour
         string[] populationNames = { "pobra", "mitjana", "rica" };
 
 
-        // Inicialitzar o resetejar les línies de CityInventoryItem per a cada ResourceType
+        // Inicialitzar o resetejar les línies de CityInventoryResource per a cada ResourceType
         foreach (var tier in specificTiers)
         {
             foreach (var need in tier.LifestyleDemands)
             {
-                var headerItem = currentCityInventory.InventoryItems
-                    .FirstOrDefault(item => item.ResourceType == need.resourceType && item.ResourceID == null);
+                var headerResource = currentCityInventory.InventoryResources
+                    .FirstOrDefault(resline => resline.ResourceType == need.resourceType && resline.ResourceID == null);
 
-                if (headerItem == null)
+                if (headerResource == null)
                 {
-                    headerItem = new CityInventoryItem(need.resourceType);
-                    currentCityInventory.InventoryItems.Add(headerItem);
+                    headerResource = new CityInventoryResource(need.resourceType);
+                    currentCityInventory.InventoryResources.Add(headerResource);
                 }
                 else
                 {
-                    headerItem.Quantity = 0;
-                    headerItem.DemandConsume = 0;
-                    headerItem.DemandCritical = 0;
-                    headerItem.DemandTotal = 0;
+                    headerResource.Quantity = 0;
+                    headerResource.DemandConsume = 0;
+                    headerResource.DemandCritical = 0;
+                    headerResource.DemandTotal = 0;
                 }
             }
         }
@@ -148,9 +148,9 @@ public class DemandManager : MonoBehaviour
             foreach (var need in tier.LifestyleDemands)
             {
                 
-                // Inicialitzar o resetejar les línies de CityInventoryItem basades en ResourceType
-                var headerItem = currentCityInventory.InventoryItems
-                .FirstOrDefault(item => item.ResourceType == need.resourceType && item.ResourceID == null);
+                // Inicialitzar o resetejar les línies de CityInventoryResource basades en ResourceType
+                var headerResource = currentCityInventory.InventoryResources
+                .FirstOrDefault(resline => resline.ResourceType == need.resourceType && resline.ResourceID == null);
                 
                 CityInventory.CityDemands newDemand = new CityInventory.CityDemands(
                     CityInventory.CityDemands.DemandType.ResourceType, 
@@ -167,10 +167,10 @@ public class DemandManager : MonoBehaviour
                 currentCityInventory.Demands.Add(newDemand);
 
                     
-                // Mou al InventoryItem
-                headerItem.DemandConsume += newDemand.DemandConsume;
-                headerItem.DemandCritical += newDemand.DemandCritical;
-                headerItem.DemandTotal += newDemand.DemandTotal;
+                // Mou al Inventoryresource
+                headerResource.DemandConsume += newDemand.DemandConsume;
+                headerResource.DemandCritical += newDemand.DemandCritical;
+                headerResource.DemandTotal += newDemand.DemandTotal;
      
                 // Log de la informació
                 Debug.Log($"ResourceType: {newDemand.ResourceType}, PopulationType: {newDemand.PopulationType}, " +
@@ -184,60 +184,60 @@ public class DemandManager : MonoBehaviour
 
     public void AssignDemandsToVarieties()
     {
-        // Primer, netejar les demandes existents en els items d'inventari
-        foreach (var item in currentCityInventory.InventoryItems)
+        // Primer, netejar les demandes existents de linies de recursos d'inventari
+        foreach (var resline in currentCityInventory.InventoryResources)
         {
-            if (item.ResourceID != null)
+            if (resline.ResourceID != null)
             {
-                item.DemandConsume = 0;
-                item.DemandCritical = 0;
-                item.DemandTotal = 0;
+                resline.DemandConsume = 0;
+                resline.DemandCritical = 0;
+                resline.DemandTotal = 0;
             }
         }
 
         // Assignar les demandes a les varietats
         foreach (var demand in currentCityInventory.Demands)
         {
-            // Ordenar els items d'inventari per quantitat, de major a menor
-            var sortedInventoryItems = currentCityInventory.InventoryItems
-                .Where(item => item.ResourceType == demand.ResourceType && item.ResourceID != null)
-                .OrderByDescending(item => item.Quantity)
+            // Ordenar els resource lines d'inventari per quantitat, de major a menor
+            var sortedInventoryResLines = currentCityInventory.InventoryResources
+                .Where(resline => resline.ResourceType == demand.ResourceType && resline.ResourceID != null)
+                .OrderByDescending(resline => resline.Quantity)
                 .ToList();
 
             // Assignar les demandes a les varietats
-            for (int i = 0; i < demand.Variety && i < sortedInventoryItems.Count; i++)
+            for (int i = 0; i < demand.Variety && i < sortedInventoryResLines.Count; i++)
             {
-                var item = sortedInventoryItems[i];
-                item.DemandConsume += demand.DemandConsume / demand.Variety;
-                item.DemandCritical += demand.DemandCritical / demand.Variety;
-                item.DemandTotal += demand.DemandTotal / demand.Variety;
+                var resline = sortedInventoryResLines[i];
+                resline.DemandConsume += demand.DemandConsume / demand.Variety;
+                resline.DemandCritical += demand.DemandCritical / demand.Variety;
+                resline.DemandTotal += demand.DemandTotal / demand.Variety;
 
                 // Buscar el nom del recurs
-                var matchedResource = DatabaseImporter.resources.FirstOrDefault(r => r.resourceID == item.ResourceID);
+                var matchedResource = DatabaseImporter.resources.FirstOrDefault(r => r.resourceID == resline.ResourceID);
                 string resourceName = matchedResource != null ? matchedResource.resourceName : "Desconegut";
 
-                // Afegir log per a cada item
-                Debug.Log($"ResourceType: {item.ResourceType}, ID: {item.ResourceID}, {resourceName}, Qty: {item.Quantity} " +
-                $"Demands: {item.DemandConsume} / {item.DemandCritical} / {item.DemandTotal}");
+                // Afegir log per a cada resource line
+                Debug.Log($"ResourceType: {resline.ResourceType}, ID: {resline.ResourceID}, {resourceName}, Qty: {resline.Quantity} " +
+                $"Demands: {resline.DemandConsume} / {resline.DemandCritical} / {resline.DemandTotal}");
             }
         }
 
         // Sumar les quantitats per a cada ResourceType i assignar-les als elements header
-        foreach (var resourceType in currentCityInventory.InventoryItems.Select(item => item.ResourceType).Distinct())
+        foreach (var resourceType in currentCityInventory.InventoryResources.Select(resline => resline.ResourceType).Distinct())
         {
-            var headerItem = currentCityInventory.InventoryItems
-                .FirstOrDefault(item => item.ResourceType == resourceType && item.ResourceID == null);
+            var headerResource = currentCityInventory.InventoryResources
+                .FirstOrDefault(resline => resline.ResourceType == resourceType && resline.ResourceID == null);
 
-            if (headerItem != null)
+            if (headerResource != null)
             {
-                float totalQuantity = currentCityInventory.InventoryItems
-                    .Where(item => item.ResourceType == resourceType && item.ResourceID != null)
-                    .Sum(item => item.Quantity);
+                float totalQuantity = currentCityInventory.InventoryResources
+                    .Where(resline => resline.ResourceType == resourceType && resline.ResourceID != null)
+                    .Sum(resline => resline.Quantity);
 
-                headerItem.Quantity = totalQuantity;
+                headerResource.Quantity = totalQuantity;
 
                 // Opcional: Afegir un log per confirmar l'assignació
-                Debug.Log($"HeaderItem per a {resourceType}: Total Quantity = {totalQuantity}");
+                Debug.Log($"HeaderResource per a {resourceType}: Total Quantity = {totalQuantity}");
             }
         }
 
@@ -255,13 +255,13 @@ public class DemandManager : MonoBehaviour
 
         StringBuilder displayText = new StringBuilder();
         displayText.AppendLine($"Inventari de la Ciutat: {currentCity.cityName} (ID: {currentCity.cityID})");
-        displayText.AppendLine("Items d'Inventari:");
+        displayText.AppendLine("Recursos d'Inventari:");
         
-        foreach (var item in currentCityInventory.InventoryItems)
+        foreach (var resline in currentCityInventory.InventoryResources)
         {
-            displayText.AppendLine($"{item.ResourceID}, Type: {item.ResourceType}, " +
-                                $"Qty: {item.Quantity}, Demands: {item.DemandConsume} / " +
-                                $"{item.DemandCritical} / {item.DemandTotal}");
+            displayText.AppendLine($"{resline.ResourceID}, Type: {resline.ResourceType}, " +
+                                $"Qty: {resline.Quantity}, Demands: {resline.DemandConsume} / " +
+                                $"{resline.DemandCritical} / {resline.DemandTotal}");
         }
 
         displayText.AppendLine("\nDemandes:");
