@@ -38,4 +38,19 @@ public class DataManager<T> : MonoBehaviour where T : class, new()
         string json = JsonConvert.SerializeObject(dataItems, Formatting.Indented); // Use Formatting.Indented for pretty print
         File.WriteAllText(dataPath, json);
     }
+
+    public List<CityData> GetCities()
+    {
+        if (dataItems is CityDataList cityDataList)
+        {
+            return cityDataList.cities;
+        }
+        else
+        {
+            Debug.LogError("DataManager no conté una instància de CityDataList.");
+            return new List<CityData>();
+        }
+    }
+
+
 }
