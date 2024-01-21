@@ -89,8 +89,7 @@ public class CityInventoryResource : InventoryResource
     public float DemandCritical { get; set; }
     public float DemandTotal { get; set; }
     public int VarietyAssigned { get; set; }
-    public int BuyPrice { get; set; }
-    public int SellPrice { get; set; }
+    public int CurrentPrice { get; set; }
     
     // Constructors
 
@@ -114,8 +113,8 @@ public class CityInventoryResource : InventoryResource
         DemandCritical = 0;
         DemandTotal = 0;
         VarietyAssigned = 0;
-        BuyPrice = 0;
-        SellPrice = 0;
+        CurrentPrice = 0;
+        
     }
 
     // Demandes a través de LifestyleTier, crea Resourcetype, nomes la capçalera (header)
@@ -131,8 +130,8 @@ public class CityInventoryResource : InventoryResource
         DemandCritical = 0;
         DemandTotal = 0;
         VarietyAssigned = 0;
-        BuyPrice = 0;
-        SellPrice = 0;
+        CurrentPrice = 0;
+        
     }
     
 }

@@ -59,7 +59,7 @@ public class DemandManager : MonoBehaviour
 
             AssignDemandsToVarieties();
             inventoryDisplayText.text = GetCityInventoryDisplayText();
-            
+            CalculatePrices();
         }
     }
 
@@ -244,6 +244,31 @@ public class DemandManager : MonoBehaviour
 
     }
     
+    public void CalculatePrices()
+    {
+        foreach (var resline in currentCityInventory.InventoryResources)
+        {
+            if (resline.ResourceID != null)
+            {
+                // Calcula el quantitat de diferencia respecte la demanda
+                float difQty = resline.DemandTotal == 0 ? 3f : (resline.Quantity - resline.DemandTotal) / resline.DemandTotal;
+
+                // Calcula la price elasticity segons la fórmula donada: y= -0.6x^3 +0.8x^2 -0.6x +1
+                float priceElasticity = -0.6f * Mathf.Pow(difQty, 3) + 0.8f * Mathf.Pow(difQty, 2) - 0.6f * difQty + 1f;
+
+                // Assegura't que la price elasticity no sigui negativa, posa valor minim, 25%
+                if (priceElasticity < 0f) { priceElasticity = 0.25f; }
+
+                // Troba el base price del recurs
+                var matchedResource = DatabaseImporter.resources.FirstOrDefault(r => r.resourceID == resline.ResourceID);
+                float basePrice = matchedResource != null ? matchedResource.basePrice : 0f;
+
+                // Calcula el CurrentPrice
+                resline.CurrentPrice = Mathf.RoundToInt(priceElasticity * basePrice);
+            }
+        }
+    }
+    
     // DISPLAY TEXTS
 
     private string GetCityInventoryDisplayText()
@@ -259,9 +284,13 @@ public class DemandManager : MonoBehaviour
         
         foreach (var resline in currentCityInventory.InventoryResources)
         {
+            var matchedResource = DatabaseImporter.resources.FirstOrDefault(r => r.resourceID == resline.ResourceID);
+            int basePrice = matchedResource != null ? matchedResource.basePrice : 0; // default a zero
+
             displayText.AppendLine($"{resline.ResourceID}, Type: {resline.ResourceType}, " +
-                                $"Qty: {resline.Quantity}, Demands: {resline.DemandConsume} / " +
-                                $"{resline.DemandCritical} / {resline.DemandTotal}");
+                           $"Qty: {resline.Quantity}, Demands: {resline.DemandConsume} / " +
+                           $"{resline.DemandCritical} / {resline.DemandTotal}, " + 
+                           $"Current price: {resline.CurrentPrice} (Base price: {basePrice})");
         }
 
         displayText.AppendLine("\nDemandes:");

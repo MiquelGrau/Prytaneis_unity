@@ -60,15 +60,14 @@ public class InventoryResource
     // Constructor bàsic i altres mètodes comuns aquí
     public static void TransferQtyAndValue(
         string resourceID,
-        Inventory originInventory,  // Asumint que originInventory és una instància d'una classe d'inventari
+        Inventory originInventory, 
         float quantityOrigin,
         int valueOrigin,
-        Inventory destinationInventory,  // Asumint que destinationInventory és una instància d'una classe d'inventari
+        Inventory destinationInventory, 
         float quantityDestination,
         int valueDestination)   
     {
-        // Comprovacions de validesa...
-
+        
         // Calcular el valor mitjà ponderat
         float totalQuantity = quantityOrigin + quantityDestination;
         
