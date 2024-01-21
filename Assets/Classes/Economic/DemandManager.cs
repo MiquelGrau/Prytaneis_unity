@@ -7,8 +7,8 @@ using UnityEngine;
 
 public class DemandManager : MonoBehaviour
 {
-
-    public DataManager<CityDataList> dataManager; 
+    
+    public DataManager dataManager; 
     public CityData currentCity  { get; private set; }
     public CityInventory currentCityInventory { get; private set; } 
     

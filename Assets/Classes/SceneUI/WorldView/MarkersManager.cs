@@ -5,7 +5,7 @@ public class MarkersManager : MonoBehaviour
 {
     public Planet planet;
     public GameObject markerPrefab;
-    public DataManager<CityDataList> dataManager;
+    public DataManager dataManager;
 
     private List<Marker> allMarkers = new List<Marker>();
 

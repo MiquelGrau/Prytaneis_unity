@@ -4,17 +4,17 @@ using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
 
-public class DataManager<T> : MonoBehaviour where T : class, new() 
+public class DataManager : MonoBehaviour
 {
     private string dataPath;
-    public T dataItems;
+    public CityDataList dataItems;
 
     private void Awake()
     {
         TextAsset cityDataAsset = Resources.Load<TextAsset>("CityData");
         if(cityDataAsset != null)
         {
-            dataItems = JsonConvert.DeserializeObject<T>(cityDataAsset.text);
+            dataItems = JsonConvert.DeserializeObject<CityDataList>(cityDataAsset.text);
             Debug.Log("Dades carregades: " + cityDataAsset.text);
 
             if(dataItems == null)
@@ -28,7 +28,7 @@ public class DataManager<T> : MonoBehaviour where T : class, new()
         }
         else
         {
-            dataItems = new T();
+            dataItems = new CityDataList();
             Debug.LogError("No es pot trobar el fitxer CityData.json a la carpeta Resources.");
         }
     }
@@ -38,7 +38,7 @@ public class DataManager<T> : MonoBehaviour where T : class, new()
         string json = JsonConvert.SerializeObject(dataItems, Formatting.Indented); // Use Formatting.Indented for pretty print
         File.WriteAllText(dataPath, json);
     }
-
+    
     public List<CityData> GetCities()
     {
         if (dataItems is CityDataList cityDataList)

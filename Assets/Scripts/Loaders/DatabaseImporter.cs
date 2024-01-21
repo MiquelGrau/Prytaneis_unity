@@ -21,7 +21,7 @@ public class DatabaseImporter : MonoBehaviour
         LoadCityInventory();
 
         // Obté la referència de DataManager i carrega les ciutats
-        DataManager<CityDataList> dataManager = FindObjectOfType<DataManager<CityDataList>>();
+        DataManager dataManager = FindObjectOfType<DataManager>();
         if (dataManager != null)
         {
             cities = dataManager.GetCities();
