@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
+// Això és una classe generica. Els inventaris es faran servir en altres classes que estan en el mapa, 
+// tals com ciutats, agents (mercaders), exercits, assentaments, etc. 
 
 public class Inventory
 {

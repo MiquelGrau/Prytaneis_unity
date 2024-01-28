@@ -18,7 +18,7 @@ public class RouteAgentUI : MonoBehaviour
         if (selectedAgent != null)
         {
             agentNameText.text = selectedAgent.agentName;
-            agentMoneyText.text = "Diners: " + selectedAgent.money.ToString();
+            //agentMoneyText.text = "Diners: " + selectedAgent.money.ToString();
             // Actualitza més camps aquí segons necessitis
         }
     }
