@@ -13,10 +13,10 @@ public class AgentManager : MonoBehaviour
     public static int SelectedAgentID { get; private set; } = -1;
 
     void Start() {
-        LoadAgents();
+        //LoadAgents();
     }
 
-    public void LoadAgents()
+    /* public void LoadAgents()
     {
         TextAsset[] jsonFiles = Resources.LoadAll<TextAsset>("DDBB_Agents");
         if (jsonFiles.Length == 0)
@@ -55,7 +55,7 @@ public class AgentManager : MonoBehaviour
             agentNameText.text = agent.agentName;
             actionButton.onClick.AddListener(() => OnAgentActionButtonClicked(agent));
         }
-    }
+    } */
 
     public void OnAgentActionButtonClicked(Agent agent)
     {
@@ -65,7 +65,7 @@ public class AgentManager : MonoBehaviour
     }
 
     // Constructors varios
-    public Agent GetAgentById(int id)
+    public Agent GetAgentById(string id)
     {
         return agents.Find(agent => agent.agentID == id);
     }
