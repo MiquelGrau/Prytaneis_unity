@@ -1,0 +1,32 @@
+{
+  "agents": [
+        {
+        "agentID": "AG0001",
+        "agentName": "Morosini",
+        "locationNode": "C0001",
+        "agentInventoryID": "AV0001",
+        "mainCharID": "C00001"
+      },
+        {
+        "agentID": "AG0002",
+        "agentName": "Medici",
+        "locationNode": "C0001",
+        "agentInventoryID": "AV0002",
+        "mainCharID": "C00002"
+      },
+        {
+        "agentID": "AG0003",
+        "agentName": "de Bruyn",
+        "locationNode": "C0002",
+        "agentInventoryID": "AV0003",
+        "mainCharID": "C00003"
+      },
+        {
+        "agentID": "AG0004",
+        "agentName": "Uccello",
+        "locationNode": "C0004",
+        "agentInventoryID": "AV0004",
+        "mainCharID": "C00004"
+      }
+  ]
+}

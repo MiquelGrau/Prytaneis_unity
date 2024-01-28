@@ -1,0 +1,36 @@
+{ 
+  "Items":[ 
+    {
+      "InventoryID": "AV0001", "AgentID": "AG0001", "InventoryMoney": 12000,
+      "InventoryResources": [
+        { "ResourceID": "R003","Quantity": 4,"CurrentValue": 94 }, 
+        { "ResourceID": "R007","Quantity": 38,"CurrentValue": 92 }, 
+        { "ResourceID": "R016","Quantity": 2,"CurrentValue": 35 }
+      ]
+    }, 
+    {
+      "InventoryID": "AV0002", "AgentID": "AG0002", "InventoryMoney": 15000,
+      "InventoryResources": [
+        { "ResourceID": "R001","Quantity": 2,"CurrentValue": 73 }, 
+        { "ResourceID": "R002","Quantity": 11,"CurrentValue": 13 }, 
+        { "ResourceID": "R006","Quantity": 14,"CurrentValue": 61 }, 
+        { "ResourceID": "R007","Quantity": 1,"CurrentValue": 60 }
+      ]
+    }, 
+    {
+      "InventoryID": "AV0003", "AgentID": "AG0003", "InventoryMoney": 21000,
+      "InventoryResources": [
+        { "ResourceID": "R005","Quantity": 46,"CurrentValue": 25 }, 
+        { "ResourceID": "R010","Quantity": 17,"CurrentValue": 16 }, 
+        { "ResourceID": "R016","Quantity": 42,"CurrentValue": 58 }
+      ]
+    }, 
+    {
+      "InventoryID": "AV0004", "AgentID": "AG0004", "InventoryMoney": 8500,
+      "InventoryResources": [
+        { "ResourceID": "R003","Quantity": 24,"CurrentValue": 25 }, 
+        { "ResourceID": "R005","Quantity": 17,"CurrentValue": 91 }
+      ]
+    }
+  ]
+}
