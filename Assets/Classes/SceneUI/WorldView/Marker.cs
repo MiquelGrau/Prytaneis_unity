@@ -1,7 +1,4 @@
 using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.SceneManagement;
-using System.Linq;
 
 public class Marker : MonoBehaviour
 {
@@ -9,29 +6,48 @@ public class Marker : MonoBehaviour
     public string cityName;
     public Vector3 position;
     private GameObject contextMenuInstance;
+    private WorldSceneInteractionMode currentMode = WorldSceneInteractionMode.Default;
 
-    private void OnMouseOver()
+    private void Start()
     {
+        // Subscriu-te a l'event OnModeChange
+        WorldSceneManager.Instance.OnModeChange += OnModeChange;
+    }
+
+    private void OnDestroy()
+    {
+        // Assegura't de desubscriure't de l'event quan aquest objecte es destrueixi
+        if (WorldSceneManager.Instance != null)
+        {
+            WorldSceneManager.Instance.OnModeChange -= OnModeChange;
+        }
+    }
+
+    private void OnModeChange(WorldSceneInteractionMode newMode)
+    {
+        // Actualitza el mode actual quan l'event sigui disparat
+        currentMode = newMode;
     }
 
     private void OnMouseDown()
+{
+    switch (currentMode)
     {
-        string currentScene = SceneManager.GetActiveScene().name;
+        case WorldSceneInteractionMode.Default:
+            PlayerPrefs.SetString("SelectedCity", cityName);
+            Debug.Log($"Mode Default: {cityName} seleccionada.");
+            // Carrega una altra escena o realitza alguna acció específica del mode Default
+            break;
 
-        switch (currentScene)
-        {
-            case "WorldScene":
-                PlayerPrefs.SetString("SelectedCity", cityName);
-                SceneManager.LoadScene("CityScene");
-                break;
+        case WorldSceneInteractionMode.Route:
+            Debug.Log($"Mode Route: Creant ruta cap a {cityName}.");
+            // Implementa la funció per a mode Route
+            break;
 
-            case "RouteScene":
-                // Ací posa la nova funció que vols realitzar quan estàs a RouteScene
-                break;
-
-            default:
-                Debug.LogWarning("Acció no definida per a aquesta escena.");
-                break;
-        }
+        default:
+            Debug.LogWarning("Acció no definida per a aquest mode.");
+            break;
     }
+}
+
 }
