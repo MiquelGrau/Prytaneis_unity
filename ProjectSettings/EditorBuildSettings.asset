@@ -9,9 +9,6 @@ EditorBuildSettings:
     path: Assets/Scenes/WorldScene.unity
     guid: d1c3109bdb54ad54c8a2b2838528e640
   - enabled: 1
-    path: Assets/Scenes/CityScene.unity
-    guid: fe7a68ab82a7a0e4496a6c8a70dc2877
-  - enabled: 1
-    path: Assets/Scenes/RouteScene.unity
-    guid: 3757c697534b4ee43898d0c3909b57f5
+    path: Assets/Scenes/RoutesScene.unity
+    guid: 491be5ce228b7b544a407ddcdce63311
   m_configObjects: {}
