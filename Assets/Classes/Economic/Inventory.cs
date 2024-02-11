@@ -33,7 +33,7 @@ public class Inventory
         else
         {
             // Crear un nou InventoryResource si no existeix
-            var matchedResource = DatabaseImporter.resources.FirstOrDefault(r => r.resourceID == resourceID);
+            var matchedResource = DataManager.resources.FirstOrDefault(r => r.resourceID == resourceID);
             var newResourceType = matchedResource != null ? matchedResource.resourceType : null;
 
             var newResource = new InventoryResource

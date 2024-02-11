@@ -67,9 +67,10 @@ public class AgentString
 }
 
 [System.Serializable]
-public class AgentListString
+public class AgentList
 {
-    public List<AgentString> agents;
+    //public List<Agent> agents;
+    public List<Agent> agents = new List<Agent>();
 }
 
 

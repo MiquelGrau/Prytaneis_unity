@@ -7,25 +7,35 @@ using System.IO;
 public class DatabaseImporter : MonoBehaviour
 {
     private const string LifestyleDataPath = "Statics/LifestyleData";
-    public List<LifestyleTier> lifestyleTiers;
     private const string ResourceDataPath = "Statics/ResourceData";
+    private DataManager dataManager;
+
+    // Classes a carregar -> mogut a DataManager
+    /* public List<LifestyleTier> lifestyleTiers;
     public static List<Resource> resources;
     public List<CityData> cities;
     public List<CityInventory> cityInventories; 
     public List<Agent> agents;
-    public List<AgentInventory> agentInventories;
+    public List<AgentInventory> agentInventories; */
 
     private void Awake()
-    {
+    {   
+        // Obtenir la referència a DataManager
+        dataManager = FindObjectOfType<DataManager>();
+        if (dataManager == null)
+        {
+            Debug.LogError("DataManager no trobat en la escena.");
+            return;
+        }
         LoadLifestyleData();
         LoadResourceData();
-        cityInventories = new List<CityInventory>(); 
         LoadCityInventory();
         LoadStartAgents();
         LoadAgentInventories();
-
+        //cityInventories = new List<CityInventory>(); 
+        
         // Obté la referència de DataManager i carrega les ciutats
-        DataManager dataManager = FindObjectOfType<DataManager>();
+        /* DataManager dataManager = FindObjectOfType<DataManager>();
         if (dataManager != null)
         {
             cities = dataManager.GetCities();
@@ -36,9 +46,9 @@ public class DatabaseImporter : MonoBehaviour
         else
         {
             Debug.LogError("No s'ha trobat DataManager.");
-        }
+        } */
 
-        Debug.Log("Acabada fase Awake de l'importador! Lifestyle, Resource, CityInventory");
+        Debug.Log("Acabada fase Awake de l'importador! Ciutats, Lifestyle, Resources, Inventaris, etc");
     }
 
     private void Start()
@@ -57,8 +67,7 @@ public class DatabaseImporter : MonoBehaviour
             return;
         }
         LifestyleTier[] tempArray = JsonUtility.FromJson<LifestyleWrapper>(jsonData.text).Items;
-        lifestyleTiers = new List<LifestyleTier>(tempArray);
-
+        DataManager.lifestyleTiers = new List<LifestyleTier>(tempArray);
         // Logs
             // Linia a linia
         /* foreach (var tier in lifestyleTiers)
@@ -69,8 +78,8 @@ public class DatabaseImporter : MonoBehaviour
                 Debug.Log($"{demand.resourceType}, {demand.quantityPerThousand} {demand.monthsCritical} {demand.monthsTotal} {demand.resourceVariety}");
             }
         } */
-        //Debug.Log("Llistats de LifestyleTier i LifestyleData carregats");
-        Debug.Log($"Llistats de LifestyleTier i LifestyleData carregats. Total de LifestyleTiers: {lifestyleTiers.Count}");
+        Debug.Log($"Llistats de LifestyleTier i LifestyleData carregats. "+
+            $"Total de LifestyleTiers: {DataManager.lifestyleTiers.Count}");
 
     }
 
@@ -82,7 +91,9 @@ public class DatabaseImporter : MonoBehaviour
             Debug.LogError("No es pot trobar el fitxer ResourceData.json a la ruta especificada.");
             return;
         }
-        resources = JsonUtility.FromJson<ListWrapper<Resource>>(jsonData.text).Items;
+        //DataManager.resources = JsonUtility.FromJson<ListWrapper<Resource>>(jsonData.text).Items;
+        var resourceList = JsonUtility.FromJson<ListWrapper<Resource>>(jsonData.text).Items;
+        DataManager.resources = resourceList;
 
         // Crear HashSets per emmagatzemar tipus i subtipus únics
         HashSet<string> uniqueResourceTypes = new HashSet<string>();
@@ -93,13 +104,14 @@ public class DatabaseImporter : MonoBehaviour
         {
             Debug.Log($"Carregat recurs: {resource.resourceID}, {resource.resourceName}, {resource.resourceType}, {resource.resourceSubtype}, {resource.basePrice}, {resource.baseWeight}");
         } */
-        foreach (var resource in resources)
+        foreach (var resource in resourceList)
         {
             uniqueResourceTypes.Add(resource.resourceType);
             uniqueResourceSubtypes.Add(resource.resourceSubtype);
         }
         //Debug.Log("Llistat de recursos carregats");
-        Debug.Log($"Llistat de recursos carregats. Total de recursos: {resources.Count}, Resource Types: {uniqueResourceTypes.Count}, Resource Subtypes: {uniqueResourceSubtypes.Count}");
+        Debug.Log($"Llistat de recursos carregats. Total de recursos: {resourceList.Count}, "+
+            $"Resource Types: {uniqueResourceTypes.Count}, Resource Subtypes: {uniqueResourceSubtypes.Count}");
     }
     
     private void LoadCityInventory()
@@ -107,26 +119,24 @@ public class DatabaseImporter : MonoBehaviour
         string path = "Assets/Resources/StartValues/CityInventories";
         string[] files = Directory.GetFiles(path, "*.json");
         
+        dataManager.cityInventories = new List<CityInventory>();
+    
         foreach (string file in files)
         {   
-            
             string jsonContent = File.ReadAllText(file);
             CityInventoryWrapper wrapper = JsonConvert.DeserializeObject<CityInventoryWrapper>(jsonContent);
-            //Debug.Log($"Llegint el fitxer: {Path.GetFileName(file)}");
-            //Debug.Log($"Contingut del fitxer: {jsonContent}");
             
             if (wrapper != null && wrapper.Items != null)
             {
                 foreach (CityInventory cityInventory in wrapper.Items)
                 {
-                    cityInventories.Add(cityInventory); // Afegeix cada CityInventory a la llista
+                    dataManager.cityInventories.Add(cityInventory); // Afegeix cada CityInventory a la llista
                     
                     int totalResLines = cityInventory.InventoryResources.Count;
                     float totalQuantity = 0;
 
                     //Debug.Log($"CityInvID: {cityInventory.CityInvID}, CityID: {cityInventory.CityID}, CityInvMoney: {cityInventory.CityInvMoney}");
                     foreach (var resline in cityInventory.InventoryResources)
-                    //foreach (CityInventoryItem resline in cityInventory.InventoryResources)
                     {
                         totalQuantity += resline.Quantity;
                         //Debug.Log($"ResourceID: {resline.ResourceID}, Quantity: {resline.Quantity}, CurrentValue: {resline.CurrentValue}");
@@ -136,16 +146,15 @@ public class DatabaseImporter : MonoBehaviour
                 }
             }
 
-            
-           
         }
         Debug.Log("Llistat d'inventaris de ciutat carregats");
     }
 
     private void LoadStartAgents()
     {
-        agents = new List<Agent>();
+        //agents = new List<Agent>();
         string path = Path.Combine(Application.dataPath, "Resources/StartValues/Agents");
+        List<Agent> loadedAgents = new List<Agent>();
 
         foreach (string file in Directory.GetFiles(path, "*.json"))
         {
@@ -156,21 +165,22 @@ public class DatabaseImporter : MonoBehaviour
             {
                 foreach (var agent in wrapper.agents)
                 {
-                    agents.Add(agent); // Afegeix cada agent a la llista
+                    loadedAgents.Add(agent); // Afegeix cada agent a la llista
                     // Afegir un log per a cada agent carregat
-                    Debug.Log($"Agent carregat: ID={agent.agentID}, Nom={agent.agentName}, " +
+                    /* Debug.Log($"Agent carregat: ID={agent.agentID}, Nom={agent.agentName}, " +
                             $"LocationNode={agent.LocationNode}, InventoryID={agent.AgentInventoryID}, " +
-                            $"MainCharID={agent.MainCharID}");
+                            $"MainCharID={agent.MainCharID}"); */
                 }
             }
         }
-
-        Debug.Log($"Total d'agents carregats: {agents.Count}");
+        dataManager.agents = loadedAgents;
+        Debug.Log($"Total d'agents carregats: {dataManager.agents.Count}");
     }
     private void LoadAgentInventories()
     {
-        agentInventories = new List<AgentInventory>();
+        //agentInventories = new List<AgentInventory>();
         string path = Path.Combine(Application.dataPath, "Resources/StartValues/AgentInventories");
+        List<AgentInventory> loadedAgentInventories = new List<AgentInventory>();
 
         foreach (string file in Directory.GetFiles(path, "*.json"))
         {
@@ -181,17 +191,17 @@ public class DatabaseImporter : MonoBehaviour
             {
                 foreach (var agentInventory in wrapper.Items)
                 {
-                    agentInventories.Add(agentInventory); // Afegeix cada AgentInventory a la llista
+                    loadedAgentInventories.Add(agentInventory); // Afegeix cada AgentInventory a la llista
 
                     // Afegir un log per a cada AgentInventory carregat
-                    Debug.Log($"AgentInventory carregat: InventoryID={agentInventory.InventoryID}, " +
+                    /* Debug.Log($"AgentInventory carregat: InventoryID={agentInventory.InventoryID}, " +
                               $"AgentID={agentInventory.AgentID}, InventoryMoney={agentInventory.InventoryMoney}, " +
-                              $"Recursos={agentInventory.InventoryResources.Count}");
+                              $"Recursos={agentInventory.InventoryResources.Count}"); */
                 }
             }
         }
-
-        Debug.Log($"Total d'inventaris d'agents carregats: {agentInventories.Count}");
+        dataManager.agentInventories = loadedAgentInventories;
+        Debug.Log($"Total d'inventaris d'agents carregats: {dataManager.agentInventories.Count}");
     }
 
 
@@ -199,6 +209,7 @@ public class DatabaseImporter : MonoBehaviour
     {
         Debug.Log("ConnectCityAndCityInv: Començant a connectar ciutats");
         
+        var cities = dataManager.GetCities();
         if (cities == null || cities.Count == 0)
         {
             Debug.LogError("ConnectCityAndCityInv: La llista de ciutats és nul·la o buida.");
@@ -206,22 +217,22 @@ public class DatabaseImporter : MonoBehaviour
         }
         foreach (var cityData in cities)
         {
-            Debug.Log($"ConnectCityAndCityInv: Processant la ciutat {cityData.cityName} amb ID d'inventari {cityData.cityInventoryID}");
+            //Debug.Log($"ConnectCityAndCityInv: Processant la ciutat {cityData.cityName} amb ID d'inventari {cityData.cityInventoryID}");
 
             // Troba l'objecte CityInventory que coincideix amb la cityInventoryID de CityData
-            var matchingInventory = cityInventories.FirstOrDefault(ci => ci.CityInvID == cityData.cityInventoryID);
-            
+            var matchingInventory = dataManager.cityInventories.FirstOrDefault(ci => ci.CityInvID == cityData.cityInventoryID);
             if (matchingInventory != null)
             {
                 // Estableix la referència de CityData a CityInventory
                 cityData.CityInventory = matchingInventory;
 
                 // Mostra un missatge indicant que la connexió ha estat exitosa
-                Debug.Log($"Connexió ciutat-inventari: {cityData.cityID} {cityData.cityName}, Inventari: {matchingInventory.CityInvID}");
+                //Debug.Log($"Connexió ciutat-inventari: {cityData.cityID} {cityData.cityName}, Inventari: {matchingInventory.CityInvID}");
             }
             else
             {
-                Debug.LogError($"No s'ha trobat Inventari amb ID {cityData.cityInventoryID} per la ciutat {cityData.cityName}");
+                Debug.LogError($"No s'ha trobat Inventari amb ID {cityData.cityInventoryID}" +
+                    $"per la ciutat {cityData.cityName}");
             }
         }
     }
@@ -229,7 +240,8 @@ public class DatabaseImporter : MonoBehaviour
     private void ConnectAgentAndAgentInv()
     {
         Debug.Log("ConnectAgentAndAgentInv: Començant a connectar agents amb els seus inventaris");
-
+        
+        var agents = dataManager.GetAgents(); 
         if (agents == null || agents.Count == 0)
         {
             Debug.LogError("ConnectAgentAndAgentInv: La llista d'agents és nul·la o buida.");
@@ -238,18 +250,17 @@ public class DatabaseImporter : MonoBehaviour
 
         foreach (var agent in agents)
         {
-            Debug.Log($"ConnectAgentAndAgentInv: Processant l'agent {agent.agentName} amb ID d'inventari {agent.AgentInventoryID}");
+            //Debug.Log($"ConnectAgentAndAgentInv: Processant l'agent {agent.agentName} amb ID d'inventari {agent.AgentInventoryID}");
 
             // Troba l'objecte AgentInventory que coincideix amb l'AgentInventoryID de l'Agent
-            var matchingInventory = agentInventories.FirstOrDefault(ai => ai.InventoryID == agent.AgentInventoryID);
-
+            var matchingInventory = dataManager.agentInventories.FirstOrDefault(ai => ai.InventoryID == agent.AgentInventoryID);
             if (matchingInventory != null)
             {
                 // Estableix la referència d'Agent a AgentInventory
                 agent.Inventory = matchingInventory;
 
                 // Mostra un missatge indicant que la connexió ha estat exitosa
-                Debug.Log($"Connexió agent-inventari: AgentID={agent.agentID}, AgentNom={agent.agentName}, InventariID={matchingInventory.InventoryID}");
+                //Debug.Log($"Connexió agent-inventari: AgentID={agent.agentID}, AgentNom={agent.agentName}, InventariID={matchingInventory.InventoryID}");
             }
             else
             {

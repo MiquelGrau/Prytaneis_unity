@@ -13,7 +13,6 @@ public class DemandManager : MonoBehaviour
     public CityInventory currentCityInventory { get; private set; } 
     
     public List<CityData> cities; 
-    public DatabaseImporter databaseImporter; 
     public List<LifestyleTier> lifestyleTiers; 
     
     private float timer = 0f;
@@ -35,7 +34,7 @@ public class DemandManager : MonoBehaviour
         
         // Assigna la ciutat actual
         AssignCurrentCity("C0001");
-        lifestyleTiers = databaseImporter.lifestyleTiers; 
+        lifestyleTiers = DataManager.lifestyleTiers; 
         
         
         // Calcula les demandes basades en la ciutat actual
@@ -80,7 +79,7 @@ public class DemandManager : MonoBehaviour
             {
                 Debug.LogError($"No s'ha trobat l'inventari per a la ciutat '{currentCity.cityName}'");
             }
-            Debug.Log($"PoorLifestyleID: {currentCity.PoorLifestyleID}, MidLifestyleID: {currentCity.MidLifestyleID}, RichLifestyleID: {currentCity.RichLifestyleID}");
+            //Debug.Log($"PoorLifestyleID: {currentCity.PoorLifestyleID}, MidLifestyleID: {currentCity.MidLifestyleID}, RichLifestyleID: {currentCity.RichLifestyleID}");
         }
         else
         {
@@ -173,9 +172,9 @@ public class DemandManager : MonoBehaviour
                 headerResource.DemandTotal += newDemand.DemandTotal;
      
                 // Log de la informació
-                Debug.Log($"ResourceType: {newDemand.ResourceType}, PopulationType: {newDemand.PopulationType}, " +
+                /* Debug.Log($"ResourceType: {newDemand.ResourceType}, PopulationType: {newDemand.PopulationType}, " +
                         $"Variety: {newDemand.Variety}, Demands: {newDemand.DemandConsume} / " +
-                        $"{newDemand.DemandCritical} / {newDemand.DemandTotal}");
+                        $"{newDemand.DemandCritical} / {newDemand.DemandTotal}"); */
                 
             }
         }
@@ -213,12 +212,12 @@ public class DemandManager : MonoBehaviour
                 resline.DemandTotal += demand.DemandTotal / demand.Variety;
 
                 // Buscar el nom del recurs
-                var matchedResource = DatabaseImporter.resources.FirstOrDefault(r => r.resourceID == resline.ResourceID);
+                var matchedResource = DataManager.resources.FirstOrDefault(r => r.resourceID == resline.ResourceID);
                 string resourceName = matchedResource != null ? matchedResource.resourceName : "Desconegut";
 
                 // Afegir log per a cada resource line
-                Debug.Log($"ResourceType: {resline.ResourceType}, ID: {resline.ResourceID}, {resourceName}, Qty: {resline.Quantity} " +
-                $"Demands: {resline.DemandConsume} / {resline.DemandCritical} / {resline.DemandTotal}");
+                /* Debug.Log($"ResourceType: {resline.ResourceType}, ID: {resline.ResourceID}, {resourceName}, Qty: {resline.Quantity} " +
+                $"Demands: {resline.DemandConsume} / {resline.DemandCritical} / {resline.DemandTotal}"); */
             }
         }
 
@@ -237,7 +236,7 @@ public class DemandManager : MonoBehaviour
                 headerResource.Quantity = totalQuantity;
 
                 // Opcional: Afegir un log per confirmar l'assignació
-                Debug.Log($"HeaderResource per a {resourceType}: Total Quantity = {totalQuantity}");
+                //Debug.Log($"HeaderResource per a {resourceType}: Total Quantity = {totalQuantity}");
             }
         }
 
@@ -260,7 +259,7 @@ public class DemandManager : MonoBehaviour
                 if (priceElasticity < 0f) { priceElasticity = 0.25f; }
 
                 // Troba el base price del recurs
-                var matchedResource = DatabaseImporter.resources.FirstOrDefault(r => r.resourceID == resline.ResourceID);
+                var matchedResource = DataManager.resources.FirstOrDefault(r => r.resourceID == resline.ResourceID);
                 float basePrice = matchedResource != null ? matchedResource.basePrice : 0f;
 
                 // Calcula el CurrentPrice
@@ -284,7 +283,7 @@ public class DemandManager : MonoBehaviour
         
         foreach (var resline in currentCityInventory.InventoryResources)
         {
-            var matchedResource = DatabaseImporter.resources.FirstOrDefault(r => r.resourceID == resline.ResourceID);
+            var matchedResource = DataManager.resources.FirstOrDefault(r => r.resourceID == resline.ResourceID);
             int basePrice = matchedResource != null ? matchedResource.basePrice : 0; // default a zero
 
             displayText.AppendLine($"{resline.ResourceID}, Type: {resline.ResourceType}, " +

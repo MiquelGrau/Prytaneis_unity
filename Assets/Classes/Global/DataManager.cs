@@ -3,11 +3,25 @@ using UnityEngine;
 using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
+        // Aquesta és la classe per guardar DADES del joc. Tot el que es vagi fent, comerç, moviment, etc, es volcarà aquí. 
+
 
 public class DataManager : MonoBehaviour
 {
     private string dataPath;
+    // Classes estatiques, definicions
+    public static List<LifestyleTier> lifestyleTiers;
+    public static List<Resource> resources;
+    
+    // Classes de city
     public CityDataList dataItems;
+    public List<CityInventory> cityInventories;
+    
+    // Classes de agents, merchants, etc
+    public List<Agent> agents = new List<Agent>();
+    public List<AgentInventory> agentInventories;
+
+    
 
     private void Awake()
     {
@@ -31,6 +45,8 @@ public class DataManager : MonoBehaviour
             dataItems = new CityDataList();
             Debug.LogError("No es pot trobar el fitxer CityData.json a la carpeta Resources.");
         }
+
+        
     }
 
     public void SaveData()
@@ -51,6 +67,22 @@ public class DataManager : MonoBehaviour
             return new List<CityData>();
         }
     }
+    public List<Agent> GetAgents()
+    {
+        return agents;
+    }
+    /* public List<Agent> GetAgents()
+    {
+        if (agents is AgentList agentList)
+        {
+            return agentList.agents;
+        }
+        else
+        {
+            Debug.LogError("DataManager no conté una instància de Agents.");
+            return new List<Agent>();
+        }
+    } */
 
 
 }
