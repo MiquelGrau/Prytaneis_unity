@@ -24,7 +24,7 @@ public class RouteManager : MonoBehaviour
         List<WorldMapCity> citiesList = JsonUtility.FromJson<List<WorldMapCity>>(cityData.text);
         NodeDataWrapper nodeDataWrapper = JsonUtility.FromJson<NodeDataWrapper>(nodeData.text);
         List<WorldMapNode> nodesList = nodeDataWrapper.nodes_jsonfile;
-        var waterPathDataWrapper = JsonUtility.FromJson<PathDataWrapper>(waterPathData.text);
+        var waterPathDataWrapper = JsonUtility.FromJson<WaterPathDataWrapper>(waterPathData.text);
         List<WorldMapWaterPath> waterPathsList = waterPathDataWrapper.waterpath_jsonfile;
 
         if (citiesList == null || nodesList == null || waterPathsList == null) {

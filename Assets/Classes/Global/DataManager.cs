@@ -13,6 +13,10 @@ public class DataManager : MonoBehaviour
     public static List<LifestyleTier> lifestyleTiers;
     public static List<Resource> resources;
     
+    // Geografia
+    public static List<WorldMapNode> worldMapNodes = new List<WorldMapNode>();
+    public static List<WorldMapLandPath> worldMapLandPaths = new List<WorldMapLandPath>();
+
     // Classes de city
     public CityDataList dataItems;
     public List<CityInventory> cityInventories;

@@ -18,19 +18,28 @@ public class MarkersManager : MonoBehaviour
         }
 
         // Utilitza dades del DataManager per afegir marcadors
-        foreach (CityData city in dataManager.dataItems.cities)
+        /* foreach (CityData city in dataManager.dataItems.cities)
         {
             AddMarker(city);
-        }
+        } */
+        // Utilitza dades del DataManager per afegir marcadors per a cada node
+        foreach (WorldMapNode node in DataManager.worldMapNodes)
+        {
+            AddMarker(node);
+        } 
     }
 
-    public void AddMarker(CityData city)
+    //public void AddMarker(CityData city)
+    public void AddMarker(WorldMapNode node)
     {
-        Vector3 position = LatLongToPosition(city.latitude, city.longitude);
+        //Vector3 position = LatLongToPosition(city.latitude, city.longitude);
+        Vector3 position = LatLongToPosition(node.latitude, node.longitude);
         GameObject markerObj = Instantiate(markerPrefab, position, Quaternion.identity, this.transform);
-        markerObj.name = "Marker_" + city.cityName;
+        //markerObj.name = "Marker_" + city.cityName;
+        markerObj.name = "Marker_" + node.id; 
         Marker marker = markerObj.AddComponent<Marker>();
-        marker.cityName = city.cityName;
+        //marker.cityName = city.cityName;
+        marker.cityName = node.name; 
         marker.position = position;
         allMarkers.Add(marker);
     }

@@ -4,19 +4,23 @@ using System.Collections.Generic;
 public class WorldMapNode
 {
     public string id;
-    public string cityId;
     public string name;
+    public string cityId;
     public float latitude;
     public float longitude;
-    public string RegionId;
-    public bool IsSuperNode;
-    public string ConnectionsId;
     public string LandNodeType;
+    public string LandContinentId;
+    public string LandRegionId;
+    public string LandSubregionId;
     public string WaterNodeType;
-
+    public string WaterNodeRegion;
+    public string WaterNodeSubregion;
+    //public bool IsSuperNode;
+    //public string ConnectionsId;
+    
     public override string ToString()
     {
-        return $"ID: {id}, CityId: {cityId}, Name: {name}, Latitude: {latitude}, Longitude: {longitude}, RegionId: {RegionId}, IsSuperNode: {IsSuperNode}, LandNodeType: {LandNodeType}, WaterNodeType: {WaterNodeType}";
+        return $"ID: {id}, CityId: {cityId}, Name: {name}, Latitude: {latitude}, Longitude: {longitude}, LandNodeType: {LandNodeType}, RegionId: {LandRegionId}, WaterNodeType: {WaterNodeType}";
     }
 
     public override bool Equals(object obj)

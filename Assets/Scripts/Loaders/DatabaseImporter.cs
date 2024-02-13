@@ -6,18 +6,14 @@ using System.IO;
 
 public class DatabaseImporter : MonoBehaviour
 {
+    // Fitxers de estàtics
     private const string LifestyleDataPath = "Statics/LifestyleData";
     private const string ResourceDataPath = "Statics/ResourceData";
+    private const string NodeDataPath = "Statics/NodeData"; 
+    
     private DataManager dataManager;
 
-    // Classes a carregar -> mogut a DataManager
-    /* public List<LifestyleTier> lifestyleTiers;
-    public static List<Resource> resources;
-    public List<CityData> cities;
-    public List<CityInventory> cityInventories; 
-    public List<Agent> agents;
-    public List<AgentInventory> agentInventories; */
-
+    
     private void Awake()
     {   
         // Obtenir la referència a DataManager
@@ -27,6 +23,8 @@ public class DatabaseImporter : MonoBehaviour
             Debug.LogError("DataManager no trobat en la escena.");
             return;
         }
+        LoadNodeData();
+        LoadLandPaths();
         LoadLifestyleData();
         LoadResourceData();
         LoadCityInventory();
@@ -57,6 +55,48 @@ public class DatabaseImporter : MonoBehaviour
         ConnectAgentAndAgentInv();
         Debug.Log("Acabada fase Start de l'importador! Connectats inventaris a Ciutats i a Agents");
     }
+
+    private void LoadNodeData()
+    {
+        TextAsset jsonData = Resources.Load<TextAsset>(NodeDataPath);
+        if (jsonData == null)
+        {
+            Debug.LogError("No es pot trobar el fitxer NodeData.json a la ruta especificada.");
+            return;
+        }
+
+        // Deserialitza el JSON al format del teu NodeDataWrapper
+        NodeDataWrapper nodeData = JsonUtility.FromJson<NodeDataWrapper>(jsonData.text);
+        /* foreach (var node in nodeData.nodes_jsonfile)
+        {
+            // Aquí pots processar cada node com necessitis, per exemple, afegint-los a una llista dins de DataManager
+            Debug.Log($"Node carregat: {node.id}, {node.name}");
+        } */
+
+        DataManager.worldMapNodes = nodeData.nodes_jsonfile;
+        Debug.Log($"Total de nodes carregats: {nodeData.nodes_jsonfile.Count}");
+    }
+
+    private void LoadLandPaths()
+    {
+        TextAsset jsonData = Resources.Load<TextAsset>("Statics/LandPaths");
+        if (jsonData == null)
+        {
+            Debug.LogError("No es pot trobar el fitxer LandPaths.json a la ruta especificada.");
+            return;
+        }
+
+        // Deserialitza el JSON directament al format del teu LandPathDataWrapper
+        LandPathDataWrapper landPathData = JsonUtility.FromJson<LandPathDataWrapper>(jsonData.text);
+        foreach (var path in landPathData.landpath_jsonfile)
+        {
+            Debug.Log(path.ToString());
+        }
+
+        DataManager.worldMapLandPaths = landPathData.landpath_jsonfile;
+        Debug.Log($"Total de land paths carregats: {landPathData.landpath_jsonfile.Count}");
+    }
+
 
     private void LoadLifestyleData()
     {
