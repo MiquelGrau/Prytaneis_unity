@@ -1,45 +1,45 @@
 { 
   "landpath_jsonfile":[ 
     {
-      "landpathId": "PL0001", "startNode": "LN0028", "endNode": "LN0403",
+      "landpathId": "PL0001", "startNode": "", "endNode": "",
       "pathDifficulty": 0, "pathLevel": 2, "pathType": 0,
       "pathArray": [
-        { "Latitude": 8.9393, "Longitude": 44.4128 }, 
-        { "Latitude": 9.3265, "Longitude": 44.3273 }, 
-        { "Latitude": 9.6067, "Longitude": 44.2231 }, 
-        { "Latitude": 9.8347, "Longitude": 44.1995 }, 
-        { "Latitude": 9.8128, "Longitude": 44.098 }
+        { "Latitude": 44.4128, "Longitude": 8.9393 }, 
+        { "Latitude": 44.3273, "Longitude": 9.3265 }, 
+        { "Latitude": 44.2231, "Longitude": 9.6067 }, 
+        { "Latitude": 44.1995, "Longitude": 9.8347 }, 
+        { "Latitude": 44.098, "Longitude": 9.8128 }
       ]
     }, 
     {
-      "landpathId": "PL0002", "startNode": "LN0028", "endNode": "",
+      "landpathId": "PL0002", "startNode": "", "endNode": "",
       "pathDifficulty": 0, "pathLevel": 2, "pathType": 0,
       "pathArray": [
-        { "Latitude": 8.9393, "Longitude": 44.4128 }, 
-        { "Latitude": 8.9393, "Longitude": 44.6506 }, 
-        { "Latitude": 8.747, "Longitude": 44.8827 }, 
-        { "Latitude": 8.6756, "Longitude": 44.9284 }
+        { "Latitude": 44.4128, "Longitude": 8.9393 }, 
+        { "Latitude": 44.6506, "Longitude": 8.9393 }, 
+        { "Latitude": 44.8827, "Longitude": 8.747 }, 
+        { "Latitude": 44.9284, "Longitude": 8.6756 }
       ]
     }, 
     {
-      "landpathId": "PL0003", "startNode": "LN0403", "endNode": "LN0028",
+      "landpathId": "PL0003", "startNode": "", "endNode": "",
       "pathDifficulty": 0, "pathLevel": 2, "pathType": 0,
       "pathArray": [
-        { "Latitude": 9.8128, "Longitude": 44.098 }, 
-        { "Latitude": 9.8347, "Longitude": 44.1995 }, 
-        { "Latitude": 9.6067, "Longitude": 44.2231 }, 
-        { "Latitude": 9.3265, "Longitude": 44.3273 }, 
-        { "Latitude": 8.9393, "Longitude": 44.4128 }
+        { "Latitude": 44.098, "Longitude": 9.8128 }, 
+        { "Latitude": 44.1995, "Longitude": 9.8347 }, 
+        { "Latitude": 44.2231, "Longitude": 9.6067 }, 
+        { "Latitude": 44.3273, "Longitude": 9.3265 }, 
+        { "Latitude": 44.4128, "Longitude": 8.9393 }
       ]
     }, 
     {
-      "landpathId": "PL0004", "startNode": "", "endNode": "LN0028",
+      "landpathId": "PL0004", "startNode": "", "endNode": "",
       "pathDifficulty": 0, "pathLevel": 2, "pathType": 0,
       "pathArray": [
-        { "Latitude": 8.6756, "Longitude": 44.9284 }, 
-        { "Latitude": 8.747, "Longitude": 44.8827 }, 
-        { "Latitude": 8.9393, "Longitude": 44.6506 }, 
-        { "Latitude": 8.9393, "Longitude": 44.4128 }
+        { "Latitude": 44.9284, "Longitude": 8.6756 }, 
+        { "Latitude": 44.8827, "Longitude": 8.747 }, 
+        { "Latitude": 44.6506, "Longitude": 8.9393 }, 
+        { "Latitude": 44.4128, "Longitude": 8.9393 }
       ]
     }
   ]
