@@ -88,10 +88,10 @@ public class DatabaseImporter : MonoBehaviour
 
         // Deserialitza el JSON directament al format del teu LandPathDataWrapper
         LandPathDataWrapper landPathData = JsonUtility.FromJson<LandPathDataWrapper>(jsonData.text);
-        foreach (var path in landPathData.landpath_jsonfile)
+        /* foreach (var path in landPathData.landpath_jsonfile)
         {
             Debug.Log(path.ToString());
-        }
+        } */
 
         DataManager.worldMapLandPaths = landPathData.landpath_jsonfile;
         Debug.Log($"Total de land paths carregats: {landPathData.landpath_jsonfile.Count}");
