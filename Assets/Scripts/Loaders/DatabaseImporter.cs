@@ -30,6 +30,7 @@ public class DatabaseImporter : MonoBehaviour
         LoadCityInventory();
         LoadStartAgents();
         LoadAgentInventories();
+        LoadBuildingTemplates();
         //cityInventories = new List<CityInventory>(); 
         
         // Obté la referència de DataManager i carrega les ciutats
@@ -309,7 +310,89 @@ public class DatabaseImporter : MonoBehaviour
         }
     }
 
-    
+    private void LoadBuildingTemplates()
+    {
+        string jsonContent = Resources.Load<TextAsset>("Statics/BuildingTemplates").text;
+        BuildingTemplateListWrapper wrapper = JsonConvert.DeserializeObject<BuildingTemplateListWrapper>(jsonContent);
+
+        foreach (var templateData in wrapper.Templates)
+        {
+            if (templateData.TemplateType == "Productive")
+            {
+                var template = JsonConvert.DeserializeObject<ProductiveTemplate>(jsonContent);
+                dataManager.productiveTemplates.Add(template);
+            }
+            else if (templateData.TemplateType == "Civic")
+            {
+                var template = JsonConvert.DeserializeObject<CivicTemplate>(jsonContent);
+                dataManager.civicTemplates.Add(template);
+            }
+
+            
+        }
+
+        Debug.Log($"Total de Plantilles Productives carregades: {dataManager.productiveTemplates.Count}");
+        Debug.Log($"Total de Plantilles Cíviques carregades: {dataManager.civicTemplates.Count}");
+    }
+
+    /* private void LoadBuildingTemplates()
+    {
+        TextAsset jsonData = Resources.Load<TextAsset>("Statics/BuildingTemplates");
+        if (jsonData == null)
+        {
+            Debug.LogError("No es pot trobar el fitxer BuildingTemplates.json a la ruta especificada.");
+            return;
+        }
+        
+        List<BuildingTemplate> templates = JsonConvert.DeserializeObject<List<BuildingTemplateJSON>>(jsonData.text)
+            .Select(templateJSON =>
+            {
+                switch (templateJSON.TemplateType)
+                {
+                    case "Productive":
+                        // Aquí, deserialitza i crea una instància de ProductiveTemplate
+                        return new ProductiveTemplate(
+                            templateJSON.TemplateID,
+                            templateJSON.ClassName,
+                            templateJSON.TemplateType,
+                            templateJSON.TemplateSubtype,
+                            // Aquí hauries de convertir els string IDs a instàncies de ProductionMethod i TemplateFactor
+                            // Si no tens les llistes de PossibleMethods i Factors carregades, utilitza null o carrega-les.
+                            null, // Placeholder per a DefaultMethod
+                            null, // Placeholder per a PossibleMethods
+                            null, // Placeholder per a Factors
+                            templateJSON.JobsPoor,
+                            templateJSON.JobsMid,
+                            templateJSON.JobsRich,
+                            templateJSON.Capacity
+                        );
+
+                    case "Civic":
+                        // Aquí, deserialitza i crea una instància de CivicTemplate
+                        return new CivicTemplate(
+                            templateJSON.TemplateID,
+                            templateJSON.ClassName,
+                            templateJSON.TemplateType,
+                            templateJSON.TemplateSubtype,
+                            templateJSON.Function,
+                            templateJSON.Capacity,
+                            templateJSON.JobsPoor,
+                            templateJSON.JobsMid,
+                            templateJSON.JobsRich
+                        );
+
+                    default:
+                        Debug.LogError("Tipus de plantilla desconeguda: " + templateJSON.TemplateType);
+                        return null;
+                }
+            }).ToList();
+
+        // Assigna la llista de templates al DataManager
+        dataManager.buildingTemplates = templates;
+        Debug.Log("BuildingTemplates carregats amb èxit.");
+    } */
+
+
 
 
     [System.Serializable]
@@ -345,3 +428,19 @@ public class AgentInventoryWrapper
     public List<AgentInventory> Items;
 }
 
+[System.Serializable]
+public class BuildingTemplateListWrapper
+{
+    public List<BuildingTemplateJSON> Templates;
+}
+
+[System.Serializable]
+public class BuildingTemplateJSON
+{
+    // Aquesta classe conté totes les propietats comunes
+    public string TemplateID;
+    public string ClassName;
+    public string TemplateType;
+    public string TemplateSubtype;
+    
+}

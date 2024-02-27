@@ -12,7 +12,11 @@ public class DataManager : MonoBehaviour
     // Classes estatiques, definicions
     public static List<LifestyleTier> lifestyleTiers;
     public static List<Resource> resources;
-    
+    public List<ProductiveTemplate> productiveTemplates = new List<ProductiveTemplate>();
+    public List<CivicTemplate> civicTemplates = new List<CivicTemplate>();
+
+
+
     // Geografia
     public static List<WorldMapNode> worldMapNodes = new List<WorldMapNode>();
     public static List<WorldMapLandPath> worldMapLandPaths = new List<WorldMapLandPath>();
