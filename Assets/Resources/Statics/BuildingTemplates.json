@@ -1,0 +1,50 @@
+{
+  "Templates": [
+    {
+      "TemplateID": "BT001", "ClassName": "Iron workshop",
+      "TemplateType": "Productive", "TemplateSubtype": "Factory",
+      "JobsPoor": 50, "JobsMid": 12, "JobsRich": 3,
+      "DefaultMethod": "PM001", "Capacity": 100,
+      "PossibleMethods": [
+        { "Method": "PM001" },
+        { "Method": "PM002" },
+        { "Method": "PM003" },
+        { "Method": "PM004" },
+        { "Method": "PM005" }
+      ],
+      "Factors": [
+        { "Factor": "FPE001" },
+        { "Factor": "FPE003" },
+        { "Factor": "FPE003" },
+        { "Factor": "FPE003" },
+        { "Factor": "FPE003" },
+        { "Factor": "FPE003" },
+        { "Factor": "FPE003" },
+        { "Factor": "FPE003" }
+      ]
+    },
+    {
+      "TemplateID": "BT002", "ClassName": "Warehouse",
+      "TemplateType": "Civic", "TemplateSubtype": "Warehousing",
+      "Function": "Warehouse", "Capacity": 500,
+      "JobsPoor": 30, "JobsMid": 5, "JobsRich": 0
+    },
+    {
+      "TemplateID": "BT003", "ClassName": "Smithy",
+      "TemplateType": "Productive", "TemplateSubtype": "Factory",
+      "JobsPoor": 20, "JobsMid": 10, "JobsRich": 0,
+      "DefaultMethod": "PM001", "Capacity": 50,
+      "PossibleMethods": [
+        { "Method": "PM001" },
+        { "Method": "PM002" },
+        { "Method": "PM006" },
+        { "Method": "PM007" }
+      ],
+      "Factors": [
+        { "Factor": "FPE002" },
+        { "Factor": "FPE003" },
+        { "Factor": "FPR001" }
+      ]
+    }
+  ]
+}
