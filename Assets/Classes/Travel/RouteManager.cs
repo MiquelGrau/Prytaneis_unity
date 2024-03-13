@@ -39,7 +39,7 @@ public class RouteManager : MonoBehaviour
         worldMapSettings.waterPaths = waterPathsList;
     }
 
-    public void CreateRoute(CityData startCity, CityData destinationCity)
+    /* public void CreateRoute(CityData startCity, CityData destinationCity)
     {
         Debug.Log($"Creant ruta des de {startCity.cityName} fins a {destinationCity.cityName}.");
 
@@ -75,7 +75,7 @@ public class RouteManager : MonoBehaviour
                 line.transform.SetParent(earthTransform, false);
             }
         }
-    }
+    } */
 
     private float GetHeightAtLatLon(float lat, float lon)
     {

@@ -26,98 +26,135 @@ public static class WorldMapUtils
         return degrees * Math.PI / 180;
     }
 
-    public static List<WorldMapWaterPath> DijkstraAlgorithm(string startNodeId, string endNodeId, List<WorldMapNode> nodes, List<WorldMapWaterPath> paths)
+    public static List<WorldMapLandPath> DijkstraAlgorithm(
+        string startNodeId, string endNodeId, List<WorldMapNode> nodes, List<WorldMapLandPath> paths)
     {
-        List<WorldMapNode> queue = new List<WorldMapNode>(nodes);
-        Dictionary<string, double> distances = new Dictionary<string, double>();
-        Dictionary<string, WorldMapWaterPath> previousPaths = new Dictionary<string, WorldMapWaterPath>();
-        HashSet<string> visitedNodes = new HashSet<string>();
+        var distances = new Dictionary<string, double>();
+        var previous = new Dictionary<string, WorldMapLandPath>();
+        var notVisited = new List<WorldMapNode>(nodes);
+        WorldMapNode endNode = nodes.Find(n => n.id == endNodeId); // Troba el node final
 
-        Debug.Log($"Starting Dijkstra's Algorithm from Node {startNodeId} to Node {endNodeId}.");
-
+        // Inicialitza distàncies
         foreach (var node in nodes)
         {
-            distances[node.id] = node.id == startNodeId ? 0 : double.MaxValue;
-            previousPaths[node.id] = null;
+            distances[node.id] = double.MaxValue;
         }
+        distances[startNodeId] = 0;
 
-        Debug.Log("Initialization complete.");
-
-        int maxIterations = 100;
-        int currentIteration = 0;
-
-        while (queue.Count > 0 && currentIteration < maxIterations)
+        while (notVisited.Count != 0)
         {
-            queue.Sort((a, b) => distances[a.id].CompareTo(distances[b.id]));
+            notVisited.Sort((x, y) => distances[x.id].CompareTo(distances[y.id]));
+            var current = notVisited[0];
+            notVisited.RemoveAt(0);
 
-            var currentNode = queue.First();
-            queue.RemoveAt(0);
-            visitedNodes.Add(currentNode.id);
-
-            Debug.Log($"Processing Node {currentNode.id} with current distance {distances[currentNode.id]}.");
-
-            if (currentNode.id == endNodeId)
+            if (current.id == endNodeId)
             {
-                Debug.Log("End Node found. Constructing path.");
+                var optimalPath = ReconstructPath(previous, current.id, nodes, paths);
+                
+                // Aquí afegim el codi per debugar
+                DebugLogOptimalPath(optimalPath, nodes);
+                
+                return optimalPath;
+            }   
 
-                List<WorldMapWaterPath> path = new List<WorldMapWaterPath>();
-                var previousPath = previousPaths[endNodeId];
-                while (previousPath != null)
-                {
-                    path.Add(previousPath);
-                    previousPath = previousPaths[previousPath.startNode == currentNode.id ? previousPath.endNode : previousPath.startNode];
-                }
-                path.Reverse();
-
-                // Calcular la distància total del camí
-                double totalDistance = 0;
-                foreach (var segment in path)
-                {
-                    var startNode = nodes.Find(node => node.id == segment.startNode);
-                    var endNode = nodes.Find(node => node.id == segment.endNode);
-                    totalDistance += HaversineDistance(new WorldMapMarker(startNode.latitude, startNode.longitude), new WorldMapMarker(endNode.latitude, endNode.longitude));
-                }
-
-                // Construir una cadena amb tots els IDs del camí
-                string pathIds = string.Join(" -> ", path.Select(p => p.waterpathId));
-
-                // Registrar la informació amb Debug.Log
-                Debug.Log($"Total path distance: {totalDistance} km");
-                Debug.Log($"Final path IDs: {pathIds}");
-                return path;
-            }
-
-            if (distances[currentNode.id] == double.MaxValue)
+            foreach (var path in paths.Where(p => p.startNode == current.id))
             {
-                Debug.Log($"Node {currentNode.id} has max distance. Skipping.");
-                continue;
-            }
+                WorldMapNode nextNode = nodes.Find(n => n.id == path.endNode);
+                if (nextNode == null) continue;
 
-            foreach (var pathObj in paths.Where(path => (path.startNode == currentNode.id) && !visitedNodes.Contains(path.startNode == currentNode.id ? path.endNode : path.startNode)))
-            {
-                var connectedNodeId = pathObj.startNode == currentNode.id ? pathObj.endNode : pathObj.startNode;
+                double tentativeDistance = distances[current.id] + CalculatePathWeight(path, nodes, endNode); // Passa el node final
 
-                if (distances.ContainsKey(connectedNodeId))
+                if (tentativeDistance < distances[nextNode.id])
                 {
-                    var connectedNode = nodes.Find(node => node.id == connectedNodeId);
-                    float distance = (float)(distances[currentNode.id] + HaversineDistance(new WorldMapMarker(currentNode.latitude, currentNode.longitude), new WorldMapMarker(connectedNode.latitude, connectedNode.longitude)) / pathObj.pathSpeed);
+                    distances[nextNode.id] = tentativeDistance;
+                    previous[nextNode.id] = path;
 
-                    Debug.Log($"Checking path from Node {currentNode.id} to Node {connectedNodeId}. Distance: {distance}.");
-
-                    if (distance < distances[connectedNodeId])
+                    if (!notVisited.Contains(nextNode))
                     {
-                        Debug.Log($"Updating distance for Node {connectedNodeId} to {distance}.");
-                        distances[connectedNodeId] = distance;
-                        previousPaths[connectedNodeId] = pathObj;
+                        notVisited.Add(nextNode);
                     }
                 }
             }
+        }
+        Debug.Log("Dijkstra Algorithm: No path found.");
+        return new List<WorldMapLandPath>(); // Retorna llista buida si no es troba cap camí
+    }
 
-            currentIteration++;
-            Debug.Log($"Iteration {currentIteration} complete.");
+
+    private static List<WorldMapLandPath> ReconstructPath(Dictionary<string, WorldMapLandPath> previous, string currentId, List<WorldMapNode> nodes, List<WorldMapLandPath> paths)
+    {
+        var totalPath = new List<WorldMapLandPath>();
+
+        while (previous.ContainsKey(currentId))
+        {
+            WorldMapLandPath path = previous[currentId];
+            totalPath.Insert(0, path); // Afegeix al principi per reconstruir el camí en ordre
+            currentId = nodes.Find(n => n.id == path.startNode).id;
         }
 
-        Debug.Log("No path found or max iterations reached. Returning empty path.");
-        return new List<WorldMapWaterPath>();
+        return totalPath;
     }
+
+    private static double CalculatePathWeight(WorldMapLandPath path, List<WorldMapNode> nodes, WorldMapNode endNode)
+    {
+        WorldMapNode startNode = nodes.Find(n => n.id == path.startNode);
+        WorldMapNode nextNode = nodes.Find(n => n.id == path.endNode);
+
+        // Converteix els nodes a markers per a calcular la distància física utilitzant Haversine
+        WorldMapMarker markerStart = new WorldMapMarker(startNode.latitude, startNode.longitude);
+        WorldMapMarker markerNext = new WorldMapMarker(nextNode.latitude, nextNode.longitude);
+
+        // Càlcul de la distància física utilitzant Haversine
+        //double distance = HaversineDistance(startNode, nextNode);
+        double distance = HaversineDistance(markerStart, markerNext);
+
+        // Potencial basat en la distància en línia recta fins al node final
+        //double potentialModifier = Potential(startNode, endNode);
+        WorldMapMarker markerEnd = new WorldMapMarker(endNode.latitude, endNode.longitude);
+        double potentialModifier = Potential(markerNext, markerEnd);
+
+        // Ajusta el pes basant-te en la distància, la dificultat del camí i el potencial
+        double weight = distance * (1 + path.pathDifficulty) + potentialModifier;
+
+        return weight;
+    }
+
+    /* private static double Potential(WorldMapNode node, WorldMapNode endNode)
+    {
+        // Conversió de latitud i longitud a radians per a càlculs
+        double nodeLatRad = DegreesToRadians(node.latitude);
+        double nodeLonRad = DegreesToRadians(node.longitude);
+        double endNodeLatRad = DegreesToRadians(endNode.latitude);
+        double endNodeLonRad = DegreesToRadians(endNode.longitude);
+
+        // Càlcul de la "distància" en línia recta utilitzant la fórmula donada
+        return Math.Sqrt(Math.Pow(nodeLatRad - endNodeLatRad, 2) + Math.Pow(nodeLonRad - endNodeLonRad, 2));
+    } */
+
+    private static double Potential(WorldMapMarker node, WorldMapMarker endNode)
+    {
+        // Càlcul de la "distància" en línia recta utilitzant la fórmula donada
+        return Math.Sqrt(Math.Pow(DegreesToRadians(node.Latitude) - DegreesToRadians(endNode.Latitude), 2) 
+        + Math.Pow(DegreesToRadians(node.Longitude) - DegreesToRadians(endNode.Longitude), 2));
+    }
+
+    private static void DebugLogOptimalPath(List<WorldMapLandPath> optimalPath, List<WorldMapNode> nodes)
+    {
+        string pathNames = string.Join(" -> ", optimalPath.Select(path =>
+        {
+            var startNode = nodes.Find(node => node.id == path.startNode);
+            return startNode.name;
+        }));
+
+        // Afegeix el nom del node final manualment ja que l'últim path només mostra el node d'inici
+        if (optimalPath.Any())
+        {
+            var lastPath = optimalPath.Last();
+            var endNode = nodes.Find(node => node.id == lastPath.endNode);
+            pathNames += " -> " + endNode.name;
+        }
+
+        Debug.Log("Dijkstra Algorithm: Optimal path is " + pathNames);
+    }
+
 }
