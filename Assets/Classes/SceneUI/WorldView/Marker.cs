@@ -4,7 +4,9 @@ public class Marker : MonoBehaviour
 {
     public GameObject contextMenuPrefab;
     public string cityName;
+    public string id;
     public Vector3 position;
+    //public DataManager dataManager;
     private GameObject contextMenuInstance;
     private WorldSceneInteractionMode currentMode = WorldSceneInteractionMode.Default;
 
@@ -30,24 +32,28 @@ public class Marker : MonoBehaviour
     }
 
     private void OnMouseDown()
-{
-    switch (currentMode)
     {
-        case WorldSceneInteractionMode.Default:
-            PlayerPrefs.SetString("SelectedCity", cityName);
-            Debug.Log($"Mode Default: {cityName} seleccionada.");
-            // Carrega una altra escena o realitza alguna acció específica del mode Default
-            break;
+        string startNodeId = "LN0001"; 
 
-        case WorldSceneInteractionMode.Route:
-            Debug.Log($"Mode Route: Creant ruta cap a {cityName}.");
-            // Implementa la funció per a mode Route
-            break;
+        switch (currentMode)
+        {
+            case WorldSceneInteractionMode.Default:
+                PlayerPrefs.SetString("SelectedCity", cityName);
+                Debug.Log($"Mode Default: {cityName} seleccionada.");
+                // Carrega una altra escena o realitza alguna acció específica del mode Default
+                break;
 
-        default:
-            Debug.LogWarning("Acció no definida per a aquest mode.");
-            break;
+            case WorldSceneInteractionMode.Route:
+                Debug.Log($"Mode Route: Creant ruta cap a {cityName}, ID {id}.");
+                WorldMapUtils.DijkstraAlgorithm(startNodeId, id, DataManager.worldMapNodes, DataManager.worldMapLandPaths);
+                
+                // Implementa la funció per a mode Route
+                break;
+
+            default:
+                Debug.LogWarning("Acció no definida per a aquest mode.");
+                break;
+        }
     }
-}
 
 }
