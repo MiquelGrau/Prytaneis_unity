@@ -1,0 +1,25 @@
+{ "ProductionMethods": [
+    {
+      "MethodID": "PM001", "MethodName": "Produce gin",
+      "MethodType": "Basic", "CycleTime": 500,
+      "Inputs": [
+        { "ResourceID": "R001", "Amount": 10 },
+        { "ResourceID": "R002", "Amount": 2 }
+      ],
+      "Outputs": [
+        { "ResourceID": "R026", "Amount": 2, "Chance": 90 }
+      ]
+    },
+    {
+      "MethodID": "PM002", "MethodName": "Produce gin extra",
+      "MethodType": "Bonus", "CycleTime": 700,
+      "Inputs": [
+        { "ResourceID": "R001", "Amount": 12 }
+      ],
+      "Outputs": [
+        { "ResourceID": "R026", "Amount": 2, "Chance": 75 }, 
+		{ "ResourceID": "R026", "Amount": 5, "Chance": 25 }
+      ]
+    }
+ ]
+}

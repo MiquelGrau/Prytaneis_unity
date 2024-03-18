@@ -14,7 +14,8 @@ public class DataManager : MonoBehaviour
     public static List<Resource> resources;
     public List<ProductiveTemplate> productiveTemplates = new List<ProductiveTemplate>();
     public List<CivicTemplate> civicTemplates = new List<CivicTemplate>();
-
+    public List<ProductionMethod> productionMethods = new List<ProductionMethod>();
+    
 
 
     // Geografia
