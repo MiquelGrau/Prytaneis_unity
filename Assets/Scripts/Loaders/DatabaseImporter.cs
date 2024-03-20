@@ -31,6 +31,7 @@ public class DatabaseImporter : MonoBehaviour
         LoadStartAgents();
         LoadAgentInventories();
         LoadBuildingTemplates();
+        LoadProductionMethods();
         //cityInventories = new List<CityInventory>(); 
         
         // Obté la referència de DataManager i carrega les ciutats
@@ -335,64 +336,40 @@ public class DatabaseImporter : MonoBehaviour
         Debug.Log($"Total de Plantilles Cíviques carregades: {dataManager.civicTemplates.Count}");
     }
 
-    /* private void LoadBuildingTemplates()
+    private void LoadProductionMethods()
     {
-        TextAsset jsonData = Resources.Load<TextAsset>("Statics/BuildingTemplates");
+        TextAsset jsonData = Resources.Load<TextAsset>("Statics/ProductionMethods");
         if (jsonData == null)
         {
-            Debug.LogError("No es pot trobar el fitxer BuildingTemplates.json a la ruta especificada.");
+            Debug.LogError("No es pot trobar el fitxer ProductionMethods.json a la ruta especificada.");
             return;
         }
-        
-        List<BuildingTemplate> templates = JsonConvert.DeserializeObject<List<BuildingTemplateJSON>>(jsonData.text)
-            .Select(templateJSON =>
+
+        ProductionMethodWrapper wrapper = JsonConvert.DeserializeObject<ProductionMethodWrapper>(jsonData.text);
+        if (wrapper.ProductionMethods != null)
+        {
+            foreach (var method in wrapper.ProductionMethods)
             {
-                switch (templateJSON.TemplateType)
+                // Aquí pots processar cada mètode si és necessari, per exemple, convertir ResourceID a objectes Resource.
+                dataManager.productionMethods.Add(method);
+
+                // Afegim un log per a cada mètode carregat
+                Debug.Log($"Carregat mètode de producció: {method.MethodName}, ID: {method.MethodID}, Tipus: {method.MethodType}, Temps de cicle: {method.CycleTime}, Inputs: {method.Inputs.Count}, Outputs: {method.Outputs.Count}");
+
+                /* foreach(var input in method.Inputs)  // Logs de recursos, quantitats, etc. 
                 {
-                    case "Productive":
-                        // Aquí, deserialitza i crea una instància de ProductiveTemplate
-                        return new ProductiveTemplate(
-                            templateJSON.TemplateID,
-                            templateJSON.ClassName,
-                            templateJSON.TemplateType,
-                            templateJSON.TemplateSubtype,
-                            // Aquí hauries de convertir els string IDs a instàncies de ProductionMethod i TemplateFactor
-                            // Si no tens les llistes de PossibleMethods i Factors carregades, utilitza null o carrega-les.
-                            null, // Placeholder per a DefaultMethod
-                            null, // Placeholder per a PossibleMethods
-                            null, // Placeholder per a Factors
-                            templateJSON.JobsPoor,
-                            templateJSON.JobsMid,
-                            templateJSON.JobsRich,
-                            templateJSON.Capacity
-                        );
-
-                    case "Civic":
-                        // Aquí, deserialitza i crea una instància de CivicTemplate
-                        return new CivicTemplate(
-                            templateJSON.TemplateID,
-                            templateJSON.ClassName,
-                            templateJSON.TemplateType,
-                            templateJSON.TemplateSubtype,
-                            templateJSON.Function,
-                            templateJSON.Capacity,
-                            templateJSON.JobsPoor,
-                            templateJSON.JobsMid,
-                            templateJSON.JobsRich
-                        );
-
-                    default:
-                        Debug.LogError("Tipus de plantilla desconeguda: " + templateJSON.TemplateType);
-                        return null;
+                    Debug.Log($"Input: {input.ResourceID}, Quantitat: {input.Amount}");
                 }
-            }).ToList();
 
-        // Assigna la llista de templates al DataManager
-        dataManager.buildingTemplates = templates;
-        Debug.Log("BuildingTemplates carregats amb èxit.");
-    } */
+                foreach(var output in method.Outputs)
+                {
+                    Debug.Log($"Output: {output.ResourceID}, Quantitat: {output.Amount}, Probabilitat: {output.Chance}%");
+                } */
+            }
+        }
 
-
+        Debug.Log($"Mètodes de producció carregats: {dataManager.productionMethods.Count}");
+    }
 
 
     [System.Serializable]
@@ -443,4 +420,10 @@ public class BuildingTemplateJSON
     public string TemplateType;
     public string TemplateSubtype;
     
+}
+
+[System.Serializable]
+public class ProductionMethodWrapper
+{
+    public List<ProductionMethod> ProductionMethods;
 }

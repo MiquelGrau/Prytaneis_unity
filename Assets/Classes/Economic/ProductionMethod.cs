@@ -8,77 +8,43 @@ public class ProductionMethod
     public string MethodName { get; private set; }
     public string MethodType { get; private set; }
     public int CycleTime { get; private set; }
-    public int FirstChance { get; private set; }
-    
+    public List<MethodInput> Inputs { get; private set; }
+    public List<MethodOutput> Outputs { get; private set; }
+
+    // Definicions per a inputs i outputs
+    public class MethodInput
+    {
+        public string ResourceID { get; set; }
+        public float Amount { get; set; }
+    }
+
+    public class MethodOutput
+    {
+        public string ResourceID { get; set; }
+        public float Amount { get; set; }
+        public int Chance { get; set; }
+    }
+
     // Constructor
-    public ProductionMethod(string methodID, string methodName, string methodType, int cycleTime, int firstChance)
+    public ProductionMethod(string methodID, string methodName, string methodType, int cycleTime,
+                            List<MethodInput> inputs, List<MethodOutput> outputs)
     {
         MethodID = methodID;
         MethodName = methodName;
         MethodType = methodType;
         CycleTime = cycleTime;
-        FirstChance = firstChance;
+        Inputs = inputs ?? new List<MethodInput>();
+        Outputs = outputs ?? new List<MethodOutput>();
     }
-}
 
-// Classe per a la manufactura bàsica
-public class BasicManufacturing : ProductionMethod
-{
-    //public string MethodID { get; private set; }
-    //public string MethodName { get; private set; }
-    //public string MethodType { get; private set; }
-    //public int CycleTime { get; private set; }
-    //public int FirstChance { get; private set; }
-    public Resource InputResource { get; private set; }
-    public float InputAmount { get; private set; }
-    public Resource OutputResource { get; private set; }
-    public float OutputAmount { get; private set; }
-
-    // Constructor
-    public BasicManufacturing(string methodID, string methodName, string methodtype, 
-                            int firstChance, int cycleTime, 
-                            Resource inputResource, float inputAmount, Resource outputResource, float outputAmount)
-        : base(methodID, methodName, methodtype, firstChance, cycleTime)
+    // Afegir inputs i outputs manualment després de la creació de l'objecte si és necessari
+    public void AddInput(string resourceID, float amount)
     {
-        InputResource = inputResource;
-        InputAmount = inputAmount;
-        OutputResource = outputResource;
-        OutputAmount = outputAmount;
+        Inputs.Add(new MethodInput() { ResourceID = resourceID, Amount = amount });
     }
-}
 
-// Classe per a la manufactura amb bonificació
-public class BonusManufacturing : ProductionMethod
-{
-    //public string MethodID { get; private set; }
-    //public string MethodName { get; private set; }
-    //public int CycleTime { get; private set; }
-    public Resource InputResource { get; private set; }
-    public float InputAmount { get; private set; }
-    //public int FirstChance { get; private set; }
-    public Resource FirstOutputResource { get; private set; }
-    public float FirstOutputAmount { get; private set; }
-    public int SecondChance { get; private set; }
-    public Resource SecondOutputResource { get; private set; }
-    public float SecondOutputAmount { get; private set; }
-
-    // Constructor
-    public BonusManufacturing(string methodID, string methodName,  string methodtype, int cycleTime, 
-                              Resource inputResource, float inputAmount, 
-                              int firstChance, Resource firstOutputResource, float firstOutputAmount,
-                              int secondChance, Resource secondOutputResource, float secondOutputAmount)
-        : base(methodID, methodName, methodtype, firstChance, cycleTime)
+    public void AddOutput(string resourceID, float amount, int chance)
     {
-        InputResource = inputResource;
-        InputAmount = inputAmount;
-        FirstOutputResource = firstOutputResource;
-        FirstOutputAmount = firstOutputAmount;
-        SecondChance = secondChance;
-        SecondOutputResource = secondOutputResource;
-        SecondOutputAmount = secondOutputAmount;
+        Outputs.Add(new MethodOutput() { ResourceID = resourceID, Amount = amount, Chance = chance });
     }
 }
-
-
-
-
