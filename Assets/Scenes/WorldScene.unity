@@ -246,7 +246,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 0.4
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
@@ -1788,6 +1788,8 @@ MonoBehaviour:
   planet: {fileID: 2018802134}
   markerPrefab: {fileID: 4679943087487269344, guid: fcea11fa61263cb428cdb52571cc47c6, type: 3}
   dataManager: {fileID: 1617731973}
+  defaultMarkerMaterial: {fileID: 2100000, guid: 0b2590d56a4cfb145a45bdc1154a0f34, type: 2}
+  routeMarkerMaterial: {fileID: 2100000, guid: 14aa343bb6195474980599df45bae316, type: 2}
 --- !u!114 &2018802138
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1802,6 +1804,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   contextMenuPrefab: {fileID: 951396140552073604, guid: 1a7b3959f7a70684091a742af0715d07, type: 3}
   cityName: 
+  id: 
   position: {x: 0, y: 0, z: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:

@@ -31,23 +31,24 @@ public class Marker : MonoBehaviour
         currentMode = newMode;
     }
 
-    private void OnMouseDown()
+     private void OnMouseDown()
     {
-        string startNodeId = "LN0001"; 
-
         switch (currentMode)
         {
             case WorldSceneInteractionMode.Default:
                 PlayerPrefs.SetString("SelectedCity", cityName);
                 Debug.Log($"Mode Default: {cityName} seleccionada.");
-                // Carrega una altra escena o realitza alguna acció específica del mode Default
+                // Potencialment carrega una altra escena o realitza alguna acció específica del mode Default
                 break;
 
             case WorldSceneInteractionMode.Route:
                 Debug.Log($"Mode Route: Creant ruta cap a {cityName}, ID {id}.");
-                WorldMapUtils.DijkstraAlgorithm(startNodeId, id, DataManager.worldMapNodes, DataManager.worldMapLandPaths);
-                
-                // Implementa la funció per a mode Route
+                string startNodeId = "LN0001";
+                var markersManager = FindObjectOfType<MarkersManager>(); // Troba l'instància de MarkersManager
+                 if (markersManager != null)
+                {
+                    markersManager.OnNewRouteSelected(startNodeId, id); // Inicia la generació de la ruta amb l'ID actual com a destí
+                }
                 break;
 
             default:
@@ -55,5 +56,4 @@ public class Marker : MonoBehaviour
                 break;
         }
     }
-
 }

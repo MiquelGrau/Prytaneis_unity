@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System.Linq;
 
 public class MarkersManager : MonoBehaviour
 {
@@ -9,6 +10,12 @@ public class MarkersManager : MonoBehaviour
     
     private List<Marker> allMarkers = new List<Marker>();
 
+    public Material defaultMarkerMaterial;
+    public Material routeMarkerMaterial;
+
+    private List<Marker> currentRouteMarkers = new List<Marker>();
+
+
     private void Start()
     {
         if (dataManager.dataItems == null)
@@ -17,11 +24,6 @@ public class MarkersManager : MonoBehaviour
             return;
         }
 
-        // Utilitza dades del DataManager per afegir marcadors
-        /* foreach (CityData city in dataManager.dataItems.cities)
-        {
-            AddMarker(city);
-        } */
         // Utilitza dades del DataManager per afegir marcadors per a cada node
         foreach (WorldMapNode node in DataManager.worldMapNodes)
         {
@@ -32,13 +34,11 @@ public class MarkersManager : MonoBehaviour
     //public void AddMarker(CityData city)
     public void AddMarker(WorldMapNode node)
     {
-        //Vector3 position = LatLongToPosition(city.latitude, city.longitude);
         Vector3 position = LatLongToPosition(node.latitude, node.longitude);
-        GameObject markerObj = Instantiate(markerPrefab, position, Quaternion.identity, this.transform);
-        //markerObj.name = "Marker_" + city.cityName;
+        GameObject prefabToUse = markerPrefab;
+        GameObject markerObj = Instantiate(prefabToUse, position, Quaternion.identity, this.transform);
         markerObj.name = "Marker_" + node.id; 
         Marker marker = markerObj.AddComponent<Marker>();
-        //marker.cityName = city.cityName;
         marker.cityName = node.name; 
         marker.id = node.id; 
         marker.position = position;
@@ -91,4 +91,52 @@ public class MarkersManager : MonoBehaviour
         }
         return null;
     }
+
+    public void OnNewRouteSelected(string startNodeId, string endNodeId)
+    {
+        ResetMarkersToDefaultMaterial(); // Restaura marcadors a l'estat per defecte
+        
+        var routePaths = WorldMapUtils.DijkstraAlgorithm(startNodeId, endNodeId, DataManager.worldMapNodes, DataManager.worldMapLandPaths);
+        if (routePaths != null && routePaths.Count > 0)
+        {
+            UpdateMarkerMaterialForRoute(routePaths); // Actualitza els marcadors de la nova ruta
+        }
+    }
+
+    // Restaura tots els marcadors al material per defecte
+    public void ResetMarkersToDefaultMaterial()
+    {
+        foreach (var marker in currentRouteMarkers)
+        {
+            var meshRenderer = marker.GetComponent<MeshRenderer>();
+            if (meshRenderer != null)
+            {
+                meshRenderer.material = defaultMarkerMaterial;
+            }
+        }
+        // Neteja la llista una vegada tots els marcadors han estat resetejats
+        currentRouteMarkers.Clear();
+    }
+
+
+    // Actualitza els marcadors específics per la ruta al material de ruta
+    public void UpdateMarkerMaterialForRoute(List<WorldMapLandPath> routePaths)
+    {
+        HashSet<string> nodeIdsInRoute = new HashSet<string>(routePaths.SelectMany(path => new[] { path.startNode, path.endNode }));
+
+        foreach (var marker in allMarkers)
+        {
+            if (nodeIdsInRoute.Contains(marker.id))
+            {
+                var meshRenderer = marker.GetComponent<MeshRenderer>();
+                if (meshRenderer != null)
+                {
+                    meshRenderer.material = routeMarkerMaterial;
+                    currentRouteMarkers.Add(marker); // Afegir a la llista per ràpid accés posterior
+                }
+            }
+        }
+    }
+
+
 }

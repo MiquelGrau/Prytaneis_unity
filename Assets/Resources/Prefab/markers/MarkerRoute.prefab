@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1248273354862619842}
   - component: {fileID: 7429941503404110780}
   m_Layer: 0
-  m_Name: Marker
+  m_Name: MarkerRoute
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -62,7 +62,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 0b2590d56a4cfb145a45bdc1154a0f34, type: 2}
+  - {fileID: 2100000, guid: 14aa343bb6195474980599df45bae316, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
