@@ -15,6 +15,8 @@ public class DataManager : MonoBehaviour
     public List<ProductiveTemplate> productiveTemplates = new List<ProductiveTemplate>();
     public List<CivicTemplate> civicTemplates = new List<CivicTemplate>();
     public List<ProductionMethod> productionMethods = new List<ProductionMethod>();
+    public List<EmployeeFT> employeeFactors = new List<EmployeeFT>();
+    public List<ResourceFT> resourceFactors = new List<ResourceFT>();
     
 
 

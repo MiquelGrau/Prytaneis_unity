@@ -1,0 +1,32 @@
+{
+  "Factors": [
+    {
+      "FactorID": "FPE001",
+      "FactorName": "Manual labour standard",
+      "FactorType": "Employee",
+      "FactorEffect": "Linear",
+      "EffectSize": 100,
+      "WorkerID": "RE001",
+      "Strata": "Poor",
+      "Minimum": 10,
+      "Optimal": 30,
+      "Maximum": 40,
+      "ShortfallEft": "Linear nerf",
+      "ShortfallSize": 50
+    },
+    {
+      "FactorID": "FPR001",
+      "FactorName": "Iron tools",
+      "FactorType": "Resource",
+      "FactorEffect": "Output buff",
+      "EffectSize": 20,
+      "ResourceID": "R046",
+      "MonthlyConsumption": 5,
+      "Minimum": 10,
+      "Optimal": 30,
+      "Maximum": 50,
+      "ShortfallEft": "No effect",
+      "ShortfallSize": 0
+    }
+  ]
+}

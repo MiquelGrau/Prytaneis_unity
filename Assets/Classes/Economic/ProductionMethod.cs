@@ -23,6 +23,7 @@ public class ProductionMethod
         public string ResourceID { get; set; }
         public float Amount { get; set; }
         public int Chance { get; set; }
+        public string Type { get; set; }
     }
 
     // Constructor

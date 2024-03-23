@@ -32,6 +32,7 @@ public class DatabaseImporter : MonoBehaviour
         LoadAgentInventories();
         LoadBuildingTemplates();
         LoadProductionMethods();
+        LoadFactorTemplates();
         //cityInventories = new List<CityInventory>(); 
         
         // Obté la referència de DataManager i carrega les ciutats
@@ -371,6 +372,40 @@ public class DatabaseImporter : MonoBehaviour
         Debug.Log($"Mètodes de producció carregats: {dataManager.productionMethods.Count}");
     }
 
+    private void LoadFactorTemplates()
+    {
+        // Carrega el text JSON com a TextAsset des de la ruta especificada
+        string jsonContent = Resources.Load<TextAsset>("Statics/FactorTemplates").text;
+        
+        // Deserialitza el JSON a l'objecte FactorTemplateListWrapper
+        FactorTemplateListWrapper wrapper = JsonConvert.DeserializeObject<FactorTemplateListWrapper>(jsonContent);
+        
+        // Comprova si l'envoltori i la llista de Factors no són nuls
+        if (wrapper != null && wrapper.Factors != null)
+        {
+            // Recorre cada Factor del JSON
+            foreach (var factorJSON in wrapper.Factors)
+            {
+                // Comprova el tipus de Factor i deserialitza al tipus de classe correcte
+                if (factorJSON.FactorType == "Employee")
+                {
+                    var factor = JsonConvert.DeserializeObject<EmployeeFT>(JsonConvert.SerializeObject(factorJSON));
+                    dataManager.employeeFactors.Add(factor);
+                }
+                else if (factorJSON.FactorType == "Resource")
+                {
+                    var factor = JsonConvert.DeserializeObject<ResourceFT>(JsonConvert.SerializeObject(factorJSON));
+                    dataManager.resourceFactors.Add(factor);
+                }
+            }
+        }
+
+        // Logs per confirmar la càrrega
+        Debug.Log($"Total de Factors d'Empleat carregats: {dataManager.employeeFactors.Count}");
+        Debug.Log($"Total de Factors de Recurs carregats: {dataManager.resourceFactors.Count}");
+    }
+
+
 
     [System.Serializable]
     private class ListWrapper<T>
@@ -427,3 +462,22 @@ public class ProductionMethodWrapper
 {
     public List<ProductionMethod> ProductionMethods;
 }
+
+[System.Serializable]
+public class FactorTemplateListWrapper
+{
+    public List<FactorJSON> Factors;
+}
+[System.Serializable]
+public class FactorJSON
+{
+    public string FactorID;
+    public string FactorName;
+    public string FactorType;
+    public string FactorEffect;
+    public int EffectSize;
+    
+}
+
+
+
