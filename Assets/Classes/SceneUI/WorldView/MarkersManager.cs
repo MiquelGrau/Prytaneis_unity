@@ -100,6 +100,7 @@ public class MarkersManager : MonoBehaviour
         if (routePaths != null && routePaths.Count > 0)
         {
             UpdateMarkerMaterialForRoute(routePaths); // Actualitza els marcadors de la nova ruta
+            CreateRouteBetweenMarkers(startNodeId, endNodeId);
         }
     }
 
@@ -138,5 +139,19 @@ public class MarkersManager : MonoBehaviour
         }
     }
 
+    public void CreateRouteBetweenMarkers(string startMarkerId, string endMarkerId)
+    {
+        Marker startMarker = allMarkers.FirstOrDefault(marker => marker.id == startMarkerId);
+        Marker endMarker = allMarkers.FirstOrDefault(marker => marker.id == endMarkerId);
 
+        if (startMarker != null && endMarker != null)
+        {
+            // Asumim que tenim una referència a un objecte Route ja existent a l'escena o la creem
+            Route routeManager = FindObjectOfType<Route>(); // Troba l'instància de Route a l'escena
+            if (routeManager != null)
+            {
+                routeManager.ConnectMarkersWithLine(startMarker, endMarker);
+            }
+        }
+    }
 }

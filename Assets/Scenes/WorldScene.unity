@@ -1714,6 +1714,7 @@ GameObject:
   - component: {fileID: 2018802136}
   - component: {fileID: 2018802138}
   - component: {fileID: 2018802137}
+  - component: {fileID: 2018802139}
   m_Layer: 0
   m_Name: Earth
   m_TagString: Untagged
@@ -1806,6 +1807,19 @@ MonoBehaviour:
   cityName: 
   id: 
   position: {x: 0, y: 0, z: 0}
+--- !u!114 &2018802139
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2018802133}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 02c5c755e1b46d8409537103c5c3f47e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  planet: {fileID: 2018802133}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
