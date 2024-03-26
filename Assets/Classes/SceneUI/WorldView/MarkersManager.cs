@@ -95,12 +95,30 @@ public class MarkersManager : MonoBehaviour
     public void OnNewRouteSelected(string startNodeId, string endNodeId)
     {
         ResetMarkersToDefaultMaterial(); // Restaura marcadors a l'estat per defecte
-        
+
+        Route routeManager = FindObjectOfType<Route>();
+        if (routeManager != null)
+        {
+            routeManager.ClearAllRoutes();
+        }
+
         var routePaths = WorldMapUtils.DijkstraAlgorithm(startNodeId, endNodeId, DataManager.worldMapNodes, DataManager.worldMapLandPaths);
         if (routePaths != null && routePaths.Count > 0)
         {
             UpdateMarkerMaterialForRoute(routePaths); // Actualitza els marcadors de la nova ruta
-            CreateRouteBetweenMarkers(startNodeId, endNodeId);
+
+            // Converteix els IDs dels nodes de la ruta en marcadors
+            List<Marker> markersInRoute = routePaths.SelectMany(path => new[] { path.startNode, path.endNode })
+                                                    .Distinct()
+                                                    .Select(id => allMarkers.FirstOrDefault(marker => marker.id == id))
+                                                    .Where(marker => marker != null)
+                                                    .ToList();
+
+            // Connecta cada marcador amb el seu següent
+            for (int i = 0; i < markersInRoute.Count - 1; i++)
+            {
+                routeManager.ConnectMarkersWithLine(markersInRoute[i], markersInRoute[i + 1]);
+            }
         }
     }
 

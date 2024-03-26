@@ -1,8 +1,12 @@
 using UnityEngine;
+using System.Collections.Generic; // Afegeix aquesta línia
+using System.Linq;
 
 public class Route : MonoBehaviour
 {
     public GameObject planet; // Assigna això des de l'Inspector d'Unity amb el teu objecte Earth
+    private List<RouteData> createdRoutes = new List<RouteData>();
+    private int routeCounter = 0;
 
     void Start()
     {
@@ -10,9 +14,7 @@ public class Route : MonoBehaviour
 
     public void ConnectMarkersWithLine(Marker markerA, Marker markerB)
     {
-        GameObject lineObject = new GameObject("MarkersLine");
-
-        // Estableix el marcador A com a pare del GameObject de la línia
+        GameObject lineObject = new GameObject($"MarkersLine_{routeCounter}");
         lineObject.transform.SetParent(markerA.transform, false);
         
         LineRenderer lineRenderer = lineObject.AddComponent<LineRenderer>();
@@ -29,6 +31,29 @@ public class Route : MonoBehaviour
         Vector3 endPosition = markerA.transform.InverseTransformPoint(markerB.transform.position); // Converteix la posició global del marcador B a l'espai local del marcador A
         lineRenderer.SetPosition(0, startPosition);
         lineRenderer.SetPosition(1, endPosition);
+        string routeId = $"route_{routeCounter++}";
+        RouteData newRoute = new RouteData(routeId, lineObject, markerA, markerB);
+        createdRoutes.Add(newRoute);
+    }
+
+    public void RemoveRouteById(string routeId)
+    {
+        var routeToRemove = createdRoutes.FirstOrDefault(r => r.routeId == routeId);
+        if (routeToRemove != null)
+        {
+            Destroy(routeToRemove.lineObject); // Elimina l'objecte de la línia de la escena
+            createdRoutes.Remove(routeToRemove); // Elimina la ruta de la llista
+        }
+    }
+
+    public void ClearAllRoutes()
+    {
+        foreach (var route in createdRoutes)
+        {
+            Destroy(route.lineObject); // Destruir l'objecte de línia
+        }
+        createdRoutes.Clear(); // Netejar la llista de rutes
+        routeCounter = 0; // Opcional: Reiniciar el comptador si vols començar la numeració des de zero
     }
 
     Vector3 LatLongToPosition(float lat, float lon)
@@ -52,4 +77,21 @@ public class Route : MonoBehaviour
         return position;
     }
 
+}
+
+[System.Serializable]
+public class RouteData
+{
+    public string routeId;
+    public GameObject lineObject; // Referència a l'objecte de la línia per aquesta ruta
+    public Marker startMarker;
+    public Marker endMarker;
+
+    public RouteData(string id, GameObject line, Marker start, Marker end)
+    {
+        routeId = id;
+        lineObject = line;
+        startMarker = start;
+        endMarker = end;
+    }
 }
