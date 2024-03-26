@@ -7,9 +7,43 @@ public class Route : MonoBehaviour
     public GameObject planet; // Assigna això des de l'Inspector d'Unity amb el teu objecte Earth
     private List<RouteData> createdRoutes = new List<RouteData>();
     private int routeCounter = 0;
+    private List<GameObject> createdLines = new List<GameObject>();
+    private int lineCounter = 0;
 
     void Start()
     {
+    }
+
+    // Funció per dibuixar una línia a través d'una llista de punts globals dins de "Earth"
+    public void DrawLineOnEarth(List<Vector3> globalPoints)
+    {
+        if (globalPoints == null || globalPoints.Count < 2) return;
+
+        string lineObjectName = $"GlobalLine_{lineCounter++}";
+        GameObject lineObject = new GameObject(lineObjectName);
+        lineObject.transform.SetParent(planet.transform, false);
+
+        LineRenderer lineRenderer = lineObject.AddComponent<LineRenderer>();
+        lineRenderer.material = new Material(Shader.Find("Sprites/Default")); // Utilitza un shader que suporti colors
+        lineRenderer.startColor = Color.blue;
+        lineRenderer.endColor = Color.blue;
+        lineRenderer.widthMultiplier = 0.0015f;
+        lineRenderer.useWorldSpace = false;
+
+        lineRenderer.positionCount = globalPoints.Count;
+        lineRenderer.SetPositions(globalPoints.ToArray());
+
+        createdLines.Add(lineObject);
+    }
+
+    // Funció per netejar totes les línies creades
+    public void ClearAllLines()
+    {
+        foreach (var line in createdLines)
+        {
+            Destroy(line); // Destruir l'objecte de la línia
+        }
+        createdLines.Clear(); // Netejar la llista de línies
     }
 
     public void ConnectMarkersWithLine(Marker markerA, Marker markerB)

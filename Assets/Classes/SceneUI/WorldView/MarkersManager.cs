@@ -100,6 +100,7 @@ public class MarkersManager : MonoBehaviour
         if (routeManager != null)
         {
             routeManager.ClearAllRoutes();
+            routeManager.ClearAllLines();
         }
 
         var routePaths = WorldMapUtils.DijkstraAlgorithm(startNodeId, endNodeId, DataManager.worldMapNodes, DataManager.worldMapLandPaths);
@@ -114,13 +115,15 @@ public class MarkersManager : MonoBehaviour
                                                     .Where(marker => marker != null)
                                                     .ToList();
 
-            // Connecta cada marcador amb el seu següent
-            for (int i = 0; i < markersInRoute.Count - 1; i++)
+            // Aquest bucle ha estat modificat per utilitzar correctament les variables dins de l'àmbit
+            foreach (var path in routePaths)
             {
-                routeManager.ConnectMarkersWithLine(markersInRoute[i], markersInRoute[i + 1]);
+                List<Vector3> pathPoints = path.pathArray.Select(marker => LatLongToPosition(marker.Latitude, marker.Longitude)).ToList();
+                routeManager.DrawLineOnEarth(pathPoints);
             }
         }
     }
+
 
     // Restaura tots els marcadors al material per defecte
     public void ResetMarkersToDefaultMaterial()
