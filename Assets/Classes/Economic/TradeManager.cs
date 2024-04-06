@@ -26,7 +26,7 @@ public class TradeManager : MonoBehaviour
     public List<Agent> agents;
 
     void Start()
-    {
+    {   
         // Trobar ciutats i agents
         cities = dataManager.GetCities(); 
         agents = dataManager.GetAgents(); 
@@ -41,7 +41,7 @@ public class TradeManager : MonoBehaviour
         agentDropdown.onValueChanged.AddListener(OnAgentSelected);
     }
 
-    public class TradeDesk
+    public class TradeDesk  // La classe amb "tota la negociació". No nomes les linies, sino diners totals i info de les parts. 
     {
         public string TradeID;
         public string TradePartnerLeft;
@@ -55,7 +55,7 @@ public class TradeManager : MonoBehaviour
 
         public void TradeDeskCleanup()
         {
-            Debug.Log($"Fent neteja de preus: {TradeResourceLines}");
+            Debug.Log($"Fent neteja de preus");
             // Elimina les línies amb quantitats a zero en ambdues bandes, linies sobrants
             TradeResourceLines.RemoveAll(line => line.QtyOriginalLeft <= 0 && line.QtyOriginalRight <= 0);
 
@@ -107,7 +107,7 @@ public class TradeManager : MonoBehaviour
         // Constructor i mètodes específics de TradeResourceLine
     }
 
-    public class TradeResourceType
+    public class TradeResourceType  // Les agrupacions que farà dels recursos, també demandes. Una suma, basicament. 
     {
         public string ResourceType;
         public int TQtyCurrentLeft;
@@ -130,8 +130,7 @@ public class TradeManager : MonoBehaviour
     public void OnCitySelected(int index)
     {
         CityData selectedCity = cities[index];
-        currentCityInventory = selectedCity.CityInventory;
-        Debug.Log($"Nova ciutat seleccionada: {selectedCity.cityName}");
+        GameManager.Instance.AssignCurrentCity(selectedCity.cityID);
         
         AssignCityInTrade();
         CurrentTrade.TradeDeskCleanup(); 
@@ -147,25 +146,28 @@ public class TradeManager : MonoBehaviour
     public void OnAgentSelected(int index)
     {
         Agent selectedAgent = agents[index];
-        currentAgentInventory = selectedAgent.Inventory;
+        //currentAgentInventory = selectedAgent.Inventory;
+        GameManager.Instance.AssignCurrentAgent(selectedAgent.agentID); 
         Debug.Log($"Nou agent seleccionat: {selectedAgent.agentName}");
         AssignAgentInTrade();
         CurrentTrade.TradeDeskCleanup(); 
         tradeInterface.UpdateTradeInterface();
         agentDropdown.Hide();
     }
-
+    
     public void AssignCityInTrade()
     {
+        CityInventory currentCityInventory = GameManager.Instance.CurrentCity.CityInventory;
         if (currentCityInventory == null) return;
-
+        
         CurrentTrade.TradePartnerLeft = currentCityInventory.CityID;
         CurrentTrade.MoneyLeft = currentCityInventory.CityInvMoney;
         
+        SetUpTradeLines();
         /* Debug.Log($"Assignat inventari de la ciutat {currentCityInventory.CityID}, "+
                   $"té {currentCityInventory.CityInvMoney} diners i conté aquests recursos:"); */
 
-        // Reiniciar valors específics de la part esquerra
+        /* // Reiniciar valors específics de la part esquerra
         foreach (var line in CurrentTrade.TradeResourceLines)
         {
             line.QtyDemandedLeft = 0;
@@ -205,7 +207,7 @@ public class TradeManager : MonoBehaviour
                 line.QtyAvailableLeft = (int)Mathf.Max(0, resource.Quantity - resource.DemandCritical);
             }
             
-        }
+        } */
         
         // Log amb informació detallada per a cada TradeResourceLine
         /* foreach (var line in CurrentTrade.TradeResourceLines)
@@ -218,13 +220,22 @@ public class TradeManager : MonoBehaviour
 
     public void AssignAgentInTrade()
     {
-        if (currentAgentInventory == null) return;
+        // Crida les dades, guardades a game manager
+        Agent currentAgent = GameManager.Instance.CurrentAgent;
+        AgentInventory currentAgentInventory = currentAgent?.Inventory;
+        if (currentAgentInventory == null)
+        {
+            Debug.LogError("No s'ha trobat l'inventari de l'agent actual.");
+            return;
+        }
 
         // Assigna les propietats bàsiques de l'agent a CurrentTrade
         CurrentTrade.TradePartnerRight = currentAgentInventory.AgentID;
         CurrentTrade.MoneyRight = currentAgentInventory.InventoryMoney;
         
-        // Reiniciar valors específics de la part dreta
+        SetUpTradeLines();
+
+        /* // Reiniciar valors específics de la part dreta
         foreach (var line in CurrentTrade.TradeResourceLines)
         {
             line.QtyCurrentRight = 0;
@@ -243,7 +254,6 @@ public class TradeManager : MonoBehaviour
                 line = new TradeResourceLine
                 {
                     ResourceID = resource.ResourceID,
-                    //ResourceType = resource.ResourceType,
                     ResourceType = matchedResource != null ? matchedResource.resourceType : "Desconegut",
                     QtyOriginalRight = (int)resource.Quantity,
                     ValueOriginalRight = resource.CurrentValue
@@ -273,7 +283,7 @@ public class TradeManager : MonoBehaviour
             }
 
             
-        }
+        } */
         
         // Log amb informació detallada per a cada TradeResourceLine
         /* foreach (var line in CurrentTrade.TradeResourceLines)
@@ -284,12 +294,90 @@ public class TradeManager : MonoBehaviour
         } */
     }
 
+    // Aquesta funció centralitza la configuració de les línies de recurs per a la negociació.
+    private void SetUpTradeLines()
+    {
+        // Obtenir les referències a les dades de la ciutat i de l'agent des de GameManager
+        CityData currentCity = GameManager.Instance.CurrentCity;
+        Agent currentAgent = GameManager.Instance.CurrentAgent;
+
+        // Obtenir els inventaris de la ciutat i de l'agent
+        CityInventory currentCityInventory = currentCity?.CityInventory;
+        AgentInventory agentInventory = currentAgent?.Inventory;
+
+        
+        // Aquest diccionari temporal ajudarà a gestionar les TradeResourceLines de manera eficient
+        Dictionary<string, TradeResourceLine> tempTradeLines = new Dictionary<string, TradeResourceLine>();
+
+        // Processar els recursos de la ciutat
+        foreach (var resource in currentCityInventory.InventoryResources)
+        {
+            if (!tempTradeLines.TryGetValue(resource.ResourceID, out var line))
+            {
+                line = new TradeResourceLine
+                {
+                    ResourceID = resource.ResourceID,
+                    ResourceType = resource.ResourceType,
+                    QtyOriginalLeft = (int)resource.Quantity,
+                    QtyDemandedLeft = (int)((CityInventoryResource)resource).DemandTotal, // Cast a CityInventoryResource per accedir a DemandTotal
+                    QtyAvailableLeft = (int)Mathf.Max(0, resource.Quantity - ((CityInventoryResource)resource).DemandCritical),
+                    BuyPriceOriginal = ((CityInventoryResource)resource).CurrentPrice, // Usa el CurrentPrice com a BuyPriceOriginal
+                    SellPriceOriginal = (int)(((CityInventoryResource)resource).CurrentPrice * 0.9f) // Calcula SellPriceOriginal amb un descompte
+                };
+                tempTradeLines[resource.ResourceID] = line;
+            }
+            else
+            {
+                // Actualitza les propietats de la línia si ja existia
+                line.QtyOriginalLeft += (int)resource.Quantity;
+                line.QtyDemandedLeft += (int)((CityInventoryResource)resource).DemandTotal;
+                line.QtyAvailableLeft += (int)Mathf.Max(0, resource.Quantity - ((CityInventoryResource)resource).DemandCritical);
+                line.BuyPriceOriginal = ((CityInventoryResource)resource).CurrentPrice;
+                line.SellPriceOriginal = (int)(((CityInventoryResource)resource).CurrentPrice * 0.9f);
+            }
+        }
+
+        // Processar els recursos de l'agent
+        if(agentInventory != null)
+        {
+            foreach(var resource in agentInventory.InventoryResources)
+            {
+                if(!tempTradeLines.TryGetValue(resource.ResourceID, out var line))
+                {
+                    line = new TradeResourceLine
+                    {
+                        ResourceID = resource.ResourceID,
+                        ResourceType = resource.ResourceType,
+                        QtyOriginalRight = (int)resource.Quantity,
+                        ValueOriginalRight = resource.CurrentValue
+                    };
+                    tempTradeLines.Add(resource.ResourceID, line);
+                }
+                else
+                {
+                    // Actualitza les propietats de la línia si ja existia
+                    line.QtyOriginalRight += (int)resource.Quantity;
+                    line.ValueOriginalRight += resource.CurrentValue;
+                }
+            }
+        }
+        // Actualitzar les TradeResourceLines de CurrentTrade amb les dades processades
+        CurrentTrade.TradeResourceLines = tempTradeLines.Values.ToList();
+
+        // Recorda cridar qualsevol altra funció necessària després de configurar les línies, com ara TradeDeskCleanup
+        CurrentTrade.TradeDeskCleanup();
+
+    }
+
+    
+
     public void RecalcPriceForResource(TradeResourceLine line)
     {
         Debug.Log($"Recalculant preu per a ID: {line.ResourceID}, {line.ResourceType}");
         // Utilitza directament les propietats de la línia per calcular la diferència respecte a la demanda
-        float difQty = line.QtyDemandedLeft == 0 ? 3f : (line.QtyCurrentLeft - line.QtyDemandedLeft) / line.QtyDemandedLeft;
-
+        float difQty = line.QtyDemandedLeft == 0 ? 3f : 
+            ((float)line.QtyCurrentLeft - (float)line.QtyDemandedLeft) / (float)line.QtyDemandedLeft;
+        
         // Calcula la price elasticity segons la fórmula donada: y= -0.6x^3 +0.8x^2 -0.6x +1
         float priceElasticity = -0.6f * Mathf.Pow(difQty, 3) + 0.8f * Mathf.Pow(difQty, 2) - 0.6f * difQty + 1f;
 
@@ -305,6 +393,10 @@ public class TradeManager : MonoBehaviour
         line.BuyPriceCurrent = currentPrice;
         line.SellPriceCurrent = Mathf.RoundToInt(currentPrice * 0.90f); // Assumeix un descompte del 10% sobre el preu de compra
 
+        // Afegir el Debug.Log amb la informació recalculada, incloent detalls sobre Qty CurrentLeft i QtyDemandedLeft
+        Debug.Log($"Recalculat preu per {matchedResource.resourceName}, (ID: {line.ResourceID}): "+
+            $"Existent {line.QtyCurrentLeft}, Demandat {line.QtyDemandedLeft}, "+
+            $"Diferència {difQty}, Elasticity {priceElasticity} x base {basePrice} = total {currentPrice}");
     }
     
     public void BuyResource(string resourceID)

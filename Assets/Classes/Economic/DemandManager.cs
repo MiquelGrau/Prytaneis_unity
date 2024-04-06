@@ -9,10 +9,10 @@ public class DemandManager : MonoBehaviour
 {
     
     public DataManager dataManager; 
-    public CityData currentCity  { get; private set; }
-    public CityInventory currentCityInventory { get; private set; } 
+    //public CityData currentCity  { get; private set; }
+    //public CityInventory currentCityInventory { get; private set; } 
     
-    public List<CityData> cities; 
+    //public List<CityData> cities; 
     public List<LifestyleTier> lifestyleTiers; 
     
     private float timer = 0f;
@@ -23,17 +23,16 @@ public class DemandManager : MonoBehaviour
     private void Start()
     {  
         Debug.Log("Iniciant DemandManager...");
-        
         // Obté el llistat de ciutats
-        cities = dataManager.GetCities(); 
+        /* cities = dataManager.GetCities(); 
         if (cities == null || cities.Count == 0)        // Comprova si 'cities' és null
         {
             Debug.LogError("No s'han pogut carregar les ciutats.");
             return;
-        }
+        } */
         
-        // Assigna la ciutat actual
-        AssignCurrentCity("C0001");
+        // Assigna la ciutat actual des de GameManager
+        //AssignCurrentCity(GameManager.Instance.CurrentCity);
         lifestyleTiers = DataManager.lifestyleTiers; 
         
         
@@ -62,39 +61,21 @@ public class DemandManager : MonoBehaviour
         }
     }
 
-
-    private void AssignCurrentCity(string cityID)
+    private void GetTierNeedsForCity() 
     {
-        currentCity = cities.Find(city => city.cityID == cityID);
-
-        if (currentCity != null)
-        {
-            Debug.Log($"Ciutat assignada: {currentCity.cityID}, {currentCity.cityName}");
-            currentCityInventory = currentCity.CityInventory; 
-            if (currentCityInventory != null)
-            {
-                Debug.Log($"Inventari de la ciutat assignada: {currentCityInventory.CityInvID}");
-            }
-            else
-            {
-                Debug.LogError($"No s'ha trobat l'inventari per a la ciutat '{currentCity.cityName}'");
-            }
-            //Debug.Log($"PoorLifestyleID: {currentCity.PoorLifestyleID}, MidLifestyleID: {currentCity.MidLifestyleID}, RichLifestyleID: {currentCity.RichLifestyleID}");
-        }
-        else
-        {
-            Debug.LogError($"No s'ha trobat cap ciutat amb l'ID '{cityID}'");
-        }
-    }
-
-    private void GetTierNeedsForCity()
-    {
+        CityData currentCity = GameManager.Instance.CurrentCity;
+        CityInventory currentCityInventory = currentCity.CityInventory;
         if (currentCity == null)
         {
             Debug.LogError("No s'ha assignat cap ciutat actual.");
             return;
         }
-
+        if (currentCityInventory == null)
+        {
+            Debug.LogError("No s'ha assignat cap inventari de ciutat.");
+            return;
+        }
+        
         // Netejar les CityDemands existents
         currentCityInventory.Demands.Clear();
 
@@ -183,6 +164,9 @@ public class DemandManager : MonoBehaviour
 
     public void AssignDemandsToVarieties()
     {
+        CityData currentCity = GameManager.Instance.CurrentCity;
+        CityInventory currentCityInventory = currentCity.CityInventory;
+
         // Primer, netejar les demandes existents de linies de recursos d'inventari
         foreach (var resline in currentCityInventory.InventoryResources)
         {
@@ -245,12 +229,16 @@ public class DemandManager : MonoBehaviour
     
     public void CalculatePrices()
     {
+        CityData currentCity = GameManager.Instance.CurrentCity;
+        CityInventory currentCityInventory = currentCity.CityInventory;
+
         foreach (var resline in currentCityInventory.InventoryResources)
         {
             if (resline.ResourceID != null)
             {
                 // Calcula el quantitat de diferencia respecte la demanda
-                float difQty = resline.DemandTotal == 0 ? 3f : (resline.Quantity - resline.DemandTotal) / resline.DemandTotal;
+                float difQty = resline.DemandTotal == 0 ? 3f : 
+                    ((float)resline.Quantity - (float)resline.DemandTotal) / (float)resline.DemandTotal;
 
                 // Calcula la price elasticity segons la fórmula donada: y= -0.6x^3 +0.8x^2 -0.6x +1
                 float priceElasticity = -0.6f * Mathf.Pow(difQty, 3) + 0.8f * Mathf.Pow(difQty, 2) - 0.6f * difQty + 1f;
@@ -272,6 +260,9 @@ public class DemandManager : MonoBehaviour
 
     private string GetCityInventoryDisplayText()
     {
+        CityData currentCity = GameManager.Instance.CurrentCity;
+        CityInventory currentCityInventory = currentCity.CityInventory;
+        
         if (currentCityInventory == null)
         {
             return "No s'ha assignat cap inventari de ciutat.";

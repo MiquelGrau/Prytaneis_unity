@@ -2453,7 +2453,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dataManager: {fileID: 1301510094}
-  cities: []
   lifestyleTiers: []
   inventoryDisplayText: {fileID: 1812656526}
 --- !u!4 &962695654
@@ -3801,6 +3800,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1301510090}
+  - component: {fileID: 1301510095}
   - component: {fileID: 1301510089}
   - component: {fileID: 1301510094}
   m_Layer: 0
@@ -3853,6 +3853,18 @@ MonoBehaviour:
     cities: []
   cityInventories: []
   agents: []
+--- !u!114 &1301510095
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1301510088}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8083e8463ac5c53408785067d3dc8657, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1304097682
 GameObject:
   m_ObjectHideFlags: 0

@@ -8,7 +8,9 @@ using Newtonsoft.Json;
 
 public class DataManager : MonoBehaviour
 {
+    public static DataManager Instance { get; private set; }
     private string dataPath;
+
     // Classes estatiques, definicions
     public static List<LifestyleTier> lifestyleTiers;
     public static List<Resource> resources;
@@ -36,6 +38,17 @@ public class DataManager : MonoBehaviour
 
     private void Awake()
     {
+        // Bloc basic per a que no es perdi la variable en altres llocs. Crec, això diu el gepeto. 
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject); // Això manté l'objecte viu entre canvis d'escena
+        }
+        else if (Instance != this)
+        {
+            Destroy(gameObject);
+        }
+        
         TextAsset cityDataAsset = Resources.Load<TextAsset>("CityData");
         if(cityDataAsset != null)
         {
@@ -78,9 +91,18 @@ public class DataManager : MonoBehaviour
             return new List<CityData>();
         }
     }
+    public CityData GetCityDataByID(string cityID)  // Te la demanaran mil vegades, millor tenir això aqui dins
+    {
+        return dataItems.cities.FirstOrDefault(city => city.cityID == cityID);
+    }
+
     public List<Agent> GetAgents()
     {
         return agents;
+    }
+    public Agent GetAgentByID(string agentID)
+    {
+        return agents.FirstOrDefault(agent => agent.agentID == agentID);
     }
     /* public List<Agent> GetAgents()
     {
