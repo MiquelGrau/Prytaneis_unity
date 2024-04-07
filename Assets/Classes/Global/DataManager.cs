@@ -30,6 +30,10 @@ public class DataManager : MonoBehaviour
     public CityDataList dataItems;
     public List<CityInventory> cityInventories;
     
+    // BBDD d'edificis
+    public int buildingCounter = 0;
+
+    
     // Classes de agents, merchants, etc
     public List<Agent> agents = new List<Agent>();
     public List<AgentInventory> agentInventories;
@@ -104,6 +108,13 @@ public class DataManager : MonoBehaviour
     {
         return agents.FirstOrDefault(agent => agent.agentID == agentID);
     }
+
+    public string GenerateBuildingID()
+    {
+        buildingCounter++;
+        return $"B{buildingCounter.ToString().PadLeft(5, '0')}";
+    }
+
     /* public List<Agent> GetAgents()
     {
         if (agents is AgentList agentList)

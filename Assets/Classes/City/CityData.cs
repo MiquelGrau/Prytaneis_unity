@@ -27,6 +27,7 @@ public class CityData
     public int RichLifestyleID; 
     
     //public List<BuildingInstanceData> buildings;
+    public List<Building> CityBuildings { get; set; } = new List<Building>(); 
     public string[][] grid;
     
 }
