@@ -164,58 +164,6 @@ public class TradeManager : MonoBehaviour
         CurrentTrade.MoneyLeft = currentCityInventory.CityInvMoney;
         
         SetUpTradeLines();
-        /* Debug.Log($"Assignat inventari de la ciutat {currentCityInventory.CityID}, "+
-                  $"té {currentCityInventory.CityInvMoney} diners i conté aquests recursos:"); */
-
-        /* // Reiniciar valors específics de la part esquerra
-        foreach (var line in CurrentTrade.TradeResourceLines)
-        {
-            line.QtyDemandedLeft = 0;
-            line.QtyAvailableLeft = 0;
-            line.QtyCurrentLeft = 0;
-            line.QtyOriginalLeft = 0;
-            line.BuyPriceCurrent = 0;
-            line.BuyPriceOriginal = 0;
-            line.SellPriceCurrent = 0;
-            line.SellPriceOriginal = 0;
-        }
-
-        // Afegir o actualitzar recursos de la ciutat
-        foreach (var resource in currentCityInventory.InventoryResources.Where(r => !string.IsNullOrEmpty(r.ResourceID)))
-        {
-            var line = CurrentTrade.TradeResourceLines.FirstOrDefault(trl => trl.ResourceID == resource.ResourceID);
-            if (line == null)
-            {
-                line = new TradeResourceLine
-                {
-                    ResourceID = resource.ResourceID,
-                    ResourceType = resource.ResourceType,
-                    QtyDemandedLeft = (int)resource.DemandTotal,
-                    QtyAvailableLeft = (int)Mathf.Max(0, resource.Quantity - resource.DemandCritical),
-                    QtyOriginalLeft = (int)resource.Quantity,
-                    BuyPriceOriginal = resource.CurrentPrice,
-                    
-                };
-                CurrentTrade.TradeResourceLines.Add(line);
-            }
-            else
-            {
-                // Actualitza les propietats si el recurs ja existeix
-                line.QtyOriginalLeft = (int)resource.Quantity;
-                line.BuyPriceOriginal = resource.CurrentPrice;
-                line.QtyDemandedLeft = (int)resource.DemandTotal;
-                line.QtyAvailableLeft = (int)Mathf.Max(0, resource.Quantity - resource.DemandCritical);
-            }
-            
-        } */
-        
-        // Log amb informació detallada per a cada TradeResourceLine
-        /* foreach (var line in CurrentTrade.TradeResourceLines)
-        {
-            Debug.Log($"ResourceID: {line.ResourceID}, ResourceType: {line.ResourceType}, " +
-                      $"QtyOriginalLeft: {line.QtyOriginalLeft}, QtyOriginalRight: {line.QtyOriginalRight}, " +
-                      $"BuyPriceOriginal: {line.BuyPriceOriginal}, ValueOriginalRight: {line.ValueOriginalRight}");
-        } */
     }
 
     public void AssignAgentInTrade()
@@ -234,64 +182,6 @@ public class TradeManager : MonoBehaviour
         CurrentTrade.MoneyRight = currentAgentInventory.InventoryMoney;
         
         SetUpTradeLines();
-
-        /* // Reiniciar valors específics de la part dreta
-        foreach (var line in CurrentTrade.TradeResourceLines)
-        {
-            line.QtyCurrentRight = 0;
-            line.QtyOriginalRight = 0;
-            line.ValueCurrentRight = 0;
-            line.ValueOriginalRight = 0;
-        }
-
-        // Afegir o actualitzar recursos de l'agent
-        foreach (var resource in currentAgentInventory.InventoryResources.Where(r => !string.IsNullOrEmpty(r.ResourceID)))
-        {
-            var line = CurrentTrade.TradeResourceLines.FirstOrDefault(trl => trl.ResourceID == resource.ResourceID);
-            var matchedResource = DataManager.resources.FirstOrDefault(r => r.resourceID == resource.ResourceID);
-            if (line == null)
-            {
-                line = new TradeResourceLine
-                {
-                    ResourceID = resource.ResourceID,
-                    ResourceType = matchedResource != null ? matchedResource.resourceType : "Desconegut",
-                    QtyOriginalRight = (int)resource.Quantity,
-                    ValueOriginalRight = resource.CurrentValue
-                };
-                CurrentTrade.TradeResourceLines.Add(line);
-            }
-            else
-            {
-                // Actualitza les propietats si el recurs ja existeix
-                line.ResourceType = matchedResource != null ? matchedResource.resourceType : "Desconegut"; // no caldria, pero bueno
-                line.QtyOriginalRight = (int)resource.Quantity;
-                line.ValueOriginalRight = resource.CurrentValue;
-            }
-
-            // Buscar la demanda de la ciutat per aquests recursos (només si QtyOriginalLeft és 0)
-            if (line.QtyOriginalLeft == 0)
-            {
-                var headerResource = currentCityInventory.InventoryResources
-                    .FirstOrDefault(ri => ri.ResourceType == line.ResourceType && ri.ResourceID == null);
-
-                if (headerResource != null)
-                {
-                    line.QtyDemandedLeft = (int)headerResource.DemandTotal;
-                    line.QtyAvailableLeft = 0;
-                }
-                RecalcPriceForResource(line);
-            }
-
-            
-        } */
-        
-        // Log amb informació detallada per a cada TradeResourceLine
-        /* foreach (var line in CurrentTrade.TradeResourceLines)
-        {
-            Debug.Log($"ResourceID: {line.ResourceID}, ResourceType: {line.ResourceType}, " +
-                      $"QtyOriginalLeft: {line.QtyOriginalLeft}, QtyOriginalRight: {line.QtyOriginalRight}, " +
-                      $"BuyPriceOriginal: {line.BuyPriceOriginal}, ValueOriginalRight: {line.ValueOriginalRight}");
-        } */
     }
 
     // Aquesta funció centralitza la configuració de les línies de recurs per a la negociació.
@@ -385,8 +275,8 @@ public class TradeManager : MonoBehaviour
         priceElasticity = Mathf.Max(priceElasticity, 0.25f);
 
         // Troba el base price del recurs
-        var matchedResource = DataManager.resources.FirstOrDefault(r => r.resourceID == line.ResourceID);
-        float basePrice = matchedResource != null ? matchedResource.basePrice : 0f;
+        var matchedResource = DataManager.resources.FirstOrDefault(r => r.ResourceID == line.ResourceID);
+        float basePrice = matchedResource != null ? matchedResource.BasePrice : 0f;
 
         // Calcula el BuyPriceCurrent i SellPriceCurrent
         int currentPrice = Mathf.RoundToInt(priceElasticity * basePrice);
@@ -394,7 +284,7 @@ public class TradeManager : MonoBehaviour
         line.SellPriceCurrent = Mathf.RoundToInt(currentPrice * 0.90f); // Assumeix un descompte del 10% sobre el preu de compra
 
         // Afegir el Debug.Log amb la informació recalculada, incloent detalls sobre Qty CurrentLeft i QtyDemandedLeft
-        Debug.Log($"Recalculat preu per {matchedResource.resourceName}, (ID: {line.ResourceID}): "+
+        Debug.Log($"Recalculat preu per {matchedResource.ResourceName}, (ID: {line.ResourceID}): "+
             $"Existent {line.QtyCurrentLeft}, Demandat {line.QtyDemandedLeft}, "+
             $"Diferència {difQty}, Elasticity {priceElasticity} x base {basePrice} = total {currentPrice}");
     }

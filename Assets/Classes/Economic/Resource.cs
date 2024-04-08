@@ -6,21 +6,21 @@ using UnityEngine;
 public class Resource
 {
     // Propietats dels recursos. Nomes definicions, les quantitats aniran als inventaris
-    public string resourceID;
-    public string resourceName;
-    public string resourceType;
-    public string resourceSubtype;
-    public int basePrice;
-    public float baseWeight;
+    public string ResourceID;
+    public string ResourceName;
+    public string ResourceType;
+    public string ResourceSubtype;
+    public int BasePrice;
+    public float BaseWeight;
 
     public Resource(string id, string name, string type, string subtype, int price, float weight)
     {
-        resourceID = id;
-        resourceName = name;
-        resourceType = type;
-        resourceSubtype = subtype;
-        basePrice = price;
-        baseWeight = weight;
+        ResourceID = id;
+        ResourceName = name;
+        ResourceType = type;
+        ResourceSubtype = subtype;
+        BasePrice = price;
+        BaseWeight = weight;
     }
 
 }

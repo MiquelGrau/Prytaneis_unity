@@ -149,8 +149,8 @@ public class DatabaseImporter : MonoBehaviour
         } */
         foreach (var resource in resourceList)
         {
-            uniqueResourceTypes.Add(resource.resourceType);
-            uniqueResourceSubtypes.Add(resource.resourceSubtype);
+            uniqueResourceTypes.Add(resource.ResourceType);
+            uniqueResourceSubtypes.Add(resource.ResourceSubtype);
         }
         //Debug.Log("Llistat de recursos carregats");
         Debug.Log($"Llistat de recursos carregats. Total de recursos: {resourceList.Count}, "+
