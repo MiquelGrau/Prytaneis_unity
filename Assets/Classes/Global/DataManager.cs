@@ -74,6 +74,9 @@ public class DataManager : MonoBehaviour
             Debug.LogError("No es pot trobar el fitxer CityData.json a la carpeta Resources.");
         }
 
+        // Depuració per a confirmar la càrrega de dades
+        Debug.Log($"Nombre de templates productius carregats: {productiveTemplates.Count}");
+        Debug.Log($"Nombre de templates cívics carregats: {civicTemplates.Count}");
         
     }
 

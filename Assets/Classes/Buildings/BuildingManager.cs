@@ -27,11 +27,13 @@ public class BuildingManager : MonoBehaviour
 
         foreach (var template in dataManager.productiveTemplates)
         {
+            Debug.Log($"Afegint template productiu: {template.ClassName}");
             buildingNames.Add(template.ClassName);
         }
 
         foreach (var template in dataManager.civicTemplates)
         {
+            Debug.Log($"Afegint template cívic: {template.ClassName}");
             buildingNames.Add(template.ClassName);
         }
 
@@ -93,7 +95,7 @@ public class BuildingManager : MonoBehaviour
             0, // HPMaximum
             template.Capacity,
             template.TemplateID,
-            new List<string>(), // CurrentFactors com a llistat buit per ara
+            new List<ProductiveFactor>(), // CurrentFactors com a llistat buit per ara
             template.PossibleMethods,
             null, // Method Active, no s'està fabricant res encara. 
             template.DefaultMethod,
@@ -109,6 +111,7 @@ public class BuildingManager : MonoBehaviour
         );
 
         // Aquí es podria afegir el nou edifici a una llista d'edificis dins de la ciutat actual, per exemple
+        SetupFactors(newBuilding, template);
         AddBuildingToCurrentCity(newBuilding);
         Debug.Log("Nou edifici productiu creat: " + newBuilding.BuildingName);
     }
@@ -161,5 +164,62 @@ public class BuildingManager : MonoBehaviour
             Debug.LogError("No hi ha cap ciutat seleccionada per afegir l'edifici.");
         }
     }
+
+    public void SetupFactors(ProductiveBuilding building, ProductiveTemplate template)
+    {
+        /* // Crear la llista de factors productius per a l'edifici si no existeix
+        if (building.CurrentFactors == null)
+        {
+            building.CurrentFactors = new List<ProductiveFactor>();
+            Debug.Log($"[SetupFactors] Inicialitzada la llista de factors per l'edifici amb ID: {building.BuildingID}");
+        } */
+
+        // Agafar el CityInventory on està situat l'edifici
+        CityInventory cityInventory = gameManager.CurrentCity.CityInventory;
+        Debug.Log($"[SetupFactors] Obtenint inventari de la ciutat: {gameManager.CurrentCity.cityName}");
+
+        foreach (TemplateFactor templateFactor in template.Factors)
+        {
+            if (templateFactor is EmployeeFT employeeFT)
+            {
+                // Crear un nou EmployeePT i assignar-li les propietats
+                EmployeePT newEmployeeFactor = new EmployeePT(
+                    templateFactor,
+                    building.ProductionTempID,
+                    0, // EffectSize inicial és zero
+                    0, // CurrentEmployees inicial és zero
+                    0 * 10 // MonthlySalary, multiplica el nombre d'empleats per 10
+                );
+
+                // Afegir el nou factor a la llista de factors de l'edifici
+                building.AddFactor(newEmployeeFactor);
+                Debug.Log($"[SetupFactors] Afegit nou factor empleat: {newEmployeeFactor.FactorName} a l'edifici: {building.BuildingID}");
+            }
+            else if (templateFactor is ResourceFT resourceFT)
+            {
+                // Trobar la quantitat actual del recurs en el CityInventory
+                float currentQuantity = cityInventory.InventoryResources
+                    .FirstOrDefault(r => r.ResourceID == resourceFT.FResource.ResourceID)?.Quantity ?? 0f;
+
+                // Crear un nou ResourcePT i assignar-li les propietats
+                ResourcePT newResourceFactor = new ResourcePT(
+                    templateFactor,
+                    building.ProductionTempID,
+                    0, // EffectSize inicial és zero
+                    resourceFT.FResource, // El recurs associat
+                    currentQuantity, // Quantitat actual del recurs
+                    0, // MonthlyConsumption inicial és zero
+                    0  // MonthlyValue inicial és zero
+                );
+
+                // Afegir el nou factor a la llista de factors de l'edifici
+                building.AddFactor(newResourceFactor);
+                Debug.Log($"[SetupFactors] Afegit nou factor recurs: {newResourceFactor.FactorName} amb quantitat actual: {newResourceFactor.CurrentQuantity} a l'edifici: {building.BuildingID}");
+            }
+        }
+
+        Debug.Log($"[SetupFactors] Factors configurats per a l'edifici: {building.BuildingID} amb un total de {building.CurrentFactors.Count} factors.");
+    }
+
 
 }

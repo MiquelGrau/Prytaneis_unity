@@ -5,7 +5,7 @@ using UnityEngine;
 public class ProductiveBuilding : Building
 {
     public string ProductionTempID { get; private set; }
-    public List<string> CurrentFactors { get; private set; } // Aquest serà reemplaçat per les instàncies reals de factors més tard.
+    public List<ProductiveFactor> CurrentFactors { get; private set; } // Aquest serà reemplaçat per les instàncies reals de factors més tard.
     public List<ProductionMethod> MethodsAvailable { get; private set; }
     public ProductionMethod MethodActive { get; private set; }
     public ProductionMethod MethodDefault { get; private set; }
@@ -21,14 +21,14 @@ public class ProductiveBuilding : Building
 
     public ProductiveBuilding(string id, string name, string templateID, string location, string ownerID, string inventoryID,
                               string activity, int size, int hpCurrent, int hpMax, int capacity,
-                              string productionTempID, List<string> currentFactors, List<ProductionMethod> methodsAvailable,
+                              string productionTempID, List<ProductiveFactor> currentFactors, List<ProductionMethod> methodsAvailable,
                               ProductionMethod methodActive, ProductionMethod methodDefault, string batchCurrent, 
                               List<string> batchBacklog, float inputEfficiency, float outputEfficiency,
                               float cycleEfficiency, float salaryEfficiency, int jobsPoor, int jobsMid, int jobsRich)
         : base(id, name, templateID, location, ownerID, inventoryID, activity, size, hpCurrent, hpMax, capacity)
     {
         ProductionTempID = productionTempID;
-        CurrentFactors = currentFactors ?? new List<string>();
+        CurrentFactors = currentFactors ?? new List<ProductiveFactor>();
         MethodsAvailable = methodsAvailable ?? new List<ProductionMethod>();
         MethodActive = methodActive;
         MethodDefault = methodDefault;
@@ -41,6 +41,16 @@ public class ProductiveBuilding : Building
         JobsPoor = jobsPoor;
         JobsMid = jobsMid;
         JobsRich = jobsRich;
+    }
+
+    // Mètode públic per afegir factors
+    public void AddFactor(ProductiveFactor factor)
+    {
+        if(CurrentFactors == null)
+        {
+            CurrentFactors = new List<ProductiveFactor>();
+        }
+        CurrentFactors.Add(factor);
     }
 }
 
