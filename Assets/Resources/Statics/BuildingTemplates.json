@@ -7,19 +7,10 @@
       "DefaultMethod": "PM001", "Capacity": 100,
       "PossibleMethods": [
         { "Method": "PM001" },
-        { "Method": "PM002" },
-        { "Method": "PM003" },
-        { "Method": "PM004" },
-        { "Method": "PM005" }
+        { "Method": "PM002" }
       ],
       "Factors": [
         { "Factor": "FPE001" },
-        { "Factor": "FPE003" },
-        { "Factor": "FPE003" },
-        { "Factor": "FPE003" },
-        { "Factor": "FPE003" },
-        { "Factor": "FPE003" },
-        { "Factor": "FPE003" },
         { "Factor": "FPE003" }
       ]
     },
@@ -36,9 +27,7 @@
       "DefaultMethod": "PM001", "Capacity": 50,
       "PossibleMethods": [
         { "Method": "PM001" },
-        { "Method": "PM002" },
-        { "Method": "PM006" },
-        { "Method": "PM007" }
+        { "Method": "PM002" }
       ],
       "Factors": [
         { "Factor": "FPE002" },

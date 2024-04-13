@@ -17,26 +17,26 @@ public class BuildingManager : MonoBehaviour
     
     private void Start()
     {
+        PopulateBuildingDropdown();
         createBuildingButton.onClick.AddListener(CreateNewBuilding);
-        PopulateDropdown();
     }
 
-    private void PopulateDropdown()
+    private void PopulateBuildingDropdown()
     {
         List<string> buildingNames = new List<string>();
 
-        foreach (var template in dataManager.productiveTemplates)
+        foreach (var template in DataManager.Instance.productiveTemplates)
         {
             Debug.Log($"Afegint template productiu: {template.ClassName}");
             buildingNames.Add(template.ClassName);
         }
 
-        foreach (var template in dataManager.civicTemplates)
+        foreach (var template in DataManager.Instance.civicTemplates)
         {
             Debug.Log($"Afegint template cívic: {template.ClassName}");
             buildingNames.Add(template.ClassName);
         }
-
+        
         buildingDropdown.ClearOptions();
         buildingDropdown.AddOptions(buildingNames);
     }
@@ -47,10 +47,10 @@ public class BuildingManager : MonoBehaviour
         int selectedIndex = buildingDropdown.value;
         
         // Calcular l'índex real tenint en compte que el llistat combina productius i cívics
-        bool isProductive = selectedIndex < dataManager.productiveTemplates.Count;
+        bool isProductive = selectedIndex < DataManager.Instance.productiveTemplates.Count;
         string selectedTemplateID = isProductive ? 
-            dataManager.productiveTemplates[selectedIndex].TemplateID : 
-            dataManager.civicTemplates[selectedIndex - dataManager.productiveTemplates.Count].TemplateID;
+            DataManager.Instance.productiveTemplates[selectedIndex].TemplateID : 
+            DataManager.Instance.civicTemplates[selectedIndex - DataManager.Instance.productiveTemplates.Count].TemplateID;
         
         BuildingTemplate selectedTemplate = FindTemplateByID(selectedTemplateID);
 
@@ -67,12 +67,12 @@ public class BuildingManager : MonoBehaviour
     private BuildingTemplate FindTemplateByID(string templateID)
     {
         // Intenta trobar el template en la llista de productiveTemplates
-        BuildingTemplate template = dataManager.productiveTemplates.FirstOrDefault(t => t.TemplateID == templateID);
+        BuildingTemplate template = DataManager.Instance.productiveTemplates.FirstOrDefault(t => t.TemplateID == templateID);
 
         // Si no es troba en productiveTemplates, busca en civicTemplates
         if (template == null)
         {
-            template = dataManager.civicTemplates.FirstOrDefault(t => t.TemplateID == templateID);
+            template = DataManager.Instance.civicTemplates.FirstOrDefault(t => t.TemplateID == templateID);
         }
 
         return template;
@@ -165,18 +165,17 @@ public class BuildingManager : MonoBehaviour
         }
     }
 
-    public void SetupFactors(ProductiveBuilding building, ProductiveTemplate template)
+    public void SetupFactors(ProductiveBuilding newBuilding, ProductiveTemplate template)
     {
-        /* // Crear la llista de factors productius per a l'edifici si no existeix
-        if (building.CurrentFactors == null)
+        // Crear la llista de factors productius per a l'edifici si no existeix
+        if (template.Factors == null)
         {
-            building.CurrentFactors = new List<ProductiveFactor>();
-            Debug.Log($"[SetupFactors] Inicialitzada la llista de factors per l'edifici amb ID: {building.BuildingID}");
-        } */
+            Debug.Log($"No hi ha cap factor carregat per aquesta template");
+        }
 
         // Agafar el CityInventory on està situat l'edifici
-        CityInventory cityInventory = gameManager.CurrentCity.CityInventory;
-        Debug.Log($"[SetupFactors] Obtenint inventari de la ciutat: {gameManager.CurrentCity.cityName}");
+        /* CityInventory cityInventory = gameManager.CurrentCity.CityInventory;
+        Debug.Log($"[SetupFactors] Obtenint inventari de la ciutat: {gameManager.CurrentCity.cityName}"); */
 
         foreach (TemplateFactor templateFactor in template.Factors)
         {
@@ -185,40 +184,49 @@ public class BuildingManager : MonoBehaviour
                 // Crear un nou EmployeePT i assignar-li les propietats
                 EmployeePT newEmployeeFactor = new EmployeePT(
                     templateFactor,
-                    building.ProductionTempID,
+                    newBuilding.ProductionTempID,
                     0, // EffectSize inicial és zero
                     0, // CurrentEmployees inicial és zero
                     0 * 10 // MonthlySalary, multiplica el nombre d'empleats per 10
                 );
 
                 // Afegir el nou factor a la llista de factors de l'edifici
-                building.AddFactor(newEmployeeFactor);
-                Debug.Log($"[SetupFactors] Afegit nou factor empleat: {newEmployeeFactor.FactorName} a l'edifici: {building.BuildingID}");
+                //newBuilding.AddFactor(newEmployeeFactor);
+                newBuilding.CurrentFactors.Add(newEmployeeFactor);
+                Debug.Log($"[SetupFactors] Afegit nou factor empleat: {newEmployeeFactor.FactorName} a l'edifici: {newBuilding.BuildingID}");
             }
             else if (templateFactor is ResourceFT resourceFT)
             {
+                // Obté el recurs associat usant ResourceID
+                Resource resource = DataManager.resourcemasterlist.FirstOrDefault(r => r.ResourceID == resourceFT.ResourceID);
+                if (resource == null)
+                {
+                    Debug.LogWarning($"Recurs amb ID {resourceFT.ResourceID} no trobat.");
+                    continue;
+                }
+
                 // Trobar la quantitat actual del recurs en el CityInventory
-                float currentQuantity = cityInventory.InventoryResources
-                    .FirstOrDefault(r => r.ResourceID == resourceFT.FResource.ResourceID)?.Quantity ?? 0f;
+                /* float currentQuantity = cityInventory.InventoryResources
+                    .FirstOrDefault(r => r.ResourceID == resourceFT.FResource.ResourceID)?.Quantity ?? 0f; */
 
                 // Crear un nou ResourcePT i assignar-li les propietats
                 ResourcePT newResourceFactor = new ResourcePT(
                     templateFactor,
-                    building.ProductionTempID,
+                    newBuilding.ProductionTempID,
                     0, // EffectSize inicial és zero
-                    resourceFT.FResource, // El recurs associat
-                    currentQuantity, // Quantitat actual del recurs
+                    resource, // El recurs associat
+                    0, // Quantitat actual del recurs -> forçat
                     0, // MonthlyConsumption inicial és zero
                     0  // MonthlyValue inicial és zero
                 );
 
                 // Afegir el nou factor a la llista de factors de l'edifici
-                building.AddFactor(newResourceFactor);
-                Debug.Log($"[SetupFactors] Afegit nou factor recurs: {newResourceFactor.FactorName} amb quantitat actual: {newResourceFactor.CurrentQuantity} a l'edifici: {building.BuildingID}");
+                newBuilding.CurrentFactors.Add(newResourceFactor);
+                Debug.Log($"[SetupFactors] Afegit nou factor recurs: {newResourceFactor.FactorName} amb quantitat actual: {newResourceFactor.CurrentQuantity} a l'edifici: {newBuilding.BuildingID}");
             }
         }
 
-        Debug.Log($"[SetupFactors] Factors configurats per a l'edifici: {building.BuildingID} amb un total de {building.CurrentFactors.Count} factors.");
+        Debug.Log($"[SetupFactors] Factors configurats per a l'edifici: {newBuilding.BuildingID} amb un total de {newBuilding.CurrentFactors.Count} factors.");
     }
 
 

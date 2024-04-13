@@ -30,9 +30,10 @@ public class DatabaseImporter : MonoBehaviour
         LoadCityInventory();
         LoadStartAgents();
         LoadAgentInventories();
-        LoadBuildingTemplates();
         LoadProductionMethods();
         LoadFactorTemplates();
+        LoadBuildingTemplates();    // Després de ProductionMethods i de FactorTemplates, o no carregarà
+
         //cityInventories = new List<CityInventory>(); 
         
         // Obté la referència de DataManager i carrega les ciutats
@@ -316,18 +317,60 @@ public class DatabaseImporter : MonoBehaviour
     {
         string jsonContent = Resources.Load<TextAsset>("Statics/BuildingTemplates").text;
         BuildingTemplateListWrapper wrapper = JsonConvert.DeserializeObject<BuildingTemplateListWrapper>(jsonContent);
-
+        
+        
         foreach (var templateData in wrapper.Templates)
         {
+            string individualJsonContent = JsonConvert.SerializeObject(templateData);
+
             if (templateData.TemplateType == "Productive")
             {
-                var template = JsonConvert.DeserializeObject<ProductiveTemplate>(jsonContent);
-                dataManager.productiveTemplates.Add(template);
+                var productiveTemplate = JsonConvert.DeserializeObject<ProductiveTemplate>(individualJsonContent);
+                
+                /* // Assigna els factors corresponents des de les IDs especificades
+                foreach (var factorId in templateData.Factors.Select(f => f.Factor))
+                {
+                    TemplateFactor foundFactor = FindFactorById(factorId);
+                    if (foundFactor != null)
+                    {
+                        productiveTemplate.Factors.Add(foundFactor);
+                        Debug.Log($"-- Factor afegit: ID={foundFactor.FactorID}, Name={foundFactor.FactorName}");
+                    }
+                    else
+                    {
+                        Debug.LogWarning($"No s'ha trobat Factor amb ID: {factorId}");
+                    }
+                } */
+                
+                // Verifica si hi ha factors a assignar
+                if (templateData.Factors != null && templateData.Factors.Count > 0)
+                {
+                    foreach (var factorReference in templateData.Factors)
+                    {
+                        TemplateFactor foundFactor = FindFactorById(factorReference.Factor);
+                        if (foundFactor != null)
+                        {
+                            productiveTemplate.Factors.Add(foundFactor);
+                            Debug.Log($"-- Factor afegit: ID={foundFactor.FactorID}, Name={foundFactor.FactorName}");
+                        }
+                        else
+                        {
+                            Debug.LogWarning($"No s'ha trobat Factor amb ID: {factorReference.Factor}");
+                        }
+                    }
+                }
+                
+                dataManager.productiveTemplates.Add(productiveTemplate);
+                Debug.Log($"Afegit ProductiveTemplate: {productiveTemplate.ClassName}, ID: {productiveTemplate.TemplateID}, Factors: {productiveTemplate.Factors.Count}");
+                foreach (var factor in productiveTemplate.Factors)
+                {
+                    Debug.Log($"-- Factor: ID={factor.FactorID}, Name={factor.FactorName}, Type={factor.FactorType}, Effect={factor.FactorEffect}");
+                }
             }
             else if (templateData.TemplateType == "Civic")
             {
-                var template = JsonConvert.DeserializeObject<CivicTemplate>(jsonContent);
-                dataManager.civicTemplates.Add(template);
+                var civicTemplate = JsonConvert.DeserializeObject<CivicTemplate>(individualJsonContent);
+                dataManager.civicTemplates.Add(civicTemplate);
             }
 
             
@@ -335,6 +378,12 @@ public class DatabaseImporter : MonoBehaviour
 
         Debug.Log($"Total de Plantilles Productives carregades: {dataManager.productiveTemplates.Count}");
         Debug.Log($"Total de Plantilles Cíviques carregades: {dataManager.civicTemplates.Count}");
+    }
+
+    private TemplateFactor FindFactorById(string factorId)
+    {
+        return dataManager.employeeFactors.FirstOrDefault(f => f.FactorID == factorId) ??
+            dataManager.resourceFactors.FirstOrDefault(f => f.FactorID == factorId) as TemplateFactor;
     }
 
     private void LoadProductionMethods()
@@ -390,6 +439,7 @@ public class DatabaseImporter : MonoBehaviour
                 if (factorJSON.FactorType == "Employee")
                 {
                     var factor = JsonConvert.DeserializeObject<EmployeeFT>(JsonConvert.SerializeObject(factorJSON));
+                    
                     dataManager.employeeFactors.Add(factor);
                 }
                 else if (factorJSON.FactorType == "Resource")
@@ -449,12 +499,18 @@ public class BuildingTemplateListWrapper
 [System.Serializable]
 public class BuildingTemplateJSON
 {
-    // Aquesta classe conté totes les propietats comunes
     public string TemplateID;
     public string ClassName;
     public string TemplateType;
     public string TemplateSubtype;
+    public List<FactorReference> Factors; 
     
+}
+
+[System.Serializable]
+public class FactorReference
+{
+    public string Factor; 
 }
 
 [System.Serializable]

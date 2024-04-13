@@ -10,16 +10,16 @@ public class BuildingInterfaces : MonoBehaviour
     public GameObject prodBuildingPrefab;
     public GameObject prodFactorPrefab;
 
-    // UI Elements for generic building info
+    // Caratula UI per edificis, en general
     public TextMeshProUGUI buildingNameText;
     public TextMeshProUGUI buildingIDText;
     public TextMeshProUGUI buildingStatusText;
     public Image buildingIcon;
 
-    // UI Elements for civic buildings
+    // Caratula UI per CivicBuildings
     public TextMeshProUGUI civicFunctionText;
 
-    // UI Elements for productive buildings
+    // Caratula UI per ProductiveBuildings
     public Transform prodFactorsPanel;
     public Transform prodMethodsPanel;
     public TextMeshProUGUI batchRunInfoText;

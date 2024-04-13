@@ -117,7 +117,7 @@ public class ResourceFT : TemplateFactor
     //public string FactorType { get; private set; }
     //public string FactorEffect { get; private set; }
     public int EffectSize { get; private set; }
-    public Resource FResource { get; private set; }
+    public string ResourceID { get; private set; }
     public float MonthlyConsumption { get; private set; }
     public int Minimum { get; private set; }
     public int Optimal { get; private set; }
@@ -128,13 +128,13 @@ public class ResourceFT : TemplateFactor
     // Constructor
     public ResourceFT(string factorID, string factorName, string factorType, 
                       string factorEffect, int effectSize,
-                      Resource fResource, float monthlyConsumption,
+                      string resourceID, float monthlyConsumption,
                       int minimum, int optimal, int maximum,
                       string shortfallEft, int shortfallSize)
         : base(factorID, factorName, factorType, factorEffect)
     {
         EffectSize = effectSize;
-        FResource = fResource;
+        ResourceID = resourceID;
         MonthlyConsumption = monthlyConsumption;
         Minimum = minimum;
         Optimal = optimal;

@@ -5,7 +5,7 @@ using UnityEngine;
 public class ProductiveBuilding : Building
 {
     public string ProductionTempID { get; private set; }
-    public List<ProductiveFactor> CurrentFactors { get; private set; } // Aquest serà reemplaçat per les instàncies reals de factors més tard.
+    public List<ProductiveFactor> CurrentFactors { get; set; } 
     public List<ProductionMethod> MethodsAvailable { get; private set; }
     public ProductionMethod MethodActive { get; private set; }
     public ProductionMethod MethodDefault { get; private set; }

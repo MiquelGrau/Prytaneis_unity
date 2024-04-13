@@ -1,32 +1,33 @@
 {
   "Factors": [
     {
-      "FactorID": "FPE001",
-      "FactorName": "Manual labour standard",
-      "FactorType": "Employee",
-      "FactorEffect": "Linear",
-      "EffectSize": 100,
-      "WorkerID": "RE001",
-      "Strata": "Poor",
-      "Minimum": 10,
-      "Optimal": 30,
-      "Maximum": 40,
-      "ShortfallEft": "Linear nerf",
-      "ShortfallSize": 50
+      "FactorID": "FPE001", "FactorName": "Manual labour standard",
+      "FactorType": "Employee", "FactorEffect": "Linear", "EffectSize": 100,
+      "WorkerID": "RE001", "Strata": "Poor",
+      "Minimum": 10, "Optimal": 30, "Maximum": 40,
+      "ShortfallEft": "Linear nerf", "ShortfallSize": 50
     },
     {
-      "FactorID": "FPR001",
-      "FactorName": "Iron tools",
-      "FactorType": "Resource",
-      "FactorEffect": "Output buff",
-      "EffectSize": 20,
+      "FactorID": "FPE002", "FactorName": "Manual labour small",
+      "FactorType": "Employee", "FactorEffect": "Linear", "EffectSize": 75,
+      "WorkerID": "RE001", "Strata": "Poor",
+      "Minimum": 5, "Optimal": 20, "Maximum": 20,
+      "ShortfallEft": "Linear nerf", "ShortfallSize": 50
+    },
+    {
+      "FactorID": "FPE003", "FactorName": "Specialized labour small",
+      "FactorType": "Employee", "FactorEffect": "Input buff", "EffectSize": 25,
+      "WorkerID": "RE002", "Strata": "Mid",
+      "Minimum": 1, "Optimal": 5, "Maximum": 5,
+      "ShortfallEft": "No effect", "ShortfallSize": 0
+    },
+    {
+      "FactorID": "FPR001", "FactorName": "Iron tools",
+      "FactorType": "Resource", "FactorEffect": "Output buff", "EffectSize": 20,
       "ResourceID": "R046",
       "MonthlyConsumption": 5,
-      "Minimum": 10,
-      "Optimal": 30,
-      "Maximum": 50,
-      "ShortfallEft": "No effect",
-      "ShortfallSize": 0
+      "Minimum": 10, "Optimal": 30, "Maximum": 50,
+      "ShortfallEft": "No effect", "ShortfallSize": 0
     }
   ]
 }
