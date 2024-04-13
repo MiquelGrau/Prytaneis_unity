@@ -196,7 +196,7 @@ public class DemandManager : MonoBehaviour
                 resline.DemandTotal += demand.DemandTotal / demand.Variety;
 
                 // Buscar el nom del recurs
-                var matchedResource = DataManager.resources.FirstOrDefault(r => r.ResourceID == resline.ResourceID);
+                var matchedResource = DataManager.resourcemasterlist.FirstOrDefault(r => r.ResourceID == resline.ResourceID);
                 string resourceName = matchedResource != null ? matchedResource.ResourceName : "Desconegut";
 
                 // Afegir log per a cada resource line
@@ -247,7 +247,7 @@ public class DemandManager : MonoBehaviour
                 if (priceElasticity < 0f) { priceElasticity = 0.25f; }
 
                 // Troba el base price del recurs
-                var matchedResource = DataManager.resources.FirstOrDefault(r => r.ResourceID == resline.ResourceID);
+                var matchedResource = DataManager.resourcemasterlist.FirstOrDefault(r => r.ResourceID == resline.ResourceID);
                 float basePrice = matchedResource != null ? matchedResource.BasePrice : 0f;
 
                 // Calcula el CurrentPrice
@@ -274,7 +274,7 @@ public class DemandManager : MonoBehaviour
         
         foreach (var resline in currentCityInventory.InventoryResources)
         {
-            var matchedResource = DataManager.resources.FirstOrDefault(r => r.ResourceID == resline.ResourceID);
+            var matchedResource = DataManager.resourcemasterlist.FirstOrDefault(r => r.ResourceID == resline.ResourceID);
             int basePrice = matchedResource != null ? matchedResource.BasePrice : 0; // default a zero
 
             displayText.AppendLine($"{resline.ResourceID}, Type: {resline.ResourceType}, " +

@@ -32,7 +32,7 @@ public class TradeInterface : MonoBehaviour
         // Per cada TradeResourceLine en CurrentTrade, crea un nou prefab i actualitza la informació
         foreach (var line in tradeManager.CurrentTrade.TradeResourceLines) {
             GameObject newLineGO = Instantiate(tradeRLPrefab, tradeRLContainer);
-            Resource matchedResource = DataManager.resources.FirstOrDefault(r => r.ResourceID == line.ResourceID);
+            Resource matchedResource = DataManager.resourcemasterlist.FirstOrDefault(r => r.ResourceID == line.ResourceID);
 
             // Asumim que els noms dels texts en el prefab coincideixen amb els noms donats
             newLineGO.transform.Find("CommonResName").GetComponent<TMP_Text>().text = matchedResource?.ResourceName ?? "Unknown";

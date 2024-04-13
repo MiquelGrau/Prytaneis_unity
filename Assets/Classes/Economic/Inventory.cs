@@ -33,7 +33,7 @@ public class Inventory
         else
         {
             // Crear un nou InventoryResource si no existeix
-            var matchedResource = DataManager.resources.FirstOrDefault(r => r.ResourceID == resourceID);
+            var matchedResource = DataManager.resourcemasterlist.FirstOrDefault(r => r.ResourceID == resourceID);
             var newResourceType = matchedResource != null ? matchedResource.ResourceType : null;
 
             var newResource = new InventoryResource

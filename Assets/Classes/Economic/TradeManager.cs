@@ -275,7 +275,7 @@ public class TradeManager : MonoBehaviour
         priceElasticity = Mathf.Max(priceElasticity, 0.25f);
 
         // Troba el base price del recurs
-        var matchedResource = DataManager.resources.FirstOrDefault(r => r.ResourceID == line.ResourceID);
+        var matchedResource = DataManager.resourcemasterlist.FirstOrDefault(r => r.ResourceID == line.ResourceID);
         float basePrice = matchedResource != null ? matchedResource.BasePrice : 0f;
 
         // Calcula el BuyPriceCurrent i SellPriceCurrent

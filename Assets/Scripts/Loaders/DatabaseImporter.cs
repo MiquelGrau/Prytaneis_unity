@@ -136,7 +136,7 @@ public class DatabaseImporter : MonoBehaviour
         }
         //DataManager.resources = JsonUtility.FromJson<ListWrapper<Resource>>(jsonData.text).Items;
         var resourceList = JsonUtility.FromJson<ListWrapper<Resource>>(jsonData.text).Items;
-        DataManager.resources = resourceList;
+        DataManager.resourcemasterlist = resourceList;
 
         // Crear HashSets per emmagatzemar tipus i subtipus únics
         HashSet<string> uniqueResourceTypes = new HashSet<string>();

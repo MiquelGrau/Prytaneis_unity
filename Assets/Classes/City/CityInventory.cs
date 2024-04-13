@@ -102,7 +102,7 @@ public class CityInventoryResource : InventoryResource
         CurrentValue = currentValue;
         
         // Busca el ResourceType corresponent al ResourceID
-        var matchedResource = DataManager.resources.FirstOrDefault(r => r.ResourceID == resourceId);
+        var matchedResource = DataManager.resourcemasterlist.FirstOrDefault(r => r.ResourceID == resourceId);
         ResourceType = matchedResource != null ? matchedResource.ResourceType : null;
 
 
