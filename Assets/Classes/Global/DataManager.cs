@@ -22,19 +22,22 @@ public class DataManager : MonoBehaviour
     
 
 
-    // Geografia
+    // Geografia fisica
     public static List<WorldMapNode> worldMapNodes = new List<WorldMapNode>();
     public static List<WorldMapLandPath> worldMapLandPaths = new List<WorldMapLandPath>();
 
-    // Classes de city
-    public CityDataList dataItems;
+    // Geografia humana
+    public CityDataList dataItems;  // antic, candidat de borrar
+    public List<CityData> allCityList;
+    public List<Settlement> allSettlementList;
     public List<CityInventory> cityInventories;
     
     // BBDD d'edificis
     public int buildingCounter = 0;
-
+        // Edificis guardats a dins de les ciutats i settlements directament
     
-    // Classes de agents, merchants, etc
+    
+    // Classes de agents, merchants, characters, etc
     public List<Agent> agents = new List<Agent>();
     public List<AgentInventory> agentInventories;
 
