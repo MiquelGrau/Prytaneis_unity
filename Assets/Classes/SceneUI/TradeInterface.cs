@@ -22,6 +22,11 @@ public class TradeInterface : MonoBehaviour
             Debug.LogError("TradeManager or CurrentTrade or TradeResourceLines is not initialized");
             return;
         }
+        if (DataManager.resourcemasterlist == null)
+        {
+            Debug.LogError("DataManager.resourcemasterlist is not initialized");
+            return;
+        }
         
         // Esborra línies anteriors
         foreach(Transform child in tradeRLContainer)

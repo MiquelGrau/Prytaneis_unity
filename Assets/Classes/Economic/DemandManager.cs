@@ -37,7 +37,10 @@ public class DemandManager : MonoBehaviour
         
         
         // Calcula les demandes basades en la ciutat actual
-        GetTierNeedsForCity();
+        foreach (CityData city in dataManager.allCityList)
+        {
+            GetTierNeedsForCity(city);
+        }
         Debug.Log("Demandes per població a la ciutat calculades");
 
         
@@ -61,32 +64,32 @@ public class DemandManager : MonoBehaviour
         }
     }
 
-    private void GetTierNeedsForCity() 
+    private void GetTierNeedsForCity(CityData chosenCity) 
     {
-        CityData currentCity = GameManager.Instance.CurrentCity;
-        CityInventory currentCityInventory = currentCity.CityInventory;
-        if (currentCity == null)
+        if (chosenCity == null)
         {
-            Debug.LogError("No s'ha assignat cap ciutat actual.");
+            Debug.LogError("La ciutat passada a GetTierNeedsForCity és null.");
             return;
         }
-        if (currentCityInventory == null)
+
+        CityInventory chosenCityInventory = chosenCity.CityInventory;
+        if (chosenCityInventory  == null)
         {
             Debug.LogError("No s'ha assignat cap inventari de ciutat.");
             return;
         }
         
         // Netejar les CityDemands existents
-        currentCityInventory.Demands.Clear();
+        chosenCityInventory.Demands.Clear();
 
         // Obtenir els LifestyleTiers per a cada grup de població
         LifestyleTier[] specificTiers = {
-            lifestyleTiers.Find(tier => tier.TierID == currentCity.PoorLifestyleID),
-            lifestyleTiers.Find(tier => tier.TierID == currentCity.MidLifestyleID),
-            lifestyleTiers.Find(tier => tier.TierID == currentCity.RichLifestyleID)
+            lifestyleTiers.Find(tier => tier.TierID == chosenCity.PoorLifestyleID),
+            lifestyleTiers.Find(tier => tier.TierID == chosenCity.MidLifestyleID),
+            lifestyleTiers.Find(tier => tier.TierID == chosenCity.RichLifestyleID)
         };
 
-        int[] populations = { currentCity.PoorPopulation, currentCity.MidPopulation, currentCity.RichPopulation };
+        int[] populations = { chosenCity.PoorPopulation, chosenCity.MidPopulation, chosenCity.RichPopulation };
         string[] populationNames = { "pobra", "mitjana", "rica" };
 
 
@@ -95,13 +98,13 @@ public class DemandManager : MonoBehaviour
         {
             foreach (var need in tier.LifestyleDemands)
             {
-                var headerResource = currentCityInventory.InventoryResources
+                var headerResource = chosenCityInventory.InventoryResources
                     .FirstOrDefault(resline => resline.ResourceType == need.resourceType && resline.ResourceID == null);
 
                 if (headerResource == null)
                 {
                     headerResource = new CityInventoryResource(need.resourceType);
-                    currentCityInventory.InventoryResources.Add(headerResource);
+                    chosenCityInventory.InventoryResources.Add(headerResource);
                 }
                 else
                 {
@@ -129,7 +132,7 @@ public class DemandManager : MonoBehaviour
             {
                 
                 // Inicialitzar o resetejar les línies de CityInventoryResource basades en ResourceType
-                var headerResource = currentCityInventory.InventoryResources
+                var headerResource = chosenCityInventory.InventoryResources
                 .FirstOrDefault(resline => resline.ResourceType == need.resourceType && resline.ResourceID == null);
                 
                 CityInventory.CityDemands newDemand = new CityInventory.CityDemands(
@@ -144,7 +147,7 @@ public class DemandManager : MonoBehaviour
                 newDemand.DemandTotal = newDemand.DemandConsume * need.monthsTotal;
 
                 // Afegir a la llista de CityDemands
-                currentCityInventory.Demands.Add(newDemand);
+                chosenCityInventory.Demands.Add(newDemand);
 
                     
                 // Mou al Inventoryresource

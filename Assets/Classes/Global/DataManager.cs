@@ -28,7 +28,7 @@ public class DataManager : MonoBehaviour
 
     // Geografia humana
     public CityDataList dataItems;  // antic, candidat de borrar
-    public List<CityData> allCityList;
+    public List<CityData> allCityList = new List<CityData>(); 
     public List<Settlement> allSettlementList;
     public List<CityInventory> cityInventories;
     
@@ -55,29 +55,7 @@ public class DataManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        
-        // Coses de importar ciutats, de quan ho feiem axi. Ja ho treuré
-        TextAsset cityDataAsset = Resources.Load<TextAsset>("CityData");
-        if(cityDataAsset != null)
-        {
-            dataItems = JsonConvert.DeserializeObject<CityDataList>(cityDataAsset.text);
-            //Debug.Log("Dades carregades: " + cityDataAsset.text);
-
-            if(dataItems == null)
-            {
-                Debug.LogError("La deserialització ha fallat. Es pot que el format JSON no coincideixi amb l'estructura de dades esperada.");
-            }
-            else
-            {
-                CityDataList dataList = dataItems as CityDataList;
-            }
-        }
-        else
-        {
-            dataItems = new CityDataList();
-            Debug.LogError("No es pot trobar el fitxer CityData.json a la carpeta Resources.");
-        }
-
+        LoadCityData();
 
         // Depuració per a confirmar la càrrega de dades
         Debug.Log($"Nombre de templates productius carregats: {productiveTemplates.Count}");
@@ -104,7 +82,33 @@ public class DataManager : MonoBehaviour
         }
     }
 
+    private void LoadCityData()
+    {
+        TextAsset cityDataAsset = Resources.Load<TextAsset>("CityData");
 
+        if (cityDataAsset != null)
+        {
+            dataItems = JsonConvert.DeserializeObject<CityDataList>(cityDataAsset.text);
+            //Debug.Log("Dades carregades: " + cityDataAsset.text);
+
+            if (dataItems == null)
+            {
+                Debug.LogError("La deserialització ha fallat. Es pot que el format JSON no coincideixi amb l'estructura de dades esperada.");
+            }
+            else
+            {
+                // Emplenem la llista `allCityList` amb les dades llegides
+                allCityList = new List<CityData>(dataItems.cities); // Crea una nova llista amb les dades deserialitzades
+                Debug.Log($"S'han carregat {allCityList.Count} ciutats.");
+            }
+        }
+        else
+        {
+            dataItems = new CityDataList();
+            Debug.LogError("No es pot trobar el fitxer CityData.json a la carpeta Resources.");
+        }
+    }
+    
     //////////////
     // BUSCADORS
     //////////////

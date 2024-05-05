@@ -21,15 +21,8 @@ public class TradeManager : MonoBehaviour
     public CityInventory currentCityInventory;
     public AgentInventory currentAgentInventory;
     
-    // Referències a les llistes de ciutats i agents
-    public List<CityData> cities;
-    public List<Agent> agents;
-
     void Start()
     {   
-        // Trobar ciutats i agents
-        cities = dataManager.GetCities(); 
-        agents = dataManager.GetAgents(); 
         CurrentTrade = new TradeDesk();
 
         // Omplir els desplegables
@@ -84,7 +77,6 @@ public class TradeManager : MonoBehaviour
 
     }
 
-
     public class TradeResourceLine
     {
         public string ResourceID;
@@ -119,16 +111,22 @@ public class TradeManager : MonoBehaviour
 
         // Constructor i mètodes específics de TradeResourceType
     }
-
-    
     
     void FillCityDropdown()
     {
+        var cityNames = dataManager.GetCities().Select(city => city.cityName).ToList();
         cityDropdown.ClearOptions();
-        cityDropdown.AddOptions(cities.Select(city => city.cityName).ToList());
+        cityDropdown.AddOptions(cityNames);
     }
     public void OnCitySelected(int index)
     {
+        var cities = dataManager.GetCities(); // Obtenint la llista des de DataManager
+        if (index < 0 || index >= cities.Count)
+        {
+            Debug.LogError("Índex de ciutat seleccionada fora de rang.");
+            return;
+        }
+        
         CityData selectedCity = cities[index];
         GameManager.Instance.AssignCurrentCity(selectedCity.cityID);
         
@@ -140,11 +138,18 @@ public class TradeManager : MonoBehaviour
 
     void FillAgentDropdown()
     {
+        var agentNames = dataManager.GetAgents().Select(agent => agent.agentName).ToList();
         agentDropdown.ClearOptions();
-        agentDropdown.AddOptions(agents.Select(agent => agent.agentName).ToList());
+        agentDropdown.AddOptions(agentNames);
     }
     public void OnAgentSelected(int index)
     {
+        var agents = dataManager.GetAgents(); // Obtenint la llista des de DataManager
+        if (index < 0 || index >= agents.Count)
+        {
+            Debug.LogError("Índex d'agent seleccionat fora de rang.");
+            return;
+        }
         Agent selectedAgent = agents[index];
         //currentAgentInventory = selectedAgent.Inventory;
         GameManager.Instance.AssignCurrentAgent(selectedAgent.agentID); 
@@ -202,28 +207,36 @@ public class TradeManager : MonoBehaviour
         // Processar els recursos de la ciutat
         foreach (var resource in currentCityInventory.InventoryResources)
         {
-            if (!tempTradeLines.TryGetValue(resource.ResourceID, out var line))
+            // Comprova que `ResourceID` no sigui `null` abans d'afegir-lo al diccionari
+            if (!string.IsNullOrWhiteSpace(resource.ResourceID))
             {
-                line = new TradeResourceLine
+                if (!tempTradeLines.TryGetValue(resource.ResourceID, out var line))
                 {
-                    ResourceID = resource.ResourceID,
-                    ResourceType = resource.ResourceType,
-                    QtyOriginalLeft = (int)resource.Quantity,
-                    QtyDemandedLeft = (int)((CityInventoryResource)resource).DemandTotal, // Cast a CityInventoryResource per accedir a DemandTotal
-                    QtyAvailableLeft = (int)Mathf.Max(0, resource.Quantity - ((CityInventoryResource)resource).DemandCritical),
-                    BuyPriceOriginal = ((CityInventoryResource)resource).CurrentPrice, // Usa el CurrentPrice com a BuyPriceOriginal
-                    SellPriceOriginal = (int)(((CityInventoryResource)resource).CurrentPrice * 0.9f) // Calcula SellPriceOriginal amb un descompte
-                };
-                tempTradeLines[resource.ResourceID] = line;
+                    line = new TradeResourceLine
+                    {
+                        ResourceID = resource.ResourceID,
+                        ResourceType = resource.ResourceType,
+                        QtyOriginalLeft = (int)resource.Quantity,
+                        QtyDemandedLeft = (int)((CityInventoryResource)resource).DemandTotal, // Cast a CityInventoryResource per accedir a DemandTotal
+                        QtyAvailableLeft = (int)Mathf.Max(0, resource.Quantity - ((CityInventoryResource)resource).DemandCritical),
+                        BuyPriceOriginal = ((CityInventoryResource)resource).CurrentPrice, // Usa el CurrentPrice com a BuyPriceOriginal
+                        SellPriceOriginal = (int)(((CityInventoryResource)resource).CurrentPrice * 0.9f) // Calcula SellPriceOriginal amb un descompte
+                    };
+                    tempTradeLines[resource.ResourceID] = line;
+                }
+                else
+                {
+                    // Actualitza les propietats de la línia si ja existia
+                    line.QtyOriginalLeft += (int)resource.Quantity;
+                    line.QtyDemandedLeft += (int)((CityInventoryResource)resource).DemandTotal;
+                    line.QtyAvailableLeft += (int)Mathf.Max(0, resource.Quantity - ((CityInventoryResource)resource).DemandCritical);
+                    line.BuyPriceOriginal = ((CityInventoryResource)resource).CurrentPrice;
+                    line.SellPriceOriginal = (int)(((CityInventoryResource)resource).CurrentPrice * 0.9f);
+                }
             }
             else
             {
-                // Actualitza les propietats de la línia si ja existia
-                line.QtyOriginalLeft += (int)resource.Quantity;
-                line.QtyDemandedLeft += (int)((CityInventoryResource)resource).DemandTotal;
-                line.QtyAvailableLeft += (int)Mathf.Max(0, resource.Quantity - ((CityInventoryResource)resource).DemandCritical);
-                line.BuyPriceOriginal = ((CityInventoryResource)resource).CurrentPrice;
-                line.SellPriceOriginal = (int)(((CityInventoryResource)resource).CurrentPrice * 0.9f);
+                Debug.LogWarning($"ResourceID buit o nul per un recurs de la ciutat {currentCity.cityName}");
             }
         }
 

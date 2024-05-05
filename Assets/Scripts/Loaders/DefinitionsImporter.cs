@@ -135,14 +135,12 @@ public class DatabaseImporter : MonoBehaviour
         HashSet<string> uniqueResourceSubtypes = new HashSet<string>();
         
         // Log de linia a linia de recursos
-        /* foreach (var resource in resources)
-        {
-            Debug.Log($"Carregat recurs: {resource.resourceID}, {resource.resourceName}, {resource.resourceType}, {resource.resourceSubtype}, {resource.basePrice}, {resource.baseWeight}");
-        } */
         foreach (var resource in resourceList)
         {
             uniqueResourceTypes.Add(resource.ResourceType);
             uniqueResourceSubtypes.Add(resource.ResourceSubtype);
+            /* Debug.Log($"Carregat recurs: {resource.resourceID}, {resource.resourceName}, {resource.resourceType}, "+
+                    $"{resource.resourceSubtype}, {resource.basePrice}, {resource.baseWeight}"); */
         }
         //Debug.Log("Llistat de recursos carregats");
         Debug.Log($"Llistat de recursos carregats. Total de recursos: {resourceList.Count}, "+

@@ -1033,7 +1033,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: -604, y: -100}
+  m_AnchoredPosition: {x: 1, y: -100}
   m_SizeDelta: {x: 600, y: 360}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &149825972
@@ -4933,8 +4933,6 @@ MonoBehaviour:
   agentDropdown: {fileID: 1701858346}
   dataManager: {fileID: 1301510094}
   tradeInterface: {fileID: 1266996384}
-  cities: []
-  agents: []
 --- !u!4 &1266996383
 Transform:
   m_ObjectHideFlags: 0
@@ -5972,7 +5970,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 0, y: -100}
+  m_AnchoredPosition: {x: 0, y: -327}
   m_SizeDelta: {x: 600, y: 360}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1481808844
