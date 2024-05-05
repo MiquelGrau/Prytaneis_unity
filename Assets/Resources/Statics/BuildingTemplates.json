@@ -7,33 +7,308 @@
       "DefaultMethod": "PM001", "Capacity": 100,
       "PossibleMethods": [
         { "Method": "PM001" },
-        { "Method": "PM002" }
+        { "Method": "PM002" },
+        { "Method": "PM003" },
+        { "Method": "PM004" },
+        { "Method": "PM005" }
       ],
       "Factors": [
         { "Factor": "FPE001" },
+        { "Factor": "FPE003" },
+        { "Factor": "FPE003" },
+        { "Factor": "FPE003" },
+        { "Factor": "FPE003" },
+        { "Factor": "FPE003" },
+        { "Factor": "FPE003" },
         { "Factor": "FPE003" }
       ]
     },
     {
-      "TemplateID": "BT002", "ClassName": "Warehouse",
-      "TemplateType": "Civic", "TemplateSubtype": "Warehousing",
-      "Function": "Warehouse", "Capacity": 500,
-      "JobsPoor": 30, "JobsMid": 5, "JobsRich": 0
-    },
-    {
-      "TemplateID": "BT003", "ClassName": "Smithy",
+      "TemplateID": "BT002", "ClassName": "Smithy",
       "TemplateType": "Productive", "TemplateSubtype": "Factory",
       "JobsPoor": 20, "JobsMid": 10, "JobsRich": 0,
       "DefaultMethod": "PM001", "Capacity": 50,
       "PossibleMethods": [
         { "Method": "PM001" },
-        { "Method": "PM002" }
+        { "Method": "PM002" },
+        { "Method": "PM006" },
+        { "Method": "PM007" }
       ],
       "Factors": [
         { "Factor": "FPE002" },
         { "Factor": "FPE003" },
         { "Factor": "FPR001" }
       ]
+    },
+    {
+      "TemplateID": "BT003", "ClassName": "Chapel",
+      "TemplateType": "Civic", "TemplateSubtype": "Religion",
+      "Function": "Religion", "Capacity": 0,
+      "JobsPoor": 4, "JobsMid": 1, "JobsRich": 0
+    },
+    {
+      "TemplateID": "BT004", "ClassName": "Church",
+      "TemplateType": "Civic", "TemplateSubtype": "Religion",
+      "Function": "Religion", "Capacity": 0,
+      "JobsPoor": 5, "JobsMid": 4, "JobsRich": 1
+    },
+    {
+      "TemplateID": "BT005", "ClassName": "Cathedral",
+      "TemplateType": "Civic", "TemplateSubtype": "Religion",
+      "Function": "Religion", "Capacity": 0,
+      "JobsPoor": 20, "JobsMid": 10, "JobsRich": 10
+    },
+    {
+      "TemplateID": "BT006", "ClassName": "Inn",
+      "TemplateType": "Civic", "TemplateSubtype": "Logistics",
+      "Function": "Logistics", "Capacity": 0,
+      "JobsPoor": 12, "JobsMid": 6, "JobsRich": 2
+    },
+    {
+      "TemplateID": "BT007", "ClassName": "Tavern",
+      "TemplateType": "Civic", "TemplateSubtype": "Entertainment",
+      "Function": "Entertainment", "Capacity": 0,
+      "JobsPoor": 8, "JobsMid": 2, "JobsRich": 0
+    },
+    {
+      "TemplateID": "BT008", "ClassName": "Brothel",
+      "TemplateType": "Civic", "TemplateSubtype": "Entertainment",
+      "Function": "Entertainment", "Capacity": 0,
+      "JobsPoor": 25, "JobsMid": 4, "JobsRich": 1
+    },
+    {
+      "TemplateID": "BT009", "ClassName": "House simple",
+      "TemplateType": "Civic", "TemplateSubtype": "Housing",
+      "Function": "Housing", "Capacity": 0,
+      "JobsPoor": 3, "JobsMid": 0, "JobsRich": 0
+    },
+    {
+      "TemplateID": "BT010", "ClassName": "House middle",
+      "TemplateType": "Civic", "TemplateSubtype": "Housing",
+      "Function": "Housing", "Capacity": 0,
+      "JobsPoor": 4, "JobsMid": 2, "JobsRich": 0
+    },
+    {
+      "TemplateID": "BT011", "ClassName": "House better",
+      "TemplateType": "Civic", "TemplateSubtype": "Housing",
+      "Function": "Housing", "Capacity": 0,
+      "JobsPoor": 6, "JobsMid": 4, "JobsRich": 0
+    },
+    {
+      "TemplateID": "BT012", "ClassName": "House villa",
+      "TemplateType": "Civic", "TemplateSubtype": "Housing",
+      "Function": "Housing", "Capacity": 0,
+      "JobsPoor": 20, "JobsMid": 8, "JobsRich": 2
+    },
+    {
+      "TemplateID": "BT013", "ClassName": "Palace",
+      "TemplateType": "Civic", "TemplateSubtype": "Housing",
+      "Function": "Housing", "Capacity": 0,
+      "JobsPoor": 25, "JobsMid": 20, "JobsRich": 5
+    },
+    {
+      "TemplateID": "BT014", "ClassName": "Notary",
+      "TemplateType": "Civic", "TemplateSubtype": "Legal",
+      "Function": "Legal", "Capacity": 0,
+      "JobsPoor": 1, "JobsMid": 7, "JobsRich": 2
+    },
+    {
+      "TemplateID": "BT015", "ClassName": "Lawyer",
+      "TemplateType": "Civic", "TemplateSubtype": "Legal",
+      "Function": "Legal", "Capacity": 0,
+      "JobsPoor": 1, "JobsMid": 7, "JobsRich": 2
+    },
+    {
+      "TemplateID": "BT016", "ClassName": "Scribe",
+      "TemplateType": "Civic", "TemplateSubtype": "Legal",
+      "Function": "Legal", "Capacity": 0,
+      "JobsPoor": 2, "JobsMid": 7, "JobsRich": 1
+    },
+    {
+      "TemplateID": "BT017", "ClassName": "Translator",
+      "TemplateType": "Civic", "TemplateSubtype": "Legal",
+      "Function": "Legal", "Capacity": 0,
+      "JobsPoor": 2, "JobsMid": 6, "JobsRich": 2
+    },
+    {
+      "TemplateID": "BT018", "ClassName": "Money trader",
+      "TemplateType": "Civic", "TemplateSubtype": "Finance",
+      "Function": "Finance", "Capacity": 0,
+      "JobsPoor": 3, "JobsMid": 5, "JobsRich": 2
+    },
+    {
+      "TemplateID": "BT019", "ClassName": "Lending bank",
+      "TemplateType": "Civic", "TemplateSubtype": "Finance",
+      "Function": "Finance", "Capacity": 0,
+      "JobsPoor": 2, "JobsMid": 6, "JobsRich": 2
+    },
+    {
+      "TemplateID": "BT020", "ClassName": "Insurer",
+      "TemplateType": "Civic", "TemplateSubtype": "Finance",
+      "Function": "Finance", "Capacity": 0,
+      "JobsPoor": 5, "JobsMid": 4, "JobsRich": 1
+    },
+    {
+      "TemplateID": "BT021", "ClassName": "Wandering merchant",
+      "TemplateType": "Civic", "TemplateSubtype": "Finance",
+      "Function": "Finance", "Capacity": 0,
+      "JobsPoor": 2, "JobsMid": 2, "JobsRich": 1
+    },
+    {
+      "TemplateID": "BT022", "ClassName": "Wandering lawyer",
+      "TemplateType": "Civic", "TemplateSubtype": "Legal",
+      "Function": "Legal", "Capacity": 0,
+      "JobsPoor": 2, "JobsMid": 2, "JobsRich": 1
+    },
+    {
+      "TemplateID": "BT023", "ClassName": "Market square",
+      "TemplateType": "Civic", "TemplateSubtype": "Trade",
+      "Function": "Trade", "Capacity": 0,
+      "JobsPoor": 10, "JobsMid": 15, "JobsRich": 5
+    },
+    {
+      "TemplateID": "BT024", "ClassName": "Docks",
+      "TemplateType": "Civic", "TemplateSubtype": "Logistics",
+      "Function": "Logistics", "Capacity": 0,
+      "JobsPoor": 15, "JobsMid": 4, "JobsRich": 1
+    },
+    {
+      "TemplateID": "BT025", "ClassName": "Garrison",
+      "TemplateType": "Civic", "TemplateSubtype": "Security",
+      "Function": "Security", "Capacity": 0,
+      "JobsPoor": 30, "JobsMid": 15, "JobsRich": 5
+    },
+    {
+      "TemplateID": "BT026", "ClassName": "Walls",
+      "TemplateType": "Civic", "TemplateSubtype": "Security",
+      "Function": "Security", "Capacity": 0,
+      "JobsPoor": 5, "JobsMid": 5, "JobsRich": 0
+    },
+    {
+      "TemplateID": "BT027", "ClassName": "Stables",
+      "TemplateType": "Civic", "TemplateSubtype": "Logistics",
+      "Function": "Logistics", "Capacity": 0,
+      "JobsPoor": 15, "JobsMid": 5, "JobsRich": 0
+    },
+    {
+      "TemplateID": "BT028", "ClassName": "Warehouse",
+      "TemplateType": "Civic", "TemplateSubtype": "Logistics",
+      "Function": "Warehouse", "Capacity": 0,
+      "JobsPoor": 25, "JobsMid": 4, "JobsRich": 1
+    },
+    {
+      "TemplateID": "BT029", "ClassName": "Builder",
+      "TemplateType": "Civic", "TemplateSubtype": "Construction",
+      "Function": "Construction", "Capacity": 0,
+      "JobsPoor": 10, "JobsMid": 10, "JobsRich": 0
+    },
+    {
+      "TemplateID": "BT030", "ClassName": "Ovens",
+      "TemplateType": "Civic", "TemplateSubtype": "Food",
+      "Function": "Food", "Capacity": 0,
+      "JobsPoor": 10, "JobsMid": 10, "JobsRich": 0
+    },
+    {
+      "TemplateID": "BT031", "ClassName": "Healer",
+      "TemplateType": "Civic", "TemplateSubtype": "Health",
+      "Function": "Health", "Capacity": 0,
+      "JobsPoor": 2, "JobsMid": 3, "JobsRich": 0
+    },
+    {
+      "TemplateID": "BT032", "ClassName": "Doctor",
+      "TemplateType": "Civic", "TemplateSubtype": "Health",
+      "Function": "Health", "Capacity": 0,
+      "JobsPoor": 3, "JobsMid": 6, "JobsRich": 1
+    },
+    {
+      "TemplateID": "BT033", "ClassName": "Apothecary",
+      "TemplateType": "Civic", "TemplateSubtype": "Health",
+      "Function": "Health", "Capacity": 0,
+      "JobsPoor": 2, "JobsMid": 6, "JobsRich": 2
+    },
+    {
+      "TemplateID": "BT034", "ClassName": "Hospital",
+      "TemplateType": "Civic", "TemplateSubtype": "Health",
+      "Function": "Health", "Capacity": 0,
+      "JobsPoor": 10, "JobsMid": 15, "JobsRich": 5
+    },
+    {
+      "TemplateID": "BT035", "ClassName": "Bathhouse",
+      "TemplateType": "Civic", "TemplateSubtype": "Health",
+      "Function": "Health", "Capacity": 0,
+      "JobsPoor": 12, "JobsMid": 6, "JobsRich": 2
+    },
+    {
+      "TemplateID": "BT036", "ClassName": "Monastery",
+      "TemplateType": "Civic", "TemplateSubtype": "Mixed",
+      "Function": "Mixed", "Capacity": 0,
+      "JobsPoor": 30, "JobsMid": 17, "JobsRich": 3
+    },
+    {
+      "TemplateID": "BT037", "ClassName": "University",
+      "TemplateType": "Civic", "TemplateSubtype": "Education",
+      "Function": "Education", "Capacity": 0,
+      "JobsPoor": 10, "JobsMid": 25, "JobsRich": 15
+    },
+    {
+      "TemplateID": "BT038", "ClassName": "School",
+      "TemplateType": "Civic", "TemplateSubtype": "Education",
+      "Function": "Education", "Capacity": 0,
+      "JobsPoor": 3, "JobsMid": 6, "JobsRich": 1
+    },
+    {
+      "TemplateID": "BT039", "ClassName": "Potter",
+      "TemplateType": "Civic", "TemplateSubtype": "Production",
+      "Function": "Production", "Capacity": 0,
+      "JobsPoor": 7, "JobsMid": 3, "JobsRich": 0
+    },
+    {
+      "TemplateID": "BT040", "ClassName": "Baron castle",
+      "TemplateType": "Civic", "TemplateSubtype": "Mixed",
+      "Function": "Mixed", "Capacity": 0,
+      "JobsPoor": 22, "JobsMid": 8, "JobsRich": 0
+    },
+    {
+      "TemplateID": "BT041", "ClassName": "Count castle",
+      "TemplateType": "Civic", "TemplateSubtype": "Mixed",
+      "Function": "Mixed", "Capacity": 0,
+      "JobsPoor": 30, "JobsMid": 17, "JobsRich": 3
+    },
+    {
+      "TemplateID": "BT042", "ClassName": "Ducal castle",
+      "TemplateType": "Civic", "TemplateSubtype": "Mixed",
+      "Function": "Mixed", "Capacity": 0,
+      "JobsPoor": 40, "JobsMid": 28, "JobsRich": 7
+    },
+    {
+      "TemplateID": "BT043", "ClassName": "Royal castle",
+      "TemplateType": "Civic", "TemplateSubtype": "Mixed",
+      "Function": "Mixed", "Capacity": 0,
+      "JobsPoor": 50, "JobsMid": 35, "JobsRich": 15
+    },
+    {
+      "TemplateID": "BT044", "ClassName": "Market stall",
+      "TemplateType": "Civic", "TemplateSubtype": "Trade",
+      "Function": "Trade", "Capacity": 0,
+      "JobsPoor": 5, "JobsMid": 4, "JobsRich": 1
+    },
+    {
+      "TemplateID": "BT045", "ClassName": "Guards",
+      "TemplateType": "Civic", "TemplateSubtype": "Security",
+      "Function": "Security", "Capacity": 0,
+      "JobsPoor": 10, "JobsMid": 10, "JobsRich": 0
+    },
+    {
+      "TemplateID": "BT046", "ClassName": "Sheriff",
+      "TemplateType": "Civic", "TemplateSubtype": "Security",
+      "Function": "Security", "Capacity": 0,
+      "JobsPoor": 4, "JobsMid": 1, "JobsRich": 0
+    },
+    {
+      "TemplateID": "BT047", "ClassName": "Nearby peasants",
+      "TemplateType": "Civic", "TemplateSubtype": "Food",
+      "Function": "Food", "Capacity": 0,
+      "JobsPoor": 45, "JobsMid": 5, "JobsRich": 0
     }
   ]
 }

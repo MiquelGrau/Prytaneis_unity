@@ -12,8 +12,8 @@ public class DataManager : MonoBehaviour
     private string dataPath;
 
     // Classes estatiques, definicions
-    public static List<LifestyleTier> lifestyleTiers;
     public static List<Resource> resourcemasterlist;
+    public static List<LifestyleTier> lifestyleTiers;
     public List<ProductiveTemplate> productiveTemplates = new List<ProductiveTemplate>();
     public List<CivicTemplate> civicTemplates = new List<CivicTemplate>();
     public List<ProductionMethod> productionMethods = new List<ProductionMethod>();
@@ -53,11 +53,12 @@ public class DataManager : MonoBehaviour
             Destroy(gameObject);
         }
         
+        // Coses de importar ciutats, de quan ho feiem axi. Ja ho treuré
         TextAsset cityDataAsset = Resources.Load<TextAsset>("CityData");
         if(cityDataAsset != null)
         {
             dataItems = JsonConvert.DeserializeObject<CityDataList>(cityDataAsset.text);
-            Debug.Log("Dades carregades: " + cityDataAsset.text);
+            //Debug.Log("Dades carregades: " + cityDataAsset.text);
 
             if(dataItems == null)
             {
@@ -73,6 +74,7 @@ public class DataManager : MonoBehaviour
             dataItems = new CityDataList();
             Debug.LogError("No es pot trobar el fitxer CityData.json a la carpeta Resources.");
         }
+
 
         // Depuració per a confirmar la càrrega de dades
         Debug.Log($"Nombre de templates productius carregats: {productiveTemplates.Count}");
@@ -98,6 +100,12 @@ public class DataManager : MonoBehaviour
             return new List<CityData>();
         }
     }
+
+
+    //////////////
+    // BUSCADORS
+    //////////////
+
     public CityData GetCityDataByID(string cityID)  // Te la demanaran mil vegades, millor tenir això aqui dins
     {
         return dataItems.cities.FirstOrDefault(city => city.cityID == cityID);
@@ -118,6 +126,14 @@ public class DataManager : MonoBehaviour
         return $"B{buildingCounter.ToString().PadLeft(5, '0')}";
     }
 
+    // Funció per obtenir el nom de la plantilla basant-se en l'ID
+    public string GetTemplateNameByID(string templateID)
+    {
+        var template = productiveTemplates.FirstOrDefault(pt => pt.TemplateID == templateID) 
+                    ?? civicTemplates.FirstOrDefault(ct => ct.TemplateID == templateID) as BuildingTemplate;
+        
+        return template?.ClassName ?? "Unknown Template";
+    }
     /* public List<Agent> GetAgents()
     {
         if (agents is AgentList agentList)

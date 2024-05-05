@@ -38,3 +38,32 @@ public class CityDataList
 {
     public List<CityData> cities;
 }
+
+[System.Serializable]
+public class Settlement
+{
+    public string settlementID;
+    public string settlementName;
+    public string nodeID;
+    public float latitude;
+    public float longitude;
+    
+    public List<Building> SettlBuildings { get; set; } = new List<Building>(); 
+    public int SettlementMoney { get; set; }
+    public List<CityInventoryResource> SettlResources { get; set; }
+    
+    //public int PoorLifestyleID;   // més endavant, nivell de satisfaccio que determina la demanda
+    //public List<CityDemands> Demands { get; set; } = new List<CityDemands>();
+    
+    public int PoorPopulation { get; set; }
+    public int MidPopulation { get; set; }
+    public int RichPopulation { get; set; }
+
+    public int Population
+    {
+        get { return PoorPopulation + MidPopulation + RichPopulation; }
+    }
+    
+    
+}
+

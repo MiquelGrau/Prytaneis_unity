@@ -9,6 +9,7 @@ public class BuildingManager : MonoBehaviour
 {
     public GameManager gameManager;
     public DataManager dataManager;
+    public BuildingInterfaces buildingInterfaces;
 
     // Desplegable i botó inicial
     public TMP_Dropdown buildingDropdown;
@@ -27,16 +28,17 @@ public class BuildingManager : MonoBehaviour
 
         foreach (var template in DataManager.Instance.productiveTemplates)
         {
-            Debug.Log($"Afegint template productiu: {template.ClassName}");
+            //Debug.Log($"Afegint template productiu: {template.ClassName}");
             buildingNames.Add(template.ClassName);
         }
 
         foreach (var template in DataManager.Instance.civicTemplates)
         {
-            Debug.Log($"Afegint template cívic: {template.ClassName}");
+            //Debug.Log($"Afegint template cívic: {template.ClassName}");
             buildingNames.Add(template.ClassName);
         }
-        
+        Debug.Log($"Llista d'edificis disponibles: {buildingNames.Count}");
+
         buildingDropdown.ClearOptions();
         buildingDropdown.AddOptions(buildingNames);
     }
@@ -156,8 +158,19 @@ public class BuildingManager : MonoBehaviour
 
             // Afegeix el nou edifici a la llista
             currentCity.CityBuildings.Add(newBuilding);
-
             Debug.Log($"Edifici afegit a la ciutat {currentCity.cityName}: {newBuilding.BuildingName}");
+            
+            // Actualitza la graella d'edificis per la ciutat actual
+            //buildingInterfaces.UpdateBuildingGridForCity(currentCity);
+            if (buildingInterfaces != null)
+            {
+                buildingInterfaces.UpdateBuildingGridForCity(currentCity);
+            }
+            else
+            {
+                Debug.LogError("BuildingInterfaces no està assignat!");
+            }
+
         }
         else
         {
