@@ -126,24 +126,36 @@ public class DatabaseImporter : MonoBehaviour
             Debug.LogError("No es pot trobar el fitxer ResourceData.json a la ruta especificada.");
             return;
         }
+        ListWrapper<Resource> resourceListWrapper = JsonConvert.DeserializeObject<ListWrapper<Resource>>(jsonData.text);
+        if (resourceListWrapper == null || resourceListWrapper.Items == null)
+        {
+            Debug.LogError("Error en deserialitzar el JSON. Verifica que el format sigui correcte.");
+            return;
+        }
+        DataManager.resourcemasterlist = resourceListWrapper.Items;
+
         //DataManager.resources = JsonUtility.FromJson<ListWrapper<Resource>>(jsonData.text).Items;
-        var resourceList = JsonUtility.FromJson<ListWrapper<Resource>>(jsonData.text).Items;
-        DataManager.resourcemasterlist = resourceList;
+        //var resourceList = JsonUtility.FromJson<ListWrapper<Resource>>(jsonData.text).Items;
+        //DataManager.resourcemasterlist = resourceList;
 
         // Crear HashSets per emmagatzemar tipus i subtipus únics
         HashSet<string> uniqueResourceTypes = new HashSet<string>();
         HashSet<string> uniqueResourceSubtypes = new HashSet<string>();
         
         // Log de linia a linia de recursos
-        foreach (var resource in resourceList)
+        foreach (var resource in DataManager.resourcemasterlist)
         {
             uniqueResourceTypes.Add(resource.ResourceType);
             uniqueResourceSubtypes.Add(resource.ResourceSubtype);
             /* Debug.Log($"Carregat recurs: {resource.resourceID}, {resource.resourceName}, {resource.resourceType}, "+
                     $"{resource.resourceSubtype}, {resource.basePrice}, {resource.baseWeight}"); */
+            Debug.Log($"Carregat recurs: {resource.ResourceID}, {resource.ResourceName}, {resource.ResourceType}, " +
+                    $"{resource.ResourceSubtype}, {resource.BasePrice}, {resource.BaseWeight}");
         }
         //Debug.Log("Llistat de recursos carregats");
-        Debug.Log($"Llistat de recursos carregats. Total de recursos: {resourceList.Count}, "+
+        //Debug.Log($"Llistat de recursos carregats. Total de recursos: {resourceList.Count}, "+
+        //    $"Resource Types: {uniqueResourceTypes.Count}, Resource Subtypes: {uniqueResourceSubtypes.Count}");
+        Debug.Log($"Llistat de recursos carregats. Total de recursos: {DataManager.resourcemasterlist.Count}, " +
             $"Resource Types: {uniqueResourceTypes.Count}, Resource Subtypes: {uniqueResourceSubtypes.Count}");
     }
     
