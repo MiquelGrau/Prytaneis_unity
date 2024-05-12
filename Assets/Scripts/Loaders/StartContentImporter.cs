@@ -205,6 +205,7 @@ public class StartContentImporter : MonoBehaviour
         {
             foreach (var building in buildings)
             {
+                building.BuildingID = DataManager.Instance.GenerateBuildingID();
                 CityData city = FindCityByID(building.BuildingLocation);
                 if (city != null)
                 {
@@ -221,6 +222,7 @@ public class StartContentImporter : MonoBehaviour
         {
             foreach (var building in buildings)
             {
+                building.BuildingID = DataManager.Instance.GenerateBuildingID();
                 Settlement settlement = FindSettlementByID(building.BuildingLocation);
                 if (settlement != null)
                 {

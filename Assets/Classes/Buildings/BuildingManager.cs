@@ -20,6 +20,7 @@ public class BuildingManager : MonoBehaviour
     {
         PopulateBuildingDropdown();
         createBuildingButton.onClick.AddListener(CreateNewBuilding);
+        buildingInterfaces.UpdateBuildingGridForCity(gameManager.CurrentCity);
     }
 
     private void PopulateBuildingDropdown()
@@ -161,7 +162,6 @@ public class BuildingManager : MonoBehaviour
             Debug.Log($"Edifici afegit a la ciutat {currentCity.cityName}: {newBuilding.BuildingName}");
             
             // Actualitza la graella d'edificis per la ciutat actual
-            //buildingInterfaces.UpdateBuildingGridForCity(currentCity);
             if (buildingInterfaces != null)
             {
                 buildingInterfaces.UpdateBuildingGridForCity(currentCity);
