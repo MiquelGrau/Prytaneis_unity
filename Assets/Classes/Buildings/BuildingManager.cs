@@ -93,7 +93,7 @@ public class BuildingManager : MonoBehaviour
             null, // OwnerID buit
             gameManager.CurrentCity.cityInventoryID,
             null, // Estat inicial d'activitat
-            10, // Mida de l'edifici
+            1, // Mida de l'edifici
             0, // HPCurrent
             0, // HPMaximum
             template.Capacity,
@@ -103,11 +103,12 @@ public class BuildingManager : MonoBehaviour
             null, // Method Active, no s'està fabricant res encara. 
             template.DefaultMethod,
             null, // BatchCurrent com a null per ara
-            new List<string>(), // BatchBacklog com a llistat buit per ara
-            1.0f, // InputEfficiency
-            1.0f, // OutputEfficiency
-            1.0f, // CycleEfficiency
-            1.0f, // SalaryEfficiency
+            new List<Batch>(), // BatchBacklog com a llistat buit per ara
+            100.0f, // Linear
+            100.0f, // InputEfficiency
+            100.0f, // OutputEfficiency
+            100.0f, // CycleEfficiency
+            100.0f, // SalaryEfficiency
             template.JobsPoor,
             template.JobsMid,
             template.JobsRich
@@ -130,7 +131,7 @@ public class BuildingManager : MonoBehaviour
             "", // OwnerID buit
             gameManager.CurrentCity.cityInventoryID,
             "Inactive", // Estat inicial d'activitat
-            10, // Mida de l'edifici
+            1, // Mida de l'edifici
             0, // HPCurrent
             0, // HPMaximum
             template.Capacity,
@@ -226,11 +227,11 @@ public class BuildingManager : MonoBehaviour
                 ResourcePT newResourceFactor = new ResourcePT(
                     templateFactor,
                     newBuilding.ProductionTempID,
-                    0, // EffectSize inicial és zero
-                    resource, // El recurs associat
-                    0, // Quantitat actual del recurs -> forçat
-                    0, // MonthlyConsumption inicial és zero
-                    0  // MonthlyValue inicial és zero
+                    0, // EffectSize
+                    resource, 
+                    0, // Quantitat actual
+                    0, // MonthlyConsumption
+                    0  // MonthlyValue
                 );
 
                 // Afegir el nou factor a la llista de factors de l'edifici

@@ -51,6 +51,7 @@ public class GameManager : MonoBehaviour
     private void HandleDayChanged()
     {
         Debug.Log($"Un nou dia ha començat: {GlobalTime.Instance.GetCurrentDate()}");
+        ProductionManager.Instance.UpdateProduction();
     }
 
     private void HandleMonthChanged()

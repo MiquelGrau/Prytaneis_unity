@@ -9,12 +9,13 @@ public class ProductiveBuilding : Building
     public List<ProductionMethod> MethodsAvailable { get; private set; }
     public ProductionMethod MethodActive { get; private set; }
     public ProductionMethod MethodDefault { get; private set; }
-    public string BatchCurrent { get; private set; } // Aquest serà reemplaçat per la classe real BatchRun més tard.
-    public List<string> BatchBacklog { get; private set; } // Aquest serà reemplaçat per una llista de BatchRuns més tard.
-    public float InputEfficiency { get; private set; }
-    public float OutputEfficiency { get; private set; }
-    public float CycleEfficiency { get; private set; }
-    public float SalaryEfficiency { get; private set; }
+    public Batch BatchCurrent { get; set; } 
+    public List<Batch> BatchBacklog { get; private set; } 
+    public float LinearOutput { get; set; }
+    public float InputEfficiency { get; set; }
+    public float OutputEfficiency { get; set; }
+    public float CycleEfficiency { get; set; }
+    public float SalaryEfficiency { get; set; }
     public int JobsPoor { get; private set; }
     public int JobsMid { get; private set; }
     public int JobsRich { get; private set; }
@@ -22,8 +23,8 @@ public class ProductiveBuilding : Building
     public ProductiveBuilding(string id, string name, string templateID, string location, string ownerID, string inventoryID,
                               string activity, int size, int hpCurrent, int hpMax, int capacity,
                               string productionTempID, List<ProductiveFactor> currentFactors, List<ProductionMethod> methodsAvailable,
-                              ProductionMethod methodActive, ProductionMethod methodDefault, string batchCurrent, 
-                              List<string> batchBacklog, float inputEfficiency, float outputEfficiency,
+                              ProductionMethod methodActive, ProductionMethod methodDefault, Batch batchCurrent, 
+                              List<Batch> batchBacklog, float linearOutput, float inputEfficiency, float outputEfficiency,
                               float cycleEfficiency, float salaryEfficiency, int jobsPoor, int jobsMid, int jobsRich)
         : base(id, name, templateID, location, ownerID, inventoryID, activity, size, hpCurrent, hpMax, capacity)
     {
@@ -33,7 +34,8 @@ public class ProductiveBuilding : Building
         MethodActive = methodActive;
         MethodDefault = methodDefault;
         BatchCurrent = batchCurrent;
-        BatchBacklog = batchBacklog ?? new List<string>();
+        BatchBacklog = batchBacklog ?? new List<Batch>();
+        LinearOutput = linearOutput;
         InputEfficiency = inputEfficiency;
         OutputEfficiency = outputEfficiency;
         CycleEfficiency = cycleEfficiency;
@@ -52,6 +54,10 @@ public class ProductiveBuilding : Building
         }
         CurrentFactors.Add(factor);
     }
+
+    
+
+
 }
 
 public class ProductiveTemplate : BuildingTemplate

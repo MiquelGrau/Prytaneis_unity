@@ -3156,6 +3156,7 @@ GameObject:
   - component: {fileID: 962695653}
   - component: {fileID: 962695656}
   - component: {fileID: 962695655}
+  - component: {fileID: 962695657}
   m_Layer: 0
   m_Name: GOCitySystem
   m_TagString: Untagged
@@ -3228,6 +3229,18 @@ MonoBehaviour:
   buildingInterfaces: {fileID: 962695655}
   buildingDropdown: {fileID: 73895507}
   createBuildingButton: {fileID: 767393907}
+--- !u!114 &962695657
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 962695652}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d44bf114124a41045991985c43518254, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &967646318
 GameObject:
   m_ObjectHideFlags: 0
@@ -4978,6 +4991,7 @@ GameObject:
   - component: {fileID: 1301510089}
   - component: {fileID: 1301510094}
   - component: {fileID: 1301510096}
+  - component: {fileID: 1301510097}
   m_Layer: 0
   m_Name: GOLoaders
   m_TagString: Untagged
@@ -5055,6 +5069,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45a340b514c19484ea4d40ff19fd6eb7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1301510097
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1301510088}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f053a67a03b89b24f8d21256e04e82f5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  monthsPerYear: 12
+  baseSecondsPerDay: 60
+  currentDayTime: 0
+  currentDay: 1
+  currentMonth: 1
+  currentYear: 1356
 --- !u!1 &1304097682
 GameObject:
   m_ObjectHideFlags: 0
@@ -8126,14 +8158,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1324441756}
     m_Modifications:
-    - target: {fileID: 167636888469600879, guid: bfad2a560b2dad74dbd59eab0b8b9dfd, type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 10917, guid: 0000000000000000f000000000000000, type: 0}
-    - target: {fileID: 167636888469600879, guid: bfad2a560b2dad74dbd59eab0b8b9dfd, type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 4557935964802139909, guid: bfad2a560b2dad74dbd59eab0b8b9dfd, type: 3}
       propertyPath: m_Name
       value: buildingSimplePrefab
@@ -8370,6 +8394,22 @@ PrefabInstance:
     - target: {fileID: 2326182073273306577, guid: bb4eb260f5830f3448d7ade11272a431, type: 3}
       propertyPath: m_Name
       value: prodFactorPrefab
+      objectReference: {fileID: 0}
+    - target: {fileID: 4642445746192279780, guid: bb4eb260f5830f3448d7ade11272a431, type: 3}
+      propertyPath: m_fontSize
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 4642445746192279780, guid: bb4eb260f5830f3448d7ade11272a431, type: 3}
+      propertyPath: m_margin.w
+      value: 16.406597
+      objectReference: {fileID: 0}
+    - target: {fileID: 4642445746192279780, guid: bb4eb260f5830f3448d7ade11272a431, type: 3}
+      propertyPath: m_margin.z
+      value: 128.54404
+      objectReference: {fileID: 0}
+    - target: {fileID: 4642445746192279780, guid: bb4eb260f5830f3448d7ade11272a431, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 4881021290699691990, guid: bb4eb260f5830f3448d7ade11272a431, type: 3}
       propertyPath: m_Pivot.x

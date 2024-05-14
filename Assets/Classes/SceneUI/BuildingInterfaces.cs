@@ -31,6 +31,20 @@ public class BuildingInterfaces : MonoBehaviour
             newBuildingCell.transform.Find("BBasicName").GetComponent<TMP_Text>().text = building.BuildingName;
             newBuildingCell.transform.Find("BBasicTemplate").GetComponent<TMP_Text>().text = DataManager.Instance.GetTemplateNameByID(building.BuildingTemplateID);
 
+            TMP_Text outputText = newBuildingCell.transform.Find("BBasicOutput").GetComponent<TMP_Text>();
+            if (building is CivicBuilding civic)
+            {
+                outputText.text = civic.Function;
+            }
+            else if (building is ProductiveBuilding productive && productive.MethodActive != null)
+            {
+                outputText.text = productive.MethodActive.MethodName;
+            }
+            else
+            {
+                outputText.text = "No additional info";
+            }
+
             // Afegeix un event al clicar per mostrar detalls
             Button detailButton = newBuildingCell.transform.Find("BBasicButtonDetail").GetComponent<Button>();
             detailButton.onClick.AddListener(() => {
@@ -82,7 +96,7 @@ public class BuildingInterfaces : MonoBehaviour
             prodPanel.transform.Find("BProdJobsPoor").GetComponent<TMP_Text>().text = productive.JobsPoor.ToString();
             prodPanel.transform.Find("BProdJobsMid").GetComponent<TMP_Text>().text = productive.JobsMid.ToString();
             prodPanel.transform.Find("BProdJobsRich").GetComponent<TMP_Text>().text = productive.JobsRich.ToString();
-            prodPanel.transform.Find("BProdBatchCurrent").GetComponent<TMP_Text>().text = productive.BatchCurrent;
+            prodPanel.transform.Find("BProdBatchCurrent").GetComponent<TMP_Text>().text = productive.BatchCurrent.ToString();
 
             Transform factorsPanel = prodPanel.transform.Find("BProdFactorPanel");
             PopulateProductiveFactors(productive, factorsPanel);

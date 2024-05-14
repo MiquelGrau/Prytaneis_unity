@@ -38,14 +38,76 @@ public class ProductionMethod
         Outputs = outputs ?? new List<MethodOutput>();
     }
 
-    // Afegir inputs i outputs manualment després de la creació de l'objecte si és necessari
-    public void AddInput(string resourceID, float amount)
+    
+}
+
+public class Batch
+{
+    public string BatchID { get; private set; }
+    public List<BatchInput> BatchInputs { get; private set; }
+    public List<BatchOutput> BatchOutputs { get; private set; }
+    public int CycleTimeTotal { get; set; }
+    public int CycleTimeProgress { get; set; }
+    public float ExpectedSalary { get; set; }
+    public float ExpectedOverhead { get; set; }
+    public float ExpectedCosts { get; set; }
+    public float AccruedSalary { get; private set; }
+    public float AccruedOverhead { get; private set; }
+    public float AccruedCosts { get; private set; }
+
+    public class BatchInput
     {
-        Inputs.Add(new MethodInput() { ResourceID = resourceID, Amount = amount });
+        public Resource InputResource { get; private set; }
+        public float InputAmount { get; private set; }
+        public float InputUnitValue { get; private set; }
+
+        public BatchInput(Resource inputResource, float inputAmount, float inputUnitValue)
+        {
+            InputResource = inputResource;
+            InputAmount = inputAmount;
+            InputUnitValue = inputUnitValue;
+        }
+    }
+    
+    public class BatchOutput
+    {
+        public Resource OutputResource { get; private set; }
+        public float OutputAmount { get; private set; }
+        public int OutputChance { get; private set; }
+        public int OutputExpGain { get; private set; }
+        public float OutputUnitValue { get; private set; }
+
+        public BatchOutput(Resource outputResource, float outputAmount, int outputChance, int outputExpGain, float outputUnitValue)
+        {
+            OutputResource = outputResource;
+            OutputAmount = outputAmount;
+            OutputChance = outputChance;
+            OutputExpGain = outputExpGain;
+            OutputUnitValue = outputUnitValue;
+        }
     }
 
-    public void AddOutput(string resourceID, float amount, int chance)
+
+    public Batch(string batchID, List<BatchInput> batchInputs, List<BatchOutput> batchOutputs, int cycleTimeTotal, float expectedSalary, float expectedOverhead, float expectedCosts)
     {
-        Outputs.Add(new MethodOutput() { ResourceID = resourceID, Amount = amount, Chance = chance });
+        BatchID = batchID;
+        BatchInputs = batchInputs ?? new List<BatchInput>();
+        BatchOutputs = batchOutputs ?? new List<BatchOutput>();
+        CycleTimeTotal = cycleTimeTotal;
+        CycleTimeProgress = 0;
+        ExpectedSalary = expectedSalary;
+        ExpectedOverhead = expectedOverhead;
+        ExpectedCosts = expectedCosts;
+        AccruedSalary = 0;
+        AccruedOverhead = 0;
+        AccruedCosts = 0;
+    }
+    
+    public bool IsCompleted()
+    {
+        return CycleTimeProgress >= CycleTimeTotal;
     }
 }
+
+
+
