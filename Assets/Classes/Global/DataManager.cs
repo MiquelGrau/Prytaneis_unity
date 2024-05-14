@@ -122,6 +122,12 @@ public class DataManager : MonoBehaviour
     {
         return agents;
     }
+
+    public Resource GetResourceByID(string resourceID)
+    {
+        return resourcemasterlist.FirstOrDefault(r => r.ResourceID == resourceID);
+    }
+    
     public Agent GetAgentByID(string agentID)
     {
         return agents.FirstOrDefault(agent => agent.agentID == agentID);
