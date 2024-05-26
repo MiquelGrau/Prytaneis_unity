@@ -139,6 +139,12 @@ public class DataManager : MonoBehaviour
         return $"B{buildingCounter.ToString().PadLeft(5, '0')}";
     }
 
+    public WorldMapNode FindNodeById(string nodeId)
+    {
+        return worldMapNodes.FirstOrDefault(node => node.id == nodeId);
+    }
+
+    
     // Funció per obtenir el nom de la plantilla basant-se en l'ID
     public string GetTemplateNameByID(string templateID)
     {
