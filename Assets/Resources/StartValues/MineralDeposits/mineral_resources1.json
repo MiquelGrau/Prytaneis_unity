@@ -1,0 +1,9 @@
+{
+  "Nodes": [
+    { "NodeID": "LN0013",
+      "Deposits": [
+        { "MineralID": "M001", "SlotQty": 4, "TotalReserves": 1000000, "AvgDepth": 2.5, "AvgPurity": 80 },
+        { "MineralID": "M002", "SlotQty": 2, "TotalReserves": 500, "AvgDepth": 1.5, "AvgPurity": 70 }
+    ] }
+  ]
+}
