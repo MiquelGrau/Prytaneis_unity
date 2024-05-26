@@ -15,6 +15,7 @@ public class WorldMapNode
     public string WaterNodeType;
     public string WaterNodeRegion;
     public string WaterNodeSubregion;
+    public List<MineralResource> NodeDeposits { get; set; } = new List<MineralResource>();
     //public bool IsSuperNode;
     //public string ConnectionsId;
     
