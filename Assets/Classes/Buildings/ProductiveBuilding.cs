@@ -67,7 +67,7 @@ public class ProductiveTemplate : BuildingTemplate
     //public string ClassName { get; private set; }
     //public string TemplateType { get; private set; }
     //public string TemplateSubtype { get; private set; }
-    public ProductionMethod DefaultMethod { get; private set; }
+    public ProductionMethod DefaultMethod { get; set; }
     public List<ProductionMethod> PossibleMethods { get; private set; }
     public List<TemplateFactor> Factors { get; private set; }
     public int JobsPoor { get; private set; }

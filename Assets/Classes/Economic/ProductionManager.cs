@@ -94,7 +94,7 @@ public class ProductionManager : MonoBehaviour
                     if (productiveBuilding.BatchCurrent != null)
                     {
                         int previousCycleTime = productiveBuilding.BatchCurrent.CycleTimeProgress;
-                        productiveBuilding.BatchCurrent.CycleTimeProgress += 1;
+                        productiveBuilding.BatchCurrent.CycleTimeProgress += 100;
                         int newCycleTime = productiveBuilding.BatchCurrent.CycleTimeProgress;
                         Debug.Log($"Avançat en la producció de {productiveBuilding.BuildingName}: Progrés: {productiveBuilding.BatchCurrent.CycleTimeProgress}");
 
@@ -105,32 +105,12 @@ public class ProductionManager : MonoBehaviour
                         }
                     }
 
-                    /* int previousCycleTime = productiveBuilding.BatchCurrent?.CycleTimeProgress ?? 0;
-                    productiveBuilding.UpdateProduction(1); // 1 dia ha passat
-                    int newCycleTime = productiveBuilding.BatchCurrent?.CycleTimeProgress ?? 0;
-                    
-                    // Incrementar el CycleTimeProgress del BatchCurrent
-                    if (productiveBuilding.BatchCurrent != null)
-                    {
-                        productiveBuilding.BatchCurrent.CycleTimeProgress += 1;
-                        Debug.Log($"Avançat en la producció de {productiveBuilding.BuildingName}: Progrés: {productiveBuilding.BatchCurrent.CycleTimeProgress}");
-                    }
-                    
-                    if (HasCompletedBatch(productiveBuilding))
-                    {
-                        CompleteBatch(productiveBuilding);
-                    } */
                 }
             }
         }
     }
 
-    /* public bool HasCompletedBatch(ProductiveBuilding building)
-    {
-        return building.BatchCurrent != null && building.BatchCurrent.CycleTimeProgress >= building.BatchCurrent.CycleTimeTotal;
-    } */
-
-    //private void CompleteBatch(ProductiveBuilding building)
+    
     private void CompleteBatch(ProductiveBuilding building, int overflowTime)
     {
         var batch = building.BatchCurrent;
@@ -153,7 +133,6 @@ public class ProductionManager : MonoBehaviour
                 }
             }
 
-            //int overflowTime = batch.CycleTimeProgress - batch.CycleTimeTotal;
             building.BatchCurrent = null;
 
             if (building.BatchBacklog.Count > 0)    // Si hi ha un proper batch, l'agafa li assigna el que ja portava

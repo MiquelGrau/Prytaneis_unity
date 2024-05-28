@@ -118,6 +118,7 @@ public class BuildingManager : MonoBehaviour
         SetupFactors(newBuilding, template);
         AddBuildingToCurrentCity(newBuilding);
         Debug.Log("Nou edifici productiu creat: " + newBuilding.BuildingName);
+        Debug.Log($"Número de ProductionMethods disponibles: {newBuilding.MethodsAvailable.Count}");
     }
 
     private void AddCivicBuilding(CivicTemplate template)

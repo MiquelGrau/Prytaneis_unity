@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -89,6 +90,7 @@ public class BuildingInterfaces : MonoBehaviour
             //GameObject prodPanel = Instantiate(prodBuildingPrefab, activeDetailPanel.transform);
             GameObject prodPanel = Instantiate(prodBuildingPrefab, innerPanel);
             prodPanel.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;  
+            prodPanel.transform.Find("BProdLinear").GetComponent<TMP_Text>().text = productive.LinearOutput.ToString("P2");
             prodPanel.transform.Find("BProdInput").GetComponent<TMP_Text>().text = productive.InputEfficiency.ToString("P2");
             prodPanel.transform.Find("BProdOutput").GetComponent<TMP_Text>().text = productive.OutputEfficiency.ToString("P2");
             prodPanel.transform.Find("BProdCycle").GetComponent<TMP_Text>().text = productive.CycleEfficiency.ToString("P2");
@@ -96,10 +98,41 @@ public class BuildingInterfaces : MonoBehaviour
             prodPanel.transform.Find("BProdJobsPoor").GetComponent<TMP_Text>().text = productive.JobsPoor.ToString();
             prodPanel.transform.Find("BProdJobsMid").GetComponent<TMP_Text>().text = productive.JobsMid.ToString();
             prodPanel.transform.Find("BProdJobsRich").GetComponent<TMP_Text>().text = productive.JobsRich.ToString();
-            prodPanel.transform.Find("BProdBatchCurrent").GetComponent<TMP_Text>().text = productive.BatchCurrent.ToString();
+            //prodPanel.transform.Find("BProdBatchCurrent").GetComponent<TMP_Text>().text = productive.MethodActive.MethodName.ToString();
 
+            if (productive.BatchCurrent != null)
+            {
+                string batchInfo = "Current Batch:\n";
+                
+                foreach (var input in productive.BatchCurrent.BatchInputs)
+                {
+                    batchInfo += $"Input: {input.InputResource.ResourceName}, Amt: {input.InputAmount}\n";
+                }
+
+                foreach (var output in productive.BatchCurrent.BatchOutputs)
+                {
+                    batchInfo += $"Output: {output.OutputResource.ResourceName}, Amt: {output.OutputAmount}\n";
+                }
+                batchInfo += $"Progress: {productive.BatchCurrent.CycleTimeProgress}/{productive.BatchCurrent.CycleTimeTotal}\n";
+
+                prodPanel.transform.Find("BProdBatchCurrent").GetComponent<TMP_Text>().text = batchInfo;
+            }
+            else
+            {
+                prodPanel.transform.Find("BProdBatchCurrent").GetComponent<TMP_Text>().text = "No active production.";
+            }
+
+            // Configurar factors
             Transform factorsPanel = prodPanel.transform.Find("BProdFactorPanel");
             PopulateProductiveFactors(productive, factorsPanel);
+            
+            // Configurar el Dropdown
+            TMP_Dropdown methodDropdown = prodPanel.transform.Find("BProdMethodsDD").GetComponent<TMP_Dropdown>();
+            PopulateMethodDropdown(methodDropdown, productive);
+
+            methodDropdown.onValueChanged.AddListener(delegate {
+                OnMethodSelected(methodDropdown, productive);
+            });
         }
     }
 
@@ -127,5 +160,28 @@ public class BuildingInterfaces : MonoBehaviour
         }
         
     }
+
+    private void PopulateMethodDropdown(TMP_Dropdown dropdown, ProductiveBuilding building)
+    {
+        dropdown.ClearOptions();
+        List<string> methodoptions = new List<string>();
+        foreach (var method in building.MethodsAvailable)
+        {
+            methodoptions.Add(method.MethodName);
+        }
+        dropdown.AddOptions(methodoptions);
+    }
+
+    private void OnMethodSelected(TMP_Dropdown dropdown, ProductiveBuilding building)
+    {
+        int index = dropdown.value;
+        if (index >= 0 && index < building.MethodsAvailable.Count)
+        {
+            ProductionMethod selectedMethod = building.MethodsAvailable[index];
+            ProductionManager.Instance.SetupNewBatch(selectedMethod, building);
+        }
+    }
+    
+
 }
 

@@ -193,6 +193,26 @@ public class DatabaseImporter : MonoBehaviour
                         }
                     }
                 }
+
+                // Assigna els ProductionMethods disponibles
+                if (templateData.PossibleMethods != null && templateData.PossibleMethods.Count > 0)
+                {
+                    foreach (var methodReference in templateData.PossibleMethods)
+                    {
+                        ProductionMethod foundMethod = FindMethodById(methodReference.Method);
+                        if (foundMethod != null)
+                        {
+                            productiveTemplate.PossibleMethods.Add(foundMethod);
+                        }
+                        else
+                        {
+                            Debug.LogWarning($"No s'ha trobat ProductionMethod amb ID: {methodReference.Method}");
+                        }
+                    }
+                }
+                // Assigna el ProductionMethod per defecte
+                productiveTemplate.DefaultMethod = FindMethodById(templateData.DefaultMethod);
+
                 
                 dataManager.productiveTemplates.Add(productiveTemplate);
                 // Logs
@@ -219,6 +239,10 @@ public class DatabaseImporter : MonoBehaviour
     {
         return dataManager.employeeFactors.FirstOrDefault(f => f.FactorID == factorId) ??
             dataManager.resourceFactors.FirstOrDefault(f => f.FactorID == factorId) as TemplateFactor;
+    }
+    private ProductionMethod FindMethodById(string methodId)
+    {
+        return dataManager.productionMethods.FirstOrDefault(m => m.MethodID == methodId);
     }
 
     private void LoadProductionMethods()
@@ -322,10 +346,21 @@ public class BuildingTemplateJSON
     public string ClassName;
     public string TemplateType;
     public string TemplateSubtype;
+    public int JobsPoor { get; set; }
+    public int JobsMid { get; set; }
+    public int JobsRich { get; set; }
+    public string DefaultMethod { get; set; }
+    public int Capacity { get; set; }
+    public List<MethodReference> PossibleMethods { get; set; }
     public List<FactorReference> Factors; 
     
 }
 
+[System.Serializable]
+public class MethodReference
+{
+    public string Method { get; set; }
+}
 [System.Serializable]
 public class FactorReference
 {
