@@ -68,8 +68,8 @@ public class ProductiveTemplate : BuildingTemplate
     //public string TemplateType { get; private set; }
     //public string TemplateSubtype { get; private set; }
     public ProductionMethod DefaultMethod { get; set; }
-    public List<ProductionMethod> PossibleMethods { get; private set; }
-    public List<TemplateFactor> Factors { get; private set; }
+    public List<ProductionMethod> PossibleMethods { get; set; } = new List<ProductionMethod>();
+    public List<TemplateFactor> Factors { get; set; } = new List<TemplateFactor>();
     public int JobsPoor { get; private set; }
     public int JobsMid { get; private set; }
     public int JobsRich { get; private set; }
@@ -81,9 +81,10 @@ public class ProductiveTemplate : BuildingTemplate
                               List<TemplateFactor> factors, int jobsPoor, int jobsMid, int jobsRich, int capacity)
         : base(templateID, className, templateType, templateSubtype)
     {
-        Factors = factors ?? new List<TemplateFactor>(); // Assigna una llista buida si factors és null
+    
         DefaultMethod = defaultMethod;
-        PossibleMethods = possibleMethods ?? new List<ProductionMethod>(); // Assigna una llista buida si possibleMethods és null
+        PossibleMethods = possibleMethods ?? new List<ProductionMethod>(); 
+        Factors = factors ?? new List<TemplateFactor>(); 
         JobsPoor = jobsPoor;
         JobsMid = jobsMid;
         JobsRich = jobsRich;

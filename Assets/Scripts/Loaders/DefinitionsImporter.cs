@@ -31,22 +31,6 @@ public class DatabaseImporter : MonoBehaviour
         LoadFactorTemplates();
         LoadBuildingTemplates();    
         
-        //cityInventories = new List<CityInventory>(); 
-        
-        // Obté la referència de DataManager i carrega les ciutats
-        /* DataManager dataManager = FindObjectOfType<DataManager>();
-        if (dataManager != null)
-        {
-            cities = dataManager.GetCities();
-            // Afegim el Debug.Log aquí per mostrar tot el contingut de la llista cities
-            string citiesJson = JsonConvert.SerializeObject(cities, Formatting.Indented);
-            Debug.Log("Ciutats carregades: " + citiesJson);
-        }
-        else
-        {
-            Debug.LogError("No s'ha trobat DataManager.");
-        } */
-
         Debug.Log("Acabada fase Awake de l'importador! Ciutats, Lifestyle, Resources, Inventaris, etc");
     }
 
@@ -161,90 +145,7 @@ public class DatabaseImporter : MonoBehaviour
     
     
 
-    private void LoadBuildingTemplates()
-    {
-        string jsonContent = Resources.Load<TextAsset>("Statics/BuildingTemplates").text;
-        BuildingTemplateListWrapper wrapper = JsonConvert.DeserializeObject<BuildingTemplateListWrapper>(jsonContent);
-        
-        
-        foreach (var templateData in wrapper.Templates)
-        {
-            string individualJsonContent = JsonConvert.SerializeObject(templateData);
-
-            if (templateData.TemplateType == "Productive")
-            {
-                var productiveTemplate = JsonConvert.DeserializeObject<ProductiveTemplate>(individualJsonContent);
-                
-                
-                // Verifica si hi ha factors a assignar
-                if (templateData.Factors != null && templateData.Factors.Count > 0)
-                {
-                    foreach (var factorReference in templateData.Factors)
-                    {
-                        TemplateFactor foundFactor = FindFactorById(factorReference.Factor);
-                        if (foundFactor != null)
-                        {
-                            productiveTemplate.Factors.Add(foundFactor);
-                            //Debug.Log($"-- Factor afegit: ID={foundFactor.FactorID}, Name={foundFactor.FactorName}");
-                        }
-                        else
-                        {
-                            Debug.LogWarning($"No s'ha trobat Factor amb ID: {factorReference.Factor}");
-                        }
-                    }
-                }
-
-                // Assigna els ProductionMethods disponibles
-                if (templateData.PossibleMethods != null && templateData.PossibleMethods.Count > 0)
-                {
-                    foreach (var methodReference in templateData.PossibleMethods)
-                    {
-                        ProductionMethod foundMethod = FindMethodById(methodReference.Method);
-                        if (foundMethod != null)
-                        {
-                            productiveTemplate.PossibleMethods.Add(foundMethod);
-                        }
-                        else
-                        {
-                            Debug.LogWarning($"No s'ha trobat ProductionMethod amb ID: {methodReference.Method}");
-                        }
-                    }
-                }
-                // Assigna el ProductionMethod per defecte
-                productiveTemplate.DefaultMethod = FindMethodById(templateData.DefaultMethod);
-
-                
-                dataManager.productiveTemplates.Add(productiveTemplate);
-                // Logs
-                /* Debug.Log($"Afegit ProductiveTemplate: {productiveTemplate.ClassName}, ID: {productiveTemplate.TemplateID}, Factors: {productiveTemplate.Factors.Count}");
-                foreach (var factor in productiveTemplate.Factors)
-                {
-                    Debug.Log($"-- Factor: ID={factor.FactorID}, Name={factor.FactorName}, Type={factor.FactorType}, Effect={factor.FactorEffect}");
-                } */
-            }
-            else if (templateData.TemplateType == "Civic")
-            {
-                var civicTemplate = JsonConvert.DeserializeObject<CivicTemplate>(individualJsonContent);
-                dataManager.civicTemplates.Add(civicTemplate);
-            }
-
-            
-        }
-
-        Debug.Log($"Total de Plantilles Productives carregades: {dataManager.productiveTemplates.Count}");
-        Debug.Log($"Total de Plantilles Cíviques carregades: {dataManager.civicTemplates.Count}");
-    }
-
-    private TemplateFactor FindFactorById(string factorId)
-    {
-        return dataManager.employeeFactors.FirstOrDefault(f => f.FactorID == factorId) ??
-            dataManager.resourceFactors.FirstOrDefault(f => f.FactorID == factorId) as TemplateFactor;
-    }
-    private ProductionMethod FindMethodById(string methodId)
-    {
-        return dataManager.productionMethods.FirstOrDefault(m => m.MethodID == methodId);
-    }
-
+    
     private void LoadProductionMethods()
     {
         TextAsset jsonData = Resources.Load<TextAsset>("Statics/ProductionMethods");
@@ -314,7 +215,108 @@ public class DatabaseImporter : MonoBehaviour
         Debug.Log($"Total de Factors de Recurs carregats: {dataManager.resourceFactors.Count}");
     }
 
-    
+    private void LoadBuildingTemplates()
+    {
+        string jsonContent = Resources.Load<TextAsset>("Statics/BuildingTemplates").text;
+        BuildingTemplateListWrapper templateWrapper = JsonConvert.DeserializeObject<BuildingTemplateListWrapper>(jsonContent);
+        Debug.Log($"Total de Templates llegits: {templateWrapper.Templates.Count}");
+
+        foreach (var templateData in templateWrapper.Templates)
+        {
+            //Debug.Log($"Processant Template - ID: {templateData.TemplateID}, ClassName: {templateData.ClassName}, TemplateType: {templateData.TemplateType}");
+            string individualJsonContent = JsonConvert.SerializeObject(templateData);
+            
+            if (templateData.TemplateType == "Productive")
+            {
+                // Crear el ProductiveTemplate a partir de BuildingTemplateJSON
+                var productiveTemplate = new ProductiveTemplate(
+                    templateData.TemplateID,
+                    templateData.ClassName,
+                    templateData.TemplateType,
+                    templateData.TemplateSubtype,
+                    null, // DefaultMethod es definirà després
+                    new List<ProductionMethod>(),
+                    new List<TemplateFactor>(),
+                    templateData.JobsPoor,
+                    templateData.JobsMid,
+                    templateData.JobsRich,
+                    templateData.Capacity
+                );
+
+                // Assigna el ProductionMethod per defecte
+                ProductionMethod defaultMethod = FindMethodById(templateData.DefaultMethod);
+                if (defaultMethod != null)
+                {
+                    productiveTemplate.GetType().GetProperty("DefaultMethod").SetValue(productiveTemplate, defaultMethod);
+                    //Debug.Log($"Assignat DefaultMethod: {defaultMethod.MethodID}");
+                }
+                else
+                {
+                    Debug.LogWarning($"No s'ha trobat ProductionMethod amb ID: {templateData.DefaultMethod}");
+                }
+
+                // Assigna els ProductionMethods disponibles
+                if (templateData.PossibleMethods != null && templateData.PossibleMethods.Count > 0)
+                {
+                    foreach (var methodReference in templateData.PossibleMethods)
+                    {
+                        ProductionMethod foundMethod = FindMethodById(methodReference.Method);
+                        if (foundMethod != null)
+                        {
+                            productiveTemplate.PossibleMethods.Add(foundMethod);
+                            //Debug.Log($"-- ProductionMethod afegit: ID={foundMethod.MethodID}, Name={foundMethod.MethodName}");
+                        }
+                        else
+                        {
+                            Debug.LogWarning($"No s'ha trobat ProductionMethod amb ID: {methodReference.Method}");
+                        }
+                    }
+                }
+                
+                // Verifica si hi ha factors a assignar
+                if (templateData.Factors != null && templateData.Factors.Count > 0)
+                {
+                    foreach (var factorReference in templateData.Factors)
+                    {
+                        TemplateFactor foundFactor = FindFactorById(factorReference.Factor);
+                        if (foundFactor != null)
+                        {
+                            productiveTemplate.Factors.Add(foundFactor);
+                            //Debug.Log($"-- Factor afegit: ID={foundFactor.FactorID}, Name={foundFactor.FactorName}");
+                        }
+                        else
+                        {
+                            Debug.LogWarning($"No s'ha trobat Factor amb ID: {factorReference.Factor}");
+                        }
+                    }
+                }
+                
+                dataManager.productiveTemplates.Add(productiveTemplate);
+                //Debug.Log($"ProductiveTemplate afegit: {productiveTemplate.ClassName}, ID: {productiveTemplate.TemplateID}");
+            }
+            else if (templateData.TemplateType == "Civic")
+            {
+                var civicTemplate = JsonConvert.DeserializeObject<CivicTemplate>(individualJsonContent);
+                dataManager.civicTemplates.Add(civicTemplate);
+            }
+
+            
+        }
+
+        Debug.Log($"Total de Plantilles Productives carregades: {dataManager.productiveTemplates.Count}");
+        Debug.Log($"Total de Plantilles Cíviques carregades: {dataManager.civicTemplates.Count}");
+    }
+
+    private TemplateFactor FindFactorById(string factorId)
+    {
+        return dataManager.employeeFactors.FirstOrDefault(f => f.FactorID == factorId) ??
+            dataManager.resourceFactors.FirstOrDefault(f => f.FactorID == factorId) as TemplateFactor;
+    }
+    private ProductionMethod FindMethodById(string methodId)
+    {
+        return dataManager.productionMethods.FirstOrDefault(m => m.MethodID == methodId);
+    }
+
 
 
     [System.Serializable]
@@ -351,8 +353,8 @@ public class BuildingTemplateJSON
     public int JobsRich { get; set; }
     public string DefaultMethod { get; set; }
     public int Capacity { get; set; }
-    public List<MethodReference> PossibleMethods { get; set; }
-    public List<FactorReference> Factors; 
+    public List<MethodReference> PossibleMethods { get; set; } = new List<MethodReference>(); 
+    public List<FactorReference> Factors { get; set; } = new List<FactorReference>(); 
     
 }
 

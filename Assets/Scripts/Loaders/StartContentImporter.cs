@@ -265,8 +265,6 @@ public class StartContentImporter : MonoBehaviour
                         {
                             int slotReserves = reservesBySlot[slotIndex];
                             var (reservesByDepth, purityLevels) = DistributeDepthsAndPurities(deposit.AvgDepth, deposit.AvgPurity, slotReserves);
-                            //int[] reservesByDepth = DistributeDepths(deposit.AvgDepth, slotReserves);
-                            //int[] purityLevels = DistributePurities(deposit.AvgPurity, modifiedDepth);
                             
                             MineralResource resource = new MineralResource(
                                 deposit.MineralID,
@@ -280,11 +278,11 @@ public class StartContentImporter : MonoBehaviour
                             landNode.NodeDeposits.Add(resource);      
                             
                             // Logging for debugging
-                            Debug.Log($"Mineral ID {deposit.MineralID}, Slot {slotIndex + 1}: ");
+                            /* Debug.Log($"Mineral ID {deposit.MineralID}, Slot {slotIndex + 1}: ");
                             for (int depth = 0; depth < reservesByDepth.Length; depth++)
                             {
                                 Debug.Log($"Depth {depth + 1}: {reservesByDepth[depth]} reserves, {purityLevels[depth]}% purity");
-                            }              
+                            }         */      
                         }
                     }
                 }
@@ -301,7 +299,7 @@ public class StartContentImporter : MonoBehaviour
         int minPerSlot = totalReserves / (slotQuantity + 2);    // Facil de canviar les densitats, amb això
         int maxPerSlot = totalReserves / Math.Max(slotQuantity - 1, 1);
 
-        Debug.Log($"Iniciant la distribució de reserves: totalReserves = {totalReserves}, slotQuantity = {slotQuantity}");
+        //Debug.Log($"Iniciant la distribució de reserves: totalReserves = {totalReserves}, slotQuantity = {slotQuantity}");
 
         for (int i = 0; i < slotQuantity - 1; i++)
         {
@@ -312,12 +310,12 @@ public class StartContentImporter : MonoBehaviour
             
             reserves[i] = reserve;
             totalAssigned += reserve;
-            Debug.Log($"Slot {i + 1}: Assignat {reserve} reserves. MinAssignable = {minAssignable}, MaxAssignable = {maxAssignable}");
+            //Debug.Log($"Slot {i + 1}: Assignat {reserve} reserves. MinAssignable = {minAssignable}, MaxAssignable = {maxAssignable}");
         }
 
         // Assigna la resta al darrer slot, garantint que la suma total és igual a TotalReserves
         reserves[slotQuantity - 1] = totalReserves - totalAssigned;
-        Debug.Log($"Slot {slotQuantity}: Assignat {reserves[slotQuantity - 1]} reserves (darrer slot).");
+        //Debug.Log($"Slot {slotQuantity}: Assignat {reserves[slotQuantity - 1]} reserves (darrer slot).");
 
         return reserves;
     }
@@ -328,7 +326,7 @@ public class StartContentImporter : MonoBehaviour
         
         float modifiedDepth = averageDepth + UnityEngine.Random.Range(-0.5f, 0.5f);
         modifiedDepth = Mathf.Clamp(modifiedDepth, 1f, 4f); // Assegurar-se que està dins els límits de profunditat
-        Debug.Log($"Original averageDepth: {averageDepth}, Modified averageDepth: {modifiedDepth}");
+        //Debug.Log($"Original averageDepth: {averageDepth}, Modified averageDepth: {modifiedDepth}");
 
         float totalWeight = 0f;
         float[] weights = new float[4];
@@ -348,11 +346,11 @@ public class StartContentImporter : MonoBehaviour
             int assigned = Mathf.RoundToInt(totalReserves * weights[i]);
             reservesByDepth[i] = assigned;
             assignedReserves += assigned;
-            Debug.Log($"Depth {i + 1}: Assigned {assigned} reserves with weight {weights[i]}");
+            //Debug.Log($"Depth {i + 1}: Assigned {assigned} reserves with weight {weights[i]}");
         }
         // Asegura que la suma total de reserves és correcta
         reservesByDepth[3] = totalReserves - assignedReserves;
-        Debug.Log($"Depth 4: Assigned {reservesByDepth[3]} reserves (last depth).");
+        //Debug.Log($"Depth 4: Assigned {reservesByDepth[3]} reserves (last depth).");
 
         return reservesByDepth;
     }
@@ -362,7 +360,7 @@ public class StartContentImporter : MonoBehaviour
         int depths = 4;
         float adjustedPurity = Mathf.Clamp(averagePurity + UnityEngine.Random.Range(-25.0f, 25.0f), 10f, 100f);
         int[] purityLevels = new int[4];
-        Debug.Log($"Adjusted Purity based on averagePurity {averagePurity}: {adjustedPurity}");
+        //Debug.Log($"Adjusted Purity based on averagePurity {averagePurity}: {adjustedPurity}");
 
         // Calcular la puresa a cada profunditat
         for (int i = 0; i < depths; i++)
@@ -371,7 +369,7 @@ public class StartContentImporter : MonoBehaviour
             float distance = Mathf.Abs(modifiedDepth - (i + 1));
             purityLevels[i] = Mathf.RoundToInt(adjustedPurity - (distance / 6.0f * adjustedPurity)); // disminuit effecte
             purityLevels[i] = Mathf.Clamp(purityLevels[i], 10, 100); // Repassar el maxim un altre cop
-            Debug.Log($"Depth {i + 1}: {purityLevels[i]}% purity");
+            //Debug.Log($"Depth {i + 1}: {purityLevels[i]}% purity");
         }
         
         return purityLevels;
@@ -388,7 +386,7 @@ public class StartContentImporter : MonoBehaviour
         modifiedDepth = Mathf.Clamp(modifiedDepth, 1f, 4f); // Assegurar-se que està dins els límits de profunditat
         float adjustedPurity = Mathf.Clamp(averagePurity + UnityEngine.Random.Range(-25.0f, 25.0f), 10f, 100f);
 
-        Debug.Log($"Modificadors: AvgDepth: {averageDepth}, Modified: {modifiedDepth}; AvgPurity:{averagePurity}, Modified: {adjustedPurity}");
+        //Debug.Log($"Modificadors: AvgDepth: {averageDepth}, Modified: {modifiedDepth}; AvgPurity:{averagePurity}, Modified: {adjustedPurity}");
         
         float totalWeight = 0f;
         float[] weights = new float[depths];
