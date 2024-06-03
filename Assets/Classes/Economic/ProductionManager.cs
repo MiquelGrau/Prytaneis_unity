@@ -27,11 +27,11 @@ public class ProductionManager : MonoBehaviour
     public void UpdateProdEfficiencies(ProductiveBuilding building)
     {
         // Reinicialitzar les eficiències
-        building.LinearOutput = 100;
-        building.InputEfficiency = 100;
-        building.OutputEfficiency = 100;
-        building.CycleEfficiency = 100;
-        building.SalaryEfficiency = 100;
+        building.LinearOutput = 1;
+        building.InputEfficiency = 1;
+        building.OutputEfficiency = 1;
+        building.CycleEfficiency = 1;
+        building.SalaryEfficiency = 1;
 
         foreach (var factor in building.CurrentFactors)
         {

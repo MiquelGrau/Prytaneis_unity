@@ -104,11 +104,11 @@ public class BuildingManager : MonoBehaviour
             template.DefaultMethod,
             null, // BatchCurrent com a null per ara
             new List<Batch>(), // BatchBacklog com a llistat buit per ara
-            100.0f, // Linear
-            100.0f, // InputEfficiency
-            100.0f, // OutputEfficiency
-            100.0f, // CycleEfficiency
-            100.0f, // SalaryEfficiency
+            1.0f, // Linear
+            1.0f, // InputEfficiency
+            1.0f, // OutputEfficiency
+            1.0f, // CycleEfficiency
+            1.0f, // SalaryEfficiency
             template.JobsPoor,
             template.JobsMid,
             template.JobsRich
