@@ -21,6 +21,10 @@ public class BuildingManager : MonoBehaviour
         PopulateBuildingDropdown();
         createBuildingButton.onClick.AddListener(CreateNewBuilding);
         buildingInterfaces.UpdateBuildingGridForCity(gameManager.CurrentCity);
+
+        // Agents
+        buildingInterfaces.UpdateAgentGrid();
+        
     }
 
     private void PopulateBuildingDropdown()

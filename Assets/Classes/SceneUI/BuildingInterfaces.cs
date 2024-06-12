@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Linq;
 
 public class BuildingInterfaces : MonoBehaviour
 {
@@ -15,7 +16,9 @@ public class BuildingInterfaces : MonoBehaviour
     public GameObject prodFactorPrefab;
     
     private GameObject activeDetailPanel; // Mantenir una referència al panell de detalls actiu
-
+    
+    public GameObject agentPrefab;
+    public Transform PInfoAgentList;
     
     // Funció per actualitzar la graella d'edificis per a una ciutat seleccionada
     public void UpdateBuildingGridForCity(CityData currentCity)
@@ -55,7 +58,60 @@ public class BuildingInterfaces : MonoBehaviour
         }
     }
 
+    // Funció per actualitzar la graella d'agents
+    public void UpdateAgentGrid()
+    {
+        foreach (Transform child in PInfoAgentList)
+        {
+            Destroy(child.gameObject);
+        }
 
+        foreach (Agent agent in DataManager.Instance.agents)
+        {
+            GameObject newAgentCell = Instantiate(agentPrefab, PInfoAgentList);
+            string agentName = agent.agentName;
+            if (agent == GameManager.Instance.CurrentAgent)
+            {
+                agentName += " *";
+            }
+            newAgentCell.transform.Find("PInfoAgentDesc").GetComponent<TMP_Text>().text = agentName;
+            newAgentCell.transform.Find("PInfoAgentMoney").GetComponent<TMP_Text>().text = agent.Inventory.InventoryMoney.ToString();
+            newAgentCell.transform.Find("PInfoAgentWares").GetComponent<TMP_Text>().text = agent.Inventory.InventoryResources.Sum(res => res.Quantity).ToString();
+
+            // Afegeix un event al clicar per mostrar detalls
+            Button agentButton = newAgentCell.transform.Find("PInfoAgentButton").GetComponent<Button>();
+            agentButton.onClick.AddListener(() => {
+                Debug.Log($"Agent {agent.agentID} ha estat seleccionat, mostrant detalls");
+                OnAgentSelected(agent);
+            });
+        }
+
+        // Configura el layout
+        VerticalLayoutGroup layoutGroup = PInfoAgentList.GetComponent<VerticalLayoutGroup>();
+        if (layoutGroup != null)
+        {
+            layoutGroup.childAlignment = TextAnchor.UpperCenter;
+            layoutGroup.childControlWidth = true;
+            layoutGroup.childControlHeight = true;
+            layoutGroup.childForceExpandWidth = true;
+            layoutGroup.childForceExpandHeight = false;
+            layoutGroup.spacing = 2f;
+        }
+
+        ContentSizeFitter contentFitter = PInfoAgentList.GetComponent<ContentSizeFitter>();
+        if (contentFitter != null)
+        {
+            contentFitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+        }
+    }
+    // Funció que s'executa quan un agent és seleccionat
+    private void OnAgentSelected(Agent agent)
+    {
+        // Aquí pots afegir la lògica per mostrar els detalls de l'agent seleccionat
+        Debug.Log($"Agent seleccionat: {agent.agentName}");
+        GameManager.Instance.AssignCurrentAgent(agent.agentID);
+        UpdateAgentGrid();
+    }
 
     // Funció per aplicar les dades de base de l'edifici. Tot el que es quedarà fixe
     public void SetupBuildingUI(Building building)
