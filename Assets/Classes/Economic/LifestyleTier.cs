@@ -5,36 +5,40 @@ using UnityEngine;
 [System.Serializable]
 public class LifestyleTier
 {
-    public int TierID; 
+    public string TierID; 
     public string TierName; 
-    public List<LifestyleNeed> LifestyleDemands;
+    public List<LifestyleDemand> LifestyleDemands;
+    public string NextTierID;
     
-    public LifestyleTier(int tierID)
+    public LifestyleTier(string tierID, string nextTierID)
     {
         TierID = tierID;
-        //AssignTierDetails(tierID);    // emplenarà directament això, però ja ho aplicarem més tard. 
+        NextTierID = nextTierID;
+        LifestyleDemands = new List<LifestyleDemand>();
+        
     }
-   
     
 }
 
 [System.Serializable]
-public class LifestyleNeed
+public class LifestyleDemand
 {
-    public string resourceType;
-    public float quantityPerThousand;
-    public int monthsCritical;
-    public int monthsTotal;
-    public int resourceVariety;
-
-    public LifestyleNeed(string resourceType, float quantityPerThousand, int monthsCritical, int monthsTotal, int resourceVariety)
-    {
-        this.resourceType = resourceType;
-        this.quantityPerThousand = quantityPerThousand;
-        this.monthsCritical = monthsCritical;
-        this.monthsTotal = monthsTotal;
-        this.resourceVariety = resourceVariety;
-    }
+    public string ResType { get; set; }
+    public string DemType { get; set; }
+    public int Position { get; set; }
+    public float MonthlyQty { get; set; }
+    public int MonthsCrit { get; set; }
+    public int MonthsTotal { get; set; }
     
+    public LifestyleDemand(string resType, string demType, int position, float monthlyQty, int monthsCrit, int monthsTotal)
+    {
+        ResType = resType;
+        DemType = demType;
+        Position = position;
+        MonthlyQty = monthlyQty;
+        MonthsCrit = monthsCrit;
+        MonthsTotal = monthsTotal;
+        
+    }
 }
 

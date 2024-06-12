@@ -14,8 +14,42 @@ public class ProductionMethod
     // Definicions per a inputs i outputs
     public class MethodInput
     {
-        public string ResourceID { get; set; }
+        public string ResourceID { get; set; }  // És String i no una Classe Resource, perquè es pugui buscar des del json
+        public string ResourceType { get; set; }
+        public string ResourceSubtype { get; set; }
         public float Amount { get; set; }
+
+        
+        // Constructor amb InputType
+        public MethodInput(string resource, float amount, InputType inputType)
+        {
+            switch (inputType)
+            {
+                case InputType.ResourceID:
+                    ResourceID = resource;
+                    ResourceType = null;
+                    ResourceSubtype = null;
+                    break;
+                case InputType.ResourceType:
+                    ResourceID = null;
+                    ResourceType = resource;
+                    ResourceSubtype = null;
+                    break;
+                case InputType.ResourceSubtype:
+                    ResourceID = null;
+                    ResourceType = null;
+                    ResourceSubtype = resource;
+                    break;
+            }
+            Amount = amount;
+        }
+        public enum InputType
+        {
+            ResourceID,
+            ResourceType,
+            ResourceSubtype
+        }
+        
     }
 
     public class MethodOutput

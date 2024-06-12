@@ -22,9 +22,9 @@ public class CityData
         get { return PoorPopulation + MidPopulation + RichPopulation; }
     }
 
-    public int PoorLifestyleID; 
-    public int MidLifestyleID; 
-    public int RichLifestyleID; 
+    public string PoorLifestyleID; 
+    public string MidLifestyleID; 
+    public string RichLifestyleID; 
     
     //public List<BuildingInstanceData> buildings;
     public List<Building> CityBuildings { get; set; } = new List<Building>(); 

@@ -9,8 +9,12 @@ public class CityInventory
     public string CityInvID { get; set; }
     public string CityID { get; set; }  
     public int CityInvMoney { get; set; }
-    public List<CityInventoryResource> InventoryResources { get; set; }
-    public List<CityDemands> Demands { get; set; } = new List<CityDemands>();
+    public List<CityInventoryResource> InventoryResources { get; set; } // Els recursos en sí
+    public List<PopulationDemand> PopDemands { get; set; } = new List<PopulationDemand>();  // Demandes de població
+    public List<BuildingDemand> BuildingDemands { get; set; } = new List<BuildingDemand>(); // Demandes de edificis
+    public List<ResourceDemand> MarketDemands { get; set; } = new List<ResourceDemand>(); // Tot conjunt i volcat a l'inventari
+
+
     
     // Constructor
     public CityInventory(string cityInvID, string cityID, int cityInvMoney, List<CityInventoryResource> resources)
@@ -18,62 +22,12 @@ public class CityInventory
         CityInvID = cityInvID;
         CityID = cityID;
         CityInvMoney = cityInvMoney;
-        InventoryResources = resources ?? new List<CityInventoryResource>(); // Assigna una nova llista buida si items és null
+        InventoryResources = resources ?? new List<CityInventoryResource>(); 
     }
     
 
-    [System.Serializable]
-    public class CityDemands
-    {
-        public string ResourceType { get; private set; }
-        public string ResourceID { get; private set; }
-        public string ResourceSubtype { get; private set; }
-        public string PopulationType { get; private set; }
-        public int Variety { get; private set; }
-        public float DemandConsume { get; set; }
-        public float DemandCritical { get; set; }
-        public float DemandTotal { get; set; }
-
-        public enum DemandType
-        {
-            ResourceType,
-            ResourceSubtype,
-            ResourceID
-        }
-
-        // Constructor per Resource Type
-        public CityDemands(DemandType type, string firstParameter, string populationType, int variety)
-        {
-            switch (type)
-            {
-                case DemandType.ResourceType:
-                    ResourceType = firstParameter;
-                    ResourceSubtype = null;
-                    ResourceID = null;
-                    break;
-                case DemandType.ResourceSubtype:
-                    ResourceType = null;
-                    ResourceSubtype = firstParameter;
-                    ResourceID = null;
-                    break;
-                case DemandType.ResourceID:
-                    ResourceType = null;
-                    ResourceSubtype = null;
-                    ResourceID = firstParameter;
-                    break;
-            }
-
-            PopulationType = populationType;
-            Variety = variety;
-            DemandConsume = 0;
-            DemandCritical = 0;
-            DemandTotal = 0;
-        }
-
-        
-    }
-
-
+    
+    
 }
 
 
@@ -134,4 +88,99 @@ public class CityInventoryResource : InventoryResource
         
     }
     
+}
+
+[System.Serializable]
+public class PopulationDemand
+{
+    public string Class { get; private set; }
+    public string ResourceType { get; private set; }
+    public string DemType { get; set; }
+    public int Position { get; set; }
+    public Resource AssignedResource { get; private set; }
+    public float CoveredQty { get; set; }
+    public float ConsumeQty { get; set; }
+    public float CritQty { get; set; }  
+    public float TotalQty { get; set; }
+    public bool Fulfilled { get; set; }
+
+
+    // Constructor
+    public PopulationDemand(string popClass, string resourceType, string demType, int position)
+    {
+        Class = popClass;
+        ResourceType = resourceType;
+        DemType = demType;
+        Position = position;
+        AssignedResource = null;
+        ConsumeQty = 0;
+        CritQty = 0;
+        TotalQty = 0;
+        CoveredQty = 0;
+        Fulfilled = false;
+    }
+
+}
+
+[System.Serializable]
+public class BuildingDemand
+{
+    public string ResType { get; private set; }
+    public Resource AssignedResource { get; private set; }
+    public string RelatedBuildID { get; private set; }
+    public float CoveredQty { get; set; }
+    public float ConsumeQty { get; set; }
+    public float CritQty { get; set; }
+    public float TotalQty { get; set; }
+
+    // Constructor per ResourceType
+    public BuildingDemand(string resType, string relatedBuildID, float consumeQty, float critQty, float totalQty)
+    {
+        ResType = resType;
+        RelatedBuildID = relatedBuildID;
+        ConsumeQty = consumeQty;
+        CritQty = critQty;
+        TotalQty = totalQty;
+        AssignedResource = null; // Inicialment null
+        CoveredQty = 0; // Inicialment zero
+    }
+
+    // Constructor per ResourceID
+    public BuildingDemand(Resource assignedResource, string relatedBuildID, float consumeQty, float critQty, float totalQty)
+    {
+        ResType = null;
+        AssignedResource = assignedResource;
+        RelatedBuildID = relatedBuildID;
+        ConsumeQty = consumeQty;
+        CritQty = critQty;
+        TotalQty = totalQty;
+        CoveredQty = 0; // Inicialment zero
+    }
+}
+
+
+[System.Serializable]
+public class ResourceDemand
+{
+    public string ResType { get; set; }
+    public Resource AssignedResource { get; set; }
+    public float ConsumeQty { get; set; }
+    public float CritQty { get; set; }
+    public float TotalQty { get; set; }
+    public int PositionPoor { get; set; }
+    public int PositionMid { get; set; }
+    public int PositionRich { get; set; }
+
+    // Constructor
+    public ResourceDemand(string resType, Resource assignedResource, float consumeQty, float critQty, float totalQty, int positionPoor, int positionMid, int positionRich)
+    {
+        ResType = resType;
+        AssignedResource = assignedResource;
+        ConsumeQty = consumeQty;
+        CritQty = critQty;
+        TotalQty = totalQty;
+        PositionPoor = positionPoor;
+        PositionMid = positionMid;
+        PositionRich = positionRich;
+    }
 }

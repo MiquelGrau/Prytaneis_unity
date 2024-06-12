@@ -131,10 +131,8 @@ public class DatabaseImporter : MonoBehaviour
         {
             uniqueResourceTypes.Add(resource.ResourceType);
             uniqueResourceSubtypes.Add(resource.ResourceSubtype);
-            /* Debug.Log($"Carregat recurs: {resource.resourceID}, {resource.resourceName}, {resource.resourceType}, "+
-                    $"{resource.resourceSubtype}, {resource.basePrice}, {resource.baseWeight}"); */
-            Debug.Log($"Carregat recurs: {resource.ResourceID}, {resource.ResourceName}, {resource.ResourceType}, " +
-                    $"{resource.ResourceSubtype}, {resource.BasePrice}, {resource.BaseWeight}");
+            /* Debug.Log($"Carregat recurs: {resource.ResourceID}, {resource.ResourceName}, {resource.ResourceType}, " +
+                    $"{resource.ResourceSubtype}, {resource.BasePrice}, {resource.BaseWeight}"); */
         }
         //Debug.Log("Llistat de recursos carregats");
         //Debug.Log($"Llistat de recursos carregats. Total de recursos: {resourceList.Count}, "+
@@ -160,9 +158,41 @@ public class DatabaseImporter : MonoBehaviour
         {
             foreach (var method in wrapper.ProductionMethods)
             {
-                // Aquí pots processar cada mètode si és necessari, per exemple, convertir ResourceID a objectes Resource.
-                dataManager.productionMethods.Add(method);
+                // Mirem primer Inputs
+                var processedInputs = new List<ProductionMethod.MethodInput>();
+                foreach (var input in method.Inputs)
+                {
+                    if (!string.IsNullOrEmpty(input.ResourceID))
+                    {
+                        processedInputs.Add(new ProductionMethod.MethodInput(input.ResourceID, input.Amount, ProductionMethod.MethodInput.InputType.ResourceID));
+                    }
+                    else if (!string.IsNullOrEmpty(input.ResourceType))
+                    {
+                        processedInputs.Add(new ProductionMethod.MethodInput(input.ResourceType, input.Amount, ProductionMethod.MethodInput.InputType.ResourceType));
+                    }
+                    else if (!string.IsNullOrEmpty(input.ResourceSubtype))
+                    {
+                        processedInputs.Add(new ProductionMethod.MethodInput(input.ResourceSubtype, input.Amount, ProductionMethod.MethodInput.InputType.ResourceSubtype));
+                    }
+                }
 
+                // Quadrem outputs
+                var processedOutputs = new List<ProductionMethod.MethodOutput>();
+                foreach (var output in method.Outputs)
+                {
+                    processedOutputs.Add(new ProductionMethod.MethodOutput
+                    {
+                        ResourceID = output.ResourceID,
+                        Amount = output.Amount,
+                        Chance = output.Chance,
+                        Type = output.Type
+                    });
+                }
+                
+                // I els enxufem a dins
+                var newMethod = new ProductionMethod(method.MethodID, method.MethodName, method.MethodType, method.CycleTime, processedInputs, processedOutputs);
+                dataManager.productionMethods.Add(newMethod);
+                
                 // Logs
                 //Debug.Log($"Carregat mètode de producció: {method.MethodName}, ID: {method.MethodID}, Tipus: {method.MethodType}, Temps de cicle: {method.CycleTime}, Inputs: {method.Inputs.Count}, Outputs: {method.Outputs.Count}");
 
@@ -170,7 +200,7 @@ public class DatabaseImporter : MonoBehaviour
                 {
                     Debug.Log($"Input: {input.ResourceID}, Quantitat: {input.Amount}");
                 }
-
+                
                 foreach(var output in method.Outputs)
                 {
                     Debug.Log($"Output: {output.ResourceID}, Quantitat: {output.Amount}, Probabilitat: {output.Chance}%");
@@ -372,7 +402,7 @@ public class FactorReference
 [System.Serializable]
 public class ProductionMethodWrapper
 {
-    public List<ProductionMethod> ProductionMethods;
+    public List<ProductionMethod> ProductionMethods { get; set; }
 }
 
 [System.Serializable]
