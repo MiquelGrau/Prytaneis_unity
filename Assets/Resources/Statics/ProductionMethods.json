@@ -4,54 +4,32 @@
       "MethodType": "Basic", "CycleTime": 500,
       "Inputs": [
         { "ResourceID": "R001", "Amount": 10 },
-        { "ResourceID": "R002", "Amount": 2 }
+        { "ResourceType": "Type1", "Amount": 2 }
       ],
       "Outputs": [
-        { "ResourceID": "R026", "Amount": 2, "Chance": 90 }
+        { "ResourceID": "R026", "Amount": 2, "Chance": 100, "Type": "Basic" }
       ]
     },
     {
-      "MethodID": "PM002", "MethodName": "Produce gin 2",
-      "MethodType": "Basic", "CycleTime": 500,
-      "Inputs": [
-        { "ResourceID": "R001", "Amount": 10 },
-        { "ResourceID": "R002", "Amount": 2 }
-      ],
-      "Outputs": [
-        { "ResourceID": "R026", "Amount": 2, "Chance": 90 }
-      ]
-    },
-    {
-      "MethodID": "PM003", "MethodName": "Produce gin 3",
-      "MethodType": "Basic", "CycleTime": 500,
-      "Inputs": [
-        { "ResourceID": "R001", "Amount": 10 },
-        { "ResourceID": "R002", "Amount": 2 }
-      ],
-      "Outputs": [
-        { "ResourceID": "R026", "Amount": 2, "Chance": 90 }
-      ]
-    },
-    {
-      "MethodID": "PM004", "MethodName": "Produce gin 4",
-      "MethodType": "Basic", "CycleTime": 500,
-      "Inputs": [
-        { "ResourceID": "R001", "Amount": 10 },
-        { "ResourceID": "R002", "Amount": 2 }
-      ],
-      "Outputs": [
-        { "ResourceID": "R026", "Amount": 2, "Chance": 90 }
-      ]
-    },
-    {
-      "MethodID": "PM005", "MethodName": "Produce gin extra",
+      "MethodID": "PM002", "MethodName": "Produce gin extra",
       "MethodType": "Bonus", "CycleTime": 700,
       "Inputs": [
-        { "ResourceID": "R001", "Amount": 12 }
+        { "ResourceID": "R001", "Amount": 12 },
+        { "ResourceSubtype": "Subtype1", "Amount": 1 }
       ],
       "Outputs": [
-        { "ResourceID": "R026", "Amount": 2, "Chance": 75 }, 
-		{ "ResourceID": "R026", "Amount": 5, "Chance": 25 }
+        { "ResourceID": "R026", "Amount": 2, "Chance": 75, "Type": "Basic" },
+        { "ResourceID": "R026", "Amount": 5, "Chance": 25, "Type": "Replace" }
+      ]
+    },
+    {
+      "MethodID": "PM003", "MethodName": "Produce gin risky",
+      "MethodType": "Risky", "CycleTime": 400,
+      "Inputs": [
+        { "ResourceID": "R001", "Amount": 10 }
+      ],
+      "Outputs": [
+        { "ResourceID": "R026", "Amount": 2, "Chance": 70, "Type": "Basic" }
       ]
     }
  ]

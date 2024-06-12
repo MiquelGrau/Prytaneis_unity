@@ -100,6 +100,7 @@ public class BuildingInterfaces : MonoBehaviour
             prodPanel.transform.Find("BProdJobsRich").GetComponent<TMP_Text>().text = productive.JobsRich.ToString();
             //prodPanel.transform.Find("BProdBatchCurrent").GetComponent<TMP_Text>().text = productive.MethodActive.MethodName.ToString();
 
+            // Informació del batch actual
             if (productive.BatchCurrent != null)
             {
                 string batchInfo = "Current Batch:\n";

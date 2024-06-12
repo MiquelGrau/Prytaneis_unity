@@ -15,6 +15,20 @@ public class TradeInterface : MonoBehaviour
     public TMP_Text moneyLeftText;
     public TMP_Text moneyRightText;
 
+    // Posicions de capçalera
+    public TMP_Text TILeftMoneyStart;
+    public TMP_Text TILeftMoneyMid;
+    public TMP_Text TILeftMoneyEnd;
+    public TMP_Text TILeftWaresStart;
+    public TMP_Text TILeftWaresMid;
+    public TMP_Text TILeftWaresEnd;
+    public TMP_Text TIRightMoneyStart;
+    public TMP_Text TIRightMoneyMid;
+    public TMP_Text TIRightMoneyEnd;
+    public TMP_Text TIRightWaresStart;
+    public TMP_Text TIRightWaresMid;
+    public TMP_Text TIRightWaresEnd;
+
     // Mètode per actualitzar la interfície amb la informació actual de TradeDesk
     public void UpdateTradeInterface()
     {
@@ -75,6 +89,44 @@ public class TradeInterface : MonoBehaviour
         {
             moneyLeftText.text = $"City money: {tradeManager.CurrentTrade.MoneyLeft} €";
             moneyRightText.text = $"Agent money: {tradeManager.CurrentTrade.MoneyRight} €";
+        }
+
+        // Actualitza els textos de l'inventari de la ciutat
+        //if (tradeManager.currentCityInventory != null)
+        if (tradeManager.currentCityInventory != null && tradeManager.currentCityInventory.InventoryResources != null)
+        {
+            int cityMoneyStart = tradeManager.currentCityInventory.CityInvMoney;
+            int cityMoneyMid = tradeManager.CurrentTrade.MoneyToBuy > 0 ? tradeManager.CurrentTrade.MoneyToBuy : -tradeManager.CurrentTrade.MoneyToSell;
+            int cityMoneyEnd = tradeManager.CurrentTrade.MoneyLeft;
+            int cityWaresStart = tradeManager.currentCityInventory.InventoryResources.Where(r => !string.IsNullOrEmpty(r.ResourceType)).Sum(r => (int)r.Quantity);
+            float cityWaresMid = tradeManager.CurrentTrade.TradeResourceLines.Sum(line => line.ToTradeQty);
+            int cityWaresEnd = cityWaresStart + (int)cityWaresMid;
+
+            TILeftMoneyStart.text = cityMoneyStart.ToString();
+            TILeftMoneyMid.text = cityMoneyMid > 0 ? cityMoneyMid.ToString() : $"(-{Mathf.Abs(cityMoneyMid)})";
+            TILeftMoneyEnd.text = cityMoneyEnd.ToString();
+            TILeftWaresStart.text = cityWaresStart.ToString();
+            TILeftWaresMid.text = cityWaresMid.ToString();
+            TILeftWaresEnd.text = cityWaresEnd.ToString();
+        }
+
+        // Actualitza els textos de l'inventari de l'agent
+        //if (tradeManager.currentAgentInventory != null)
+        if (tradeManager.currentAgentInventory != null && tradeManager.currentAgentInventory.InventoryResources != null)
+        {
+            int agentMoneyStart = tradeManager.currentAgentInventory.InventoryMoney;
+            int agentMoneyMid = tradeManager.CurrentTrade.MoneyToBuy > 0 ? -tradeManager.CurrentTrade.MoneyToBuy : tradeManager.CurrentTrade.MoneyToSell;
+            int agentMoneyEnd = tradeManager.CurrentTrade.MoneyRight;
+            int agentWaresStart = tradeManager.currentAgentInventory.InventoryResources.Where(r => !string.IsNullOrEmpty(r.ResourceType)).Sum(r => (int)r.Quantity);
+            float agentWaresMid = -tradeManager.CurrentTrade.TradeResourceLines.Sum(line => line.ToTradeQty);
+            int agentWaresEnd = agentWaresStart + (int)agentWaresMid;
+
+            TIRightMoneyStart.text = agentMoneyStart.ToString();
+            TIRightMoneyMid.text = agentMoneyMid > 0 ? agentMoneyMid.ToString() : $"(-{Mathf.Abs(agentMoneyMid)})";
+            TIRightMoneyEnd.text = agentMoneyEnd.ToString();
+            TIRightWaresStart.text = agentWaresStart.ToString();
+            TIRightWaresMid.text = agentWaresMid.ToString();
+            TIRightWaresEnd.text = agentWaresEnd.ToString();
         }
     }
 

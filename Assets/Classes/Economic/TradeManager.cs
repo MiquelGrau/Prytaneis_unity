@@ -151,7 +151,6 @@ public class TradeManager : MonoBehaviour
             return;
         }
         Agent selectedAgent = agents[index];
-        //currentAgentInventory = selectedAgent.Inventory;
         GameManager.Instance.AssignCurrentAgent(selectedAgent.agentID); 
         Debug.Log($"Nou agent seleccionat: {selectedAgent.agentName}");
         AssignAgentInTrade();
