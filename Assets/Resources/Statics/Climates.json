@@ -1,0 +1,52 @@
+{ 
+  "Climates":[ 
+    {
+      "ClimateID": "CL01", "ClimateName": "Mediterranean", "Seasons": [
+        { "SeasonName": "Winter","AvgMaxTemp": 15,"AvgMinTemp": 9,"Precipitation": 35 }, 
+        { "SeasonName": "Spring","AvgMaxTemp": 20,"AvgMinTemp": 13,"Precipitation": 45 }, 
+        { "SeasonName": "Summer","AvgMaxTemp": 28,"AvgMinTemp": 22,"Precipitation": 30 }, 
+        { "SeasonName": "Autumn","AvgMaxTemp": 18,"AvgMinTemp": 12,"Precipitation": 90 }
+      ]
+    }, 
+    {
+      "ClimateID": "CL02", "ClimateName": "Oceanic", "Seasons": [
+        { "SeasonName": "Winter","AvgMaxTemp": 6,"AvgMinTemp": 1,"Precipitation": 60 }, 
+        { "SeasonName": "Spring","AvgMaxTemp": 15,"AvgMinTemp": 5,"Precipitation": 45 }, 
+        { "SeasonName": "Summer","AvgMaxTemp": 22,"AvgMinTemp": 13,"Precipitation": 90 }, 
+        { "SeasonName": "Autumn","AvgMaxTemp": 14,"AvgMinTemp": 7,"Precipitation": 80 }
+      ]
+    }, 
+    {
+      "ClimateID": "CL03", "ClimateName": "Subarid", "Seasons": [
+        { "SeasonName": "Winter","AvgMaxTemp": 12,"AvgMinTemp": 2,"Precipitation": 20 }, 
+        { "SeasonName": "Spring","AvgMaxTemp": 20,"AvgMinTemp": 10,"Precipitation": 40 }, 
+        { "SeasonName": "Summer","AvgMaxTemp": 30,"AvgMinTemp": 18,"Precipitation": 18 }, 
+        { "SeasonName": "Autumn","AvgMaxTemp": 22,"AvgMinTemp": 12,"Precipitation": 30 }
+      ]
+    }, 
+    {
+      "ClimateID": "CL04", "ClimateName": "Desertic", "Seasons": [
+        { "SeasonName": "Winter","AvgMaxTemp": 20,"AvgMinTemp": 12,"Precipitation": 5 }, 
+        { "SeasonName": "Spring","AvgMaxTemp": 28,"AvgMinTemp": 16,"Precipitation": 3 }, 
+        { "SeasonName": "Summer","AvgMaxTemp": 35,"AvgMinTemp": 23,"Precipitation": 0 }, 
+        { "SeasonName": "Autumn","AvgMaxTemp": 29,"AvgMinTemp": 20,"Precipitation": 2 }
+      ]
+    }, 
+    {
+      "ClimateID": "CL05", "ClimateName": "Continental", "Seasons": [
+        { "SeasonName": "Winter","AvgMaxTemp": 5,"AvgMinTemp": -5,"Precipitation": 40 }, 
+        { "SeasonName": "Spring","AvgMaxTemp": 18,"AvgMinTemp": 5,"Precipitation": 55 }, 
+        { "SeasonName": "Summer","AvgMaxTemp": 30,"AvgMinTemp": 15,"Precipitation": 75 }, 
+        { "SeasonName": "Autumn","AvgMaxTemp": 18,"AvgMinTemp": 5,"Precipitation": 50 }
+      ]
+    }, 
+    {
+      "ClimateID": "CL06", "ClimateName": "none", "Seasons": [
+        { "SeasonName": "Winter","AvgMaxTemp": 20,"AvgMinTemp": 10,"Precipitation": 60 }, 
+        { "SeasonName": "Spring","AvgMaxTemp": 20,"AvgMinTemp": 10,"Precipitation": 60 }, 
+        { "SeasonName": "Summer","AvgMaxTemp": 20,"AvgMinTemp": 10,"Precipitation": 60 }, 
+        { "SeasonName": "Autumn","AvgMaxTemp": 20,"AvgMinTemp": 10,"Precipitation": 60 }
+      ]
+    }
+  ]
+}

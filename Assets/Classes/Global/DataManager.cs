@@ -25,6 +25,7 @@ public class DataManager : MonoBehaviour
     // Geografia fisica
     public static List<WorldMapNode> worldMapNodes = new List<WorldMapNode>();
     public static List<WorldMapLandPath> worldMapLandPaths = new List<WorldMapLandPath>();
+    public static List<Climate> climates = new List<Climate>();
 
     // Geografia humana
     public CityDataList dataItems;  // antic, candidat de borrar
@@ -152,6 +153,11 @@ public class DataManager : MonoBehaviour
                     ?? civicTemplates.FirstOrDefault(ct => ct.TemplateID == templateID) as BuildingTemplate;
         
         return template?.ClassName ?? "Unknown Template";
+    }
+
+    public Climate GetClimateByName(string climateName)
+    {
+        return climates.FirstOrDefault(c => c.ClimateName == climateName);
     }
     /* public List<Agent> GetAgents()
     {

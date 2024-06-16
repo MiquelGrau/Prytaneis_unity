@@ -15,7 +15,13 @@ public class WorldMapNode
     public string WaterNodeType;
     public string WaterNodeRegion;
     public string WaterNodeSubregion;
+    // Natural resources
     public List<MineralResource> NodeDeposits { get; set; } = new List<MineralResource>();
+    // Climatology
+    public Climate NodeClimate { get; set; }
+    public Season CurrentSeason { get; set; }
+    public float ExtraMinTemp { get; set; }
+    public float ExtraMaxTemp { get; set; }
     //public bool IsSuperNode;
     //public string ConnectionsId;
     
@@ -39,8 +45,4 @@ public class WorldMapNode
     }
 }
 
-[System.Serializable]
-public class NodeDataWrapper
-{
-    public List<WorldMapNode> nodes_jsonfile;
-}
+

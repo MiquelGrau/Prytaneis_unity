@@ -9,7 +9,6 @@ public class DatabaseImporter : MonoBehaviour
     // Fitxers de estàtics
     private const string LifestyleDataPath = "Statics/LifestyleData";
     private const string ResourceDataPath = "Statics/ResourceData";
-    private const string NodeDataPath = "Statics/NodeData"; 
     
     private DataManager dataManager;
 
@@ -23,6 +22,7 @@ public class DatabaseImporter : MonoBehaviour
             Debug.LogError("DataManager no trobat en la escena.");
             return;
         }
+        LoadClimateData();
         LoadNodeData();
         LoadLandPaths();
         LoadLifestyleData();
@@ -35,9 +35,43 @@ public class DatabaseImporter : MonoBehaviour
     }
 
     
+    private void LoadClimateData()
+    {
+        TextAsset jsonData = Resources.Load<TextAsset>("Statics/Climates");
+        if (jsonData == null)
+        {
+            Debug.LogError("No es pot trobar el fitxer Climates.json a la ruta especificada.");
+            return;
+        }
+
+        // Deserialitza el JSON al format del teu ClimateDataWrapper
+        ClimateDataWrapper climateData = JsonConvert.DeserializeObject<ClimateDataWrapper>(jsonData.text);
+
+        if (climateData?.Climates != null)
+        {
+            foreach (var newclimate in climateData.Climates)
+            {
+                // Aquí pots processar cada clima si és necessari, per exemple, afegint-los a una llista dins de DataManager
+                DataManager.climates.Add(newclimate);
+                //Debug.Log($"Clima carregat: {newclimate.ClimateID}, {newclimate.ClimateName}. Estacions:");
+                //foreach (var season in newclimate.Seasons)
+                //{
+                //    Debug.Log($"- {season.SeasonName}: Temp Màx: {season.AvgMaxTemp}, Temp Mín: {season.AvgMinTemp}, Precipitació: {season.Precipitation}");
+                //}
+            }
+        }
+        else
+        {
+            Debug.LogError("No s'ha pogut deserialitzar correctament el fitxer Climates.json.");
+        }
+
+        Debug.Log($"Total de climes carregats: {climateData?.Climates.Count}");
+    }
+
+    
     private void LoadNodeData()
     {
-        TextAsset jsonData = Resources.Load<TextAsset>(NodeDataPath);
+        TextAsset jsonData = Resources.Load<TextAsset>("Statics/NodeData");
         if (jsonData == null)
         {
             Debug.LogError("No es pot trobar el fitxer NodeData.json a la ruta especificada.");
@@ -46,16 +80,45 @@ public class DatabaseImporter : MonoBehaviour
 
         // Deserialitza el JSON al format del teu NodeDataWrapper
         NodeDataWrapper nodeData = JsonUtility.FromJson<NodeDataWrapper>(jsonData.text);
-        /* foreach (var node in nodeData.nodes_jsonfile)
+        
+        // Processar els nodes per assignar les noves propietats
+        foreach (var node in nodeData.nodes_jsonfile)
         {
-            // Aquí pots processar cada node com necessitis, per exemple, afegint-los a una llista dins de DataManager
-            Debug.Log($"Node carregat: {node.id}, {node.name}");
-        } */
+            // Assignar el Climate a partir del nom del Climate en el JSON
+            var climate = DataManager.Instance.GetClimateByName(node.Climate);
+            var currentSeason = climate?.Seasons.FirstOrDefault(); // Assumeix la primera estació com a inicial
+            
+            // Crear una nova instància de WorldMapNode amb les noves propietats
+            var newNode = new WorldMapNode
+            {
+                id = node.id,
+                name = node.name,
+                cityId = node.cityId,
+                latitude = node.latitude,
+                longitude = node.longitude,
+                LandNodeType = node.LandNodeType,
+                LandContinentId = node.LandContinentId,
+                LandRegionId = node.LandRegionId,
+                LandSubregionId = node.LandSubregionId,
+                WaterNodeType = node.WaterNodeType,
+                WaterNodeRegion = node.WaterNodeRegion,
+                WaterNodeSubregion = node.WaterNodeSubregion,
+                NodeDeposits = node.NodeDeposits,
+                NodeClimate = climate,
+                CurrentSeason = currentSeason,
+                ExtraMinTemp = node.ExtraMinTemp,
+                ExtraMaxTemp = node.ExtraMaxTemp
+            };
 
-        DataManager.worldMapNodes = nodeData.nodes_jsonfile;
+            // Afegir el nou node processat a la llista
+            DataManager.worldMapNodes.Add(newNode);
+            //Debug.Log($"Node carregat: {newNode.id}, {newNode.name}");
+        }
+
         Debug.Log($"Total de nodes carregats: {nodeData.nodes_jsonfile.Count}");
     }
 
+    
     private void LoadLandPaths()
     {
         TextAsset jsonData = Resources.Load<TextAsset>("Statics/LandPaths");
@@ -357,6 +420,39 @@ public class DatabaseImporter : MonoBehaviour
 }
 
 // Els collons de wrappers, els necessita per desempaquetar els jsons
+
+[System.Serializable]
+public class NodeDataWrapper
+{
+    public List<JsonNodeData> nodes_jsonfile;
+}
+
+[System.Serializable]
+public class JsonNodeData
+{
+    public string id;
+    public string name;
+    public string cityId;
+    public float latitude;
+    public float longitude;
+    public string LandNodeType;
+    public string LandContinentId;
+    public string LandRegionId;
+    public string LandSubregionId;
+    public string WaterNodeType;
+    public string WaterNodeRegion;
+    public string WaterNodeSubregion;
+    public List<MineralResource> NodeDeposits { get; set; } = new List<MineralResource>();
+    public string Climate;
+    public float ExtraMinTemp;
+    public float ExtraMaxTemp;
+}
+
+[System.Serializable]
+public class ClimateDataWrapper
+{
+    public List<Climate> Climates;
+}
 
 [System.Serializable]
 public class LifestyleWrapper
