@@ -23,7 +23,8 @@ public class RouteManager : MonoBehaviour
         // Parsejar les dades
         List<WorldMapCity> citiesList = JsonUtility.FromJson<List<WorldMapCity>>(cityData.text);
         NodeDataWrapper nodeDataWrapper = JsonUtility.FromJson<NodeDataWrapper>(nodeData.text);
-        List<WorldMapNode> nodesList = nodeDataWrapper.nodes_jsonfile;
+        //List<WorldMapNode> nodesList = nodeDataWrapper.nodes_jsonfile;
+        List<WorldMapNode> nodesList = DataManager.worldMapNodes;
         var waterPathDataWrapper = JsonUtility.FromJson<WaterPathDataWrapper>(waterPathData.text);
         List<WorldMapWaterPath> waterPathsList = waterPathDataWrapper.waterpath_jsonfile;
 
