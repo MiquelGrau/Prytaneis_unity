@@ -51,8 +51,7 @@ public class DatabaseImporter : MonoBehaviour
         {
             foreach (var newclimate in climateData.Climates)
             {
-                // Aquí pots processar cada clima si és necessari, per exemple, afegint-los a una llista dins de DataManager
-                DataManager.climates.Add(newclimate);
+                DataManager.climateList.Add(newclimate);
                 //Debug.Log($"Clima carregat: {newclimate.ClimateID}, {newclimate.ClimateName}. Estacions:");
                 //foreach (var season in newclimate.Seasons)
                 //{
@@ -85,8 +84,13 @@ public class DatabaseImporter : MonoBehaviour
         foreach (var node in nodeData.nodes_jsonfile)
         {
             // Assignar el Climate a partir del nom del Climate en el JSON
-            var climate = DataManager.Instance.GetClimateByName(node.Climate);
-            var currentSeason = climate?.Seasons.FirstOrDefault(); // Assumeix la primera estació com a inicial
+            var climateinnode = GetClimateByName(node.Climate);
+            if (climateinnode == null)
+            {
+                Debug.LogError($"No s'ha trobat cap clima amb el nom '{node.Climate}' per al node {node.name}");
+                continue;
+            }
+            var currentSeason = climateinnode.Seasons.FirstOrDefault(); // Assumeix la primera estació com a inicial
             
             // Crear una nova instància de WorldMapNode amb les noves propietats
             var newNode = new WorldMapNode
@@ -104,7 +108,7 @@ public class DatabaseImporter : MonoBehaviour
                 WaterNodeRegion = node.WaterNodeRegion,
                 WaterNodeSubregion = node.WaterNodeSubregion,
                 NodeDeposits = node.NodeDeposits,
-                NodeClimate = climate,
+                NodeClimate = climateinnode,
                 CurrentSeason = currentSeason,
                 ExtraMinTemp = node.ExtraMinTemp,
                 ExtraMaxTemp = node.ExtraMaxTemp
@@ -117,7 +121,11 @@ public class DatabaseImporter : MonoBehaviour
 
         Debug.Log($"Total de nodes carregats: {nodeData.nodes_jsonfile.Count}");
     }
-
+    public Climate GetClimateByName(string climateName)
+    {
+        return DataManager.climateList.FirstOrDefault(c => c.ClimateName == climateName);
+    }
+    
     
     private void LoadLandPaths()
     {
@@ -409,8 +417,7 @@ public class DatabaseImporter : MonoBehaviour
     {
         return dataManager.productionMethods.FirstOrDefault(m => m.MethodID == methodId);
     }
-
-
+    
 
     [System.Serializable]
     private class ListWrapper<T>
