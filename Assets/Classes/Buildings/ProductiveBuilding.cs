@@ -93,3 +93,31 @@ public class ProductiveTemplate : BuildingTemplate
 }
 
 
+public class AgriculturalBuilding : ProductiveBuilding
+{
+    
+    public float FrostEffect { get; private set; }
+    public float HeatEffect { get; private set; }
+    public int MethodAge { get; private set; }
+    public float SoilHealth { get; private set; }
+
+    public AgriculturalBuilding(string id, string name, string templateID, string location, string ownerID, string inventoryID,
+                                string activity, int size, int hpCurrent, int hpMax, int capacity,
+                                string productionTempID, List<ProductiveFactor> currentFactors, List<ProductionMethod> methodsAvailable,
+                                ProductionMethod methodActive, ProductionMethod methodDefault, Batch batchCurrent,
+                                List<Batch> batchBacklog, float linearOutput, float inputEfficiency, float outputEfficiency,
+                                float cycleEfficiency, float salaryEfficiency, int jobsPoor, int jobsMid, int jobsRich,
+                                float frostEffect, float heatEffect, int methodAge, float soilHealth)
+        : base(id, name, templateID, location, ownerID, inventoryID, activity, size, hpCurrent, hpMax, capacity,
+               productionTempID, currentFactors, methodsAvailable, methodActive, methodDefault, batchCurrent,
+               batchBacklog, linearOutput, inputEfficiency, outputEfficiency, cycleEfficiency, salaryEfficiency, jobsPoor, jobsMid, jobsRich)
+    {
+        FrostEffect = 100f;
+        HeatEffect = 100f;
+        MethodAge = 0;
+        SoilHealth = 100f;
+    }
+}
+// Agricultural building no necessita template, perquè no té res especial respecte l'altre, són tot propietats
+// que s'afegiran un cop ja creat l'edifici i seleccionat el Production Method a treballar. 
+
