@@ -39,41 +39,24 @@ public class TradeManager : MonoBehaviour
         public string TradeID;
         public string TradePartnerLeft;
         public string TradePartnerRight;
-        public int MoneyLeft;
+        public float LeftMoneyStart;
+        public float LeftMoneyMid;
+        public float LeftMoneyEnd;
+        public float LeftWaresStart;
+        public float LeftWaresMid;
+        public float LeftWaresEnd;
+        public float RightMoneyStart;
+        public float RightMoneyMid;
+        public float RightMoneyEnd;
+        public float RightWaresStart;
+        public float RightWaresMid;
+        public float RightWaresEnd;
+        /* public int MoneyLeft;
         public int MoneyRight;
         public int MoneyToBuy;
-        public int MoneyToSell;
+        public int MoneyToSell; */
         public List<TradeResourceLine> TradeResourceLines = new List<TradeResourceLine>();
         public List<TradeResourceType> TradeResourceTypes = new List<TradeResourceType>();
-
-        public void TradeDeskCleanup()
-        {
-            Debug.Log($"Fent neteja de preus");
-            // Elimina les línies amb quantitats a zero en ambdues bandes, linies sobrants
-            TradeResourceLines.RemoveAll(line => line.QtyOriginalLeft <= 0 && line.QtyOriginalRight <= 0);
-
-            foreach (var line in TradeResourceLines)
-            {
-                // Actualitza les quantitats
-                line.QtyCurrentLeft = line.QtyOriginalLeft;
-                line.QtyCurrentRight = line.QtyOriginalRight;
-                line.ValueCurrentRight = line.ValueOriginalRight;
-                line.ToTradeQty = 0;
-                line.ToTradeMoney = 0;
-
-                // Si QtyOriginalLeft és major que zero, reseteja els preus
-                if (line.QtyOriginalLeft > 0)
-                {
-                    line.BuyPriceCurrent = line.BuyPriceOriginal;
-                    line.SellPriceOriginal = (int)(line.BuyPriceOriginal * 0.90);
-                    line.SellPriceCurrent = line.SellPriceOriginal;
-                }
-                
-            }
-            // Ordena les TradeResourceLines per ResourceID
-            TradeResourceLines = TradeResourceLines.OrderBy(line => line.ResourceID).ToList();
-
-        }
 
     }
 
@@ -86,7 +69,7 @@ public class TradeManager : MonoBehaviour
         public int QtyCurrentLeft;
         public int QtyOriginalLeft;
         public int BuyPriceCurrent;
-        public int BuyPriceOriginal;
+        public int BuyPriceOriginal;    
         public int SellPriceCurrent;
         public int SellPriceOriginal;
         public int QtyCurrentRight;
@@ -112,11 +95,24 @@ public class TradeManager : MonoBehaviour
         // Constructor i mètodes específics de TradeResourceType
     }
     
+    // Dropdowns
+    // Usats per seleccionar rapidament diferents agents. 
+    // Al tanto que ara és "global", farà teleport de la gent si se seleccionen. 
     void FillCityDropdown()
     {
         var cityNames = dataManager.GetCities().Select(city => city.cityName).ToList();
         cityDropdown.ClearOptions();
         cityDropdown.AddOptions(cityNames);
+
+        // Preselecciona la ciutat actual
+        var currentCityIndex = cityNames.FindIndex(name => name == GameManager.Instance.CurrentCity.cityName);
+        if (currentCityIndex >= 0)
+        {
+            cityDropdown.SetValueWithoutNotify(currentCityIndex);
+            AssignCityInTrade();
+            TradeDeskCleanup(); 
+            tradeInterface.UpdateTradeInterface();
+        }
     }
     public void OnCitySelected(int index)
     {
@@ -131,7 +127,7 @@ public class TradeManager : MonoBehaviour
         GameManager.Instance.AssignCurrentCity(selectedCity.cityID);
         
         AssignCityInTrade();
-        CurrentTrade.TradeDeskCleanup(); 
+        TradeDeskCleanup(); 
         tradeInterface.UpdateTradeInterface();
         cityDropdown.Hide();
     }
@@ -141,6 +137,16 @@ public class TradeManager : MonoBehaviour
         var agentNames = dataManager.GetAgents().Select(agent => agent.agentName).ToList();
         agentDropdown.ClearOptions();
         agentDropdown.AddOptions(agentNames);
+
+        // Preselecciona l'agent actual
+        var currentAgentIndex = agentNames.FindIndex(name => name == GameManager.Instance.CurrentAgent.agentName);
+        if (currentAgentIndex >= 0)
+        {
+            agentDropdown.SetValueWithoutNotify(currentAgentIndex);
+            AssignAgentInTrade();
+            TradeDeskCleanup(); 
+            tradeInterface.UpdateTradeInterface();
+        }
     }
     public void OnAgentSelected(int index)
     {
@@ -154,19 +160,20 @@ public class TradeManager : MonoBehaviour
         GameManager.Instance.AssignCurrentAgent(selectedAgent.agentID); 
         Debug.Log($"Nou agent seleccionat: {selectedAgent.agentName}");
         AssignAgentInTrade();
-        CurrentTrade.TradeDeskCleanup(); 
+        TradeDeskCleanup(); 
         tradeInterface.UpdateTradeInterface();
         agentDropdown.Hide();
     }
     
     public void AssignCityInTrade()
     {
-        CityInventory currentCityInventory = GameManager.Instance.CurrentCity.CityInventory;
+        currentCityInventory = GameManager.Instance.CurrentCity.CityInventory;
         if (currentCityInventory == null) return;
         
         CurrentTrade.TradePartnerLeft = currentCityInventory.CityID;
-        CurrentTrade.MoneyLeft = currentCityInventory.CityInvMoney;
-        
+        CurrentTrade.LeftMoneyStart = currentCityInventory.CityInvMoney;
+        CurrentTrade.LeftWaresStart = currentCityInventory.InventoryResources.Where(r => !string.IsNullOrEmpty(r.ResourceType)).Sum(r => (int)r.Quantity);
+                
         SetUpTradeLines();
     }
 
@@ -174,7 +181,8 @@ public class TradeManager : MonoBehaviour
     {
         // Crida les dades, guardades a game manager
         Agent currentAgent = GameManager.Instance.CurrentAgent;
-        AgentInventory currentAgentInventory = currentAgent?.Inventory;
+        //AgentInventory currentAgentInventory = currentAgent?.Inventory;
+        currentAgentInventory = currentAgent?.Inventory;
         if (currentAgentInventory == null)
         {
             Debug.LogError("No s'ha trobat l'inventari de l'agent actual.");
@@ -183,11 +191,64 @@ public class TradeManager : MonoBehaviour
 
         // Assigna les propietats bàsiques de l'agent a CurrentTrade
         CurrentTrade.TradePartnerRight = currentAgentInventory.AgentID;
-        CurrentTrade.MoneyRight = currentAgentInventory.InventoryMoney;
-        
+        CurrentTrade.RightMoneyStart = currentAgentInventory.InventoryMoney;
+        CurrentTrade.RightWaresStart = currentAgentInventory.InventoryResources.Where(r => !string.IsNullOrEmpty(r.ResourceType)).Sum(r => (int)r.Quantity);
+                
         SetUpTradeLines();
     }
 
+    public void TradeDeskCleanup()
+    {
+        Debug.Log($"Netejant el Trade Desk");
+        if (CurrentTrade != null)
+        {
+            // Reset de les propietats
+            if (currentCityInventory != null && currentAgentInventory != null)
+            {
+                CurrentTrade.LeftMoneyStart = currentCityInventory.CityInvMoney;
+                CurrentTrade.LeftWaresStart = currentCityInventory.InventoryResources.Where(r => !string.IsNullOrEmpty(r.ResourceType)).Sum(r => (int)r.Quantity);
+                CurrentTrade.RightMoneyStart = currentAgentInventory.InventoryMoney;
+                CurrentTrade.RightWaresStart = currentAgentInventory.InventoryResources.Where(r => !string.IsNullOrEmpty(r.ResourceType)).Sum(r => (int)r.Quantity);
+
+                // Reseteja els valors mid a zero
+                CurrentTrade.LeftMoneyMid = 0;
+                CurrentTrade.LeftWaresMid = 0;
+                CurrentTrade.RightMoneyMid = 0;
+                CurrentTrade.RightWaresMid = 0;
+
+                // Assigna els valors end igual als start
+                CurrentTrade.LeftMoneyEnd = CurrentTrade.LeftMoneyStart;
+                CurrentTrade.LeftWaresEnd = CurrentTrade.LeftWaresStart;
+                CurrentTrade.RightMoneyEnd = CurrentTrade.RightMoneyStart;
+                CurrentTrade.RightWaresEnd = CurrentTrade.RightWaresStart;
+            }
+
+            // Elimina les línies amb quantitats a zero en ambdues bandes, linies sobrants
+            CurrentTrade.TradeResourceLines.RemoveAll(line => line.QtyOriginalLeft <= 0 && line.QtyOriginalRight <= 0);
+
+            foreach (var line in CurrentTrade.TradeResourceLines)
+            {
+                // Actualitza les quantitats
+                line.QtyCurrentLeft = line.QtyOriginalLeft;
+                line.QtyCurrentRight = line.QtyOriginalRight;
+                line.ValueCurrentRight = line.ValueOriginalRight;
+                line.ToTradeQty = 0;
+                line.ToTradeMoney = 0;
+
+                // Si QtyOriginalLeft és major que zero, reseteja els preus
+                if (line.QtyOriginalLeft > 0)
+                {
+                    line.BuyPriceCurrent = line.BuyPriceOriginal;
+                    line.SellPriceOriginal = (int)(line.BuyPriceOriginal * 0.90);
+                    line.SellPriceCurrent = line.SellPriceOriginal;
+                }
+                
+            }
+            // Ordena les TradeResourceLines per ResourceID
+            CurrentTrade.TradeResourceLines = CurrentTrade.TradeResourceLines.OrderBy(line => line.ResourceID).ToList();
+        }
+    }
+    
     // Aquesta funció centralitza la configuració de les línies de recurs per a la negociació.
     private void SetUpTradeLines()
     {
@@ -196,8 +257,10 @@ public class TradeManager : MonoBehaviour
         Agent currentAgent = GameManager.Instance.CurrentAgent;
 
         // Obtenir els inventaris de la ciutat i de l'agent
-        CityInventory currentCityInventory = currentCity?.CityInventory;
+        //CityInventory currentCityInventory = currentCity?.CityInventory;
+        currentCityInventory = currentCity?.CityInventory;
         AgentInventory agentInventory = currentAgent?.Inventory;
+        
 
         
         // Aquest diccionari temporal ajudarà a gestionar les TradeResourceLines de manera eficient
@@ -267,7 +330,7 @@ public class TradeManager : MonoBehaviour
         CurrentTrade.TradeResourceLines = tempTradeLines.Values.ToList();
 
         // Recorda cridar qualsevol altra funció necessària després de configurar les línies, com ara TradeDeskCleanup
-        CurrentTrade.TradeDeskCleanup();
+        TradeDeskCleanup();
 
     }
 
@@ -303,48 +366,80 @@ public class TradeManager : MonoBehaviour
     
     public void BuyResource(string resourceID)
     {
+        Debug.Log($"Comprant");
         var resourceLine = CurrentTrade.TradeResourceLines.FirstOrDefault(line => line.ResourceID == resourceID);
         if (resourceLine != null && resourceLine.QtyCurrentLeft > 0)
         {
             // Actualitza les quantitats
             resourceLine.QtyCurrentLeft--;
+            CurrentTrade.LeftWaresMid--;
             resourceLine.QtyCurrentRight++;
+            CurrentTrade.RightWaresMid++;
             resourceLine.ToTradeQty++;
             
             // Actualitza els diners
-            CurrentTrade.MoneyLeft += resourceLine.BuyPriceCurrent;
-            CurrentTrade.MoneyRight -= resourceLine.BuyPriceCurrent;
+            CurrentTrade.LeftMoneyMid += resourceLine.BuyPriceCurrent;
+            CurrentTrade.RightMoneyMid -= resourceLine.BuyPriceCurrent;
             resourceLine.ToTradeMoney -= resourceLine.BuyPriceCurrent;
 
             // Recalcular preu per aquest recurs
             RecalcPriceForResource(resourceLine);
         }
-
+        CurrentTrade.LeftWaresEnd = CurrentTrade.LeftWaresStart + CurrentTrade.LeftWaresMid;
+        CurrentTrade.RightWaresEnd = CurrentTrade.RightWaresStart + CurrentTrade.RightWaresMid;
+        CurrentTrade.LeftMoneyEnd = CurrentTrade.LeftMoneyStart + CurrentTrade.LeftMoneyMid;
+        CurrentTrade.RightMoneyEnd = CurrentTrade.RightMoneyStart + CurrentTrade.RightMoneyMid;
+        
         // Actualitza la UI
         tradeInterface.UpdateTradeInterface();
     }
 
     public void SellResource(string resourceID)
     {
+        Debug.Log($"Venent");
         var resourceLine = CurrentTrade.TradeResourceLines.FirstOrDefault(line => line.ResourceID == resourceID);
         if (resourceLine != null && resourceLine.QtyCurrentRight > 0)
         {
             // Actualitza les quantitats
             resourceLine.QtyCurrentRight--;
+            CurrentTrade.RightWaresMid--;
             resourceLine.QtyCurrentLeft++;
+            CurrentTrade.LeftWaresMid++;
             resourceLine.ToTradeQty--;
             
             // Actualitza els diners
-            CurrentTrade.MoneyRight += resourceLine.SellPriceCurrent;
-            CurrentTrade.MoneyLeft -= resourceLine.SellPriceCurrent;
+            CurrentTrade.RightMoneyMid += resourceLine.SellPriceCurrent;
+            CurrentTrade.LeftMoneyMid -= resourceLine.SellPriceCurrent;
             resourceLine.ToTradeMoney += resourceLine.BuyPriceCurrent;
 
             // Recalcular preu per aquest recurs
             RecalcPriceForResource(resourceLine);
         }
-
+        CurrentTrade.LeftMoneyEnd = CurrentTrade.LeftMoneyStart + CurrentTrade.LeftMoneyMid;
+        CurrentTrade.RightMoneyEnd = CurrentTrade.RightMoneyStart + CurrentTrade.RightMoneyMid;
+        CurrentTrade.LeftWaresEnd = CurrentTrade.LeftWaresStart + CurrentTrade.LeftWaresMid;
+        CurrentTrade.RightWaresEnd = CurrentTrade.RightWaresStart + CurrentTrade.RightWaresMid;
+        
         // Actualitza la UI
         tradeInterface.UpdateTradeInterface();
+    }
+
+    private void ResetTradeTotals()
+    {
+        CurrentTrade.LeftMoneyStart = currentCityInventory.CityInvMoney;
+        CurrentTrade.LeftWaresStart = currentCityInventory.InventoryResources.Where(r => !string.IsNullOrEmpty(r.ResourceType)).Sum(r => (int)r.Quantity);
+        CurrentTrade.RightMoneyStart = currentAgentInventory.InventoryMoney;
+        CurrentTrade.RightWaresStart = currentAgentInventory.InventoryResources.Where(r => !string.IsNullOrEmpty(r.ResourceType)).Sum(r => (int)r.Quantity);
+        
+        CurrentTrade.LeftMoneyMid = 0;
+        CurrentTrade.RightMoneyMid = 0;
+        CurrentTrade.LeftWaresMid = 0;
+        CurrentTrade.RightWaresMid = 0;
+        
+        CurrentTrade.LeftMoneyEnd = CurrentTrade.LeftMoneyStart;
+        CurrentTrade.RightMoneyEnd = CurrentTrade.RightMoneyStart;
+        CurrentTrade.LeftWaresEnd = CurrentTrade.LeftWaresStart;
+        CurrentTrade.RightWaresEnd = CurrentTrade.RightWaresStart;
     }
 
 }

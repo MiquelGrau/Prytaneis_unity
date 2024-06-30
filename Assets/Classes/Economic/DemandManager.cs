@@ -9,60 +9,42 @@ public class DemandManager : MonoBehaviour
 {
     
     public DataManager dataManager; 
-    //public CityData currentCity  { get; private set; }
-    //public CityInventory currentCityInventory { get; private set; } 
-    
-    //public List<CityData> cities; 
     public List<LifestyleTier> lifestyleTiers; 
-    
-    private float timer = 0f;
-    private float timeToWait = 6f; 
     
     public TextMeshProUGUI inventoryDisplayText; 
 
+    // Comptador inicial per aplicar calculs
+    private float timeToWait = 2f; 
+    private bool firstDemand = false;
+    
     private void Start()
     {  
         Debug.Log("Iniciant DemandManager...");
-        // Obté el llistat de ciutats
-        /* cities = dataManager.GetCities(); 
-        if (cities == null || cities.Count == 0)        // Comprova si 'cities' és null
-        {
-            Debug.LogError("No s'han pogut carregar les ciutats.");
-            return;
-        } */
-        
-        // Assigna la ciutat actual des de GameManager
-        //AssignCurrentCity(GameManager.Instance.CurrentCity);
         lifestyleTiers = DataManager.lifestyleTiers; 
-        
         
         // Calcula les demandes basades en la ciutat actual
         foreach (CityData city in dataManager.allCityList)
         {
             GetTierNeedsForCity(city);
         }
+        GenerateMarketDemands();
+        CalculateAllCityPrices();
         Debug.Log("Demandes per població a la ciutat calculades");
-
         
-        
-
     }
 
     private void Update()
     {
-        timer += Time.deltaTime; // Aquesta línia incrementa el temporitzador basant-se en el temps real que ha passat
-
-        if (timer >= timeToWait)
+        
+        if (GlobalTime.Instance.currentDayTime >= timeToWait && !firstDemand) // Aplico directament el "daytime", que és com la hora
         {
-            // Reset del temporitzador
-            timer = 0f;
-
-            Debug.Log("Tic tac! Temporitzador cada 6 segons.");
+            Debug.Log("Aplicats calculs a segon 2");
 
             //AssignDemandsToVarieties();
-            GenerateMarketDemands();
+            GenerateMarketDemands();    // Versió simple, només a currentcity
             inventoryDisplayText.text = GetCityInventoryDisplayText();
-            CalculatePrices();
+            CalculateAllCityPrices();   // Versio simple, només ho fa a la CurrentCity
+            firstDemand = true;
         }
     }
 
@@ -449,7 +431,7 @@ public class DemandManager : MonoBehaviour
         Debug.Log("MarketDemands generades correctament.");
     }
 
-    public void CalculatePrices()
+    public void CalculateAllCityPrices()
     {
         CityData currentCity = GameManager.Instance.CurrentCity;
         CityInventory currentCityInventory = currentCity.CityInventory;

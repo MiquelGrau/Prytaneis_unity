@@ -12,6 +12,8 @@ public class GameManager : MonoBehaviour
     public Agent CurrentAgent { get; private set; }
     public AgentInventory CurrentAgentInventory { get; private set; }
 
+    
+    
     void Awake()
     {
         if (Instance != null && Instance != this)
@@ -29,6 +31,7 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log($"Començant fase del GameManager");
         AssignCurrentCity("C0001");
+        AssignCurrentAgent("AG0003");
         
         // Subscripció als esdeveniments de GlobalTime
         GlobalTime.Instance.OnDayChanged += HandleDayChanged;
@@ -36,6 +39,7 @@ public class GameManager : MonoBehaviour
         GlobalTime.Instance.OnYearChanged += HandleYearChanged;
     }
 
+    
     void OnDestroy()
     {
         // Desubscripció dels esdeveniments de GlobalTime

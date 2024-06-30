@@ -4,7 +4,7 @@ using UnityEngine.UI;
 using TMPro;
 using System.Linq;
 
-public class BuildingInterfaces : MonoBehaviour
+public class CityInterface : MonoBehaviour
 {
     // Prefabs
     public GameObject buildingSimplePrefab;
@@ -15,11 +15,28 @@ public class BuildingInterfaces : MonoBehaviour
     public GameObject prodBuildingPrefab;
     public GameObject prodFactorPrefab;
     
-    private GameObject activeDetailPanel; // Mantenir una referència al panell de detalls actiu
+    private GameObject activeDetailPanel; 
     
     public GameObject agentPrefab;
     public Transform PInfoAgentList;
+
+    // Mostrar el panell de la interfície de comerç
+    public GameObject tradeInterfaceMaster;  
+    public TradeInterface tradeInterface;    
+    public TradeManager tradeManager;    
     
+    public Button PInfoToMarketButton;
+    public TMP_Text PInfoToMarketTxt;
+    private bool isMarketOpen = false;
+    
+    private void Start()    // Start per les interaccions que hi ha només per l'escena
+    {
+        // Comerç
+        InitializeTradeInterface();
+        PInfoToMarketButton.onClick.AddListener(ShowTradePanel);
+    }
+    
+    // DISPLAY PRINCIPAL
     // Funció per actualitzar la graella d'edificis per a una ciutat seleccionada
     public void UpdateBuildingGridForCity(CityData currentCity)
     {
@@ -57,6 +74,8 @@ public class BuildingInterfaces : MonoBehaviour
             });
         }
     }
+
+    // DISPLAY DRET, info del jugador
 
     // Funció per actualitzar la graella d'agents
     public void UpdateAgentGrid()
@@ -104,6 +123,7 @@ public class BuildingInterfaces : MonoBehaviour
             contentFitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
         }
     }
+
     // Funció que s'executa quan un agent és seleccionat
     private void OnAgentSelected(Agent agent)
     {
@@ -111,6 +131,56 @@ public class BuildingInterfaces : MonoBehaviour
         Debug.Log($"Agent seleccionat: {agent.agentName}");
         GameManager.Instance.AssignCurrentAgent(agent.agentID);
         UpdateAgentGrid();
+    }
+    
+    // Display de la Interficie de Comerç
+    private void InitializeTradeInterface()
+    {
+        if (tradeInterfaceMaster != null && tradeInterface != null)
+        {
+            Debug.Log("Component TradeInterface trobat correctament.");
+            tradeInterface.tradeManager = FindObjectOfType<TradeManager>();
+            if (tradeInterface.tradeManager != null)
+            {
+                tradeInterface.tradeManager.tradeInterface = tradeInterface;
+            }
+            else
+            {
+                Debug.LogError("No s'ha trobat el component TradeManager a l'escena.");
+            }
+            tradeInterfaceMaster.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, -410, -10);
+            tradeInterfaceMaster.SetActive(false); // Amaga la interfície de comerç inicialment
+        
+        }
+        else
+        {
+            Debug.LogError("Falta assignar al Inspector o el TradeInterfaceMaster o el script de TradeInterface.");
+        }
+        
+    }
+
+    private void ShowTradePanel() // El botó per mostrar o tancar el mercat
+    {
+        if (!isMarketOpen)
+        {
+            // Mostrar el panell de comerç
+            tradeInterfaceMaster.SetActive(true);
+            tradeInterface.UpdateTradeInterface();
+
+            // Canviar el text del botó
+            PInfoToMarketTxt.text = "Leave Market";
+            isMarketOpen = true;
+        }
+        else
+        {
+            // Amagar el panell de comerç
+            tradeInterfaceMaster.SetActive(false);
+            tradeManager.TradeDeskCleanup();
+
+            // Canviar el text del botó
+            PInfoToMarketTxt.text = "Go to Market";
+            isMarketOpen = false;
+        }
     }
 
     // Funció per aplicar les dades de base de l'edifici. Tot el que es quedarà fixe

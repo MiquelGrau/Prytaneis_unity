@@ -9,7 +9,7 @@ public class BuildingManager : MonoBehaviour
 {
     public GameManager gameManager;
     public DataManager dataManager;
-    public BuildingInterfaces buildingInterfaces;
+    public CityInterface cityInterface;
 
     // Desplegable i botó inicial
     public TMP_Dropdown buildingDropdown;
@@ -20,10 +20,10 @@ public class BuildingManager : MonoBehaviour
     {
         PopulateBuildingDropdown();
         createBuildingButton.onClick.AddListener(CreateNewBuilding);
-        buildingInterfaces.UpdateBuildingGridForCity(gameManager.CurrentCity);
+        cityInterface.UpdateBuildingGridForCity(gameManager.CurrentCity);
 
         // Agents
-        buildingInterfaces.UpdateAgentGrid();
+        cityInterface.UpdateAgentGrid();
         
     }
 
@@ -168,13 +168,13 @@ public class BuildingManager : MonoBehaviour
             Debug.Log($"Edifici afegit a la ciutat {currentCity.cityName}: {newBuilding.BuildingName}");
             
             // Actualitza la graella d'edificis per la ciutat actual
-            if (buildingInterfaces != null)
+            if (cityInterface != null)
             {
-                buildingInterfaces.UpdateBuildingGridForCity(currentCity);
+                cityInterface.UpdateBuildingGridForCity(currentCity);
             }
             else
             {
-                Debug.LogError("BuildingInterfaces no està assignat!");
+                Debug.LogError("cityInterface no està assignat!");
             }
 
         }
