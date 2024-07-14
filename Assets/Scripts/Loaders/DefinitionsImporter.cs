@@ -156,21 +156,28 @@ public class DatabaseImporter : MonoBehaviour
             Debug.LogError("No es pot trobar el fitxer LifestyleData.json a la ruta especificada.");
             return;
         }
-        LifestyleTier[] tempArray = JsonUtility.FromJson<LifestyleWrapper>(jsonData.text).Items;
-        DataManager.lifestyleTiers = new List<LifestyleTier>(tempArray);
-        // Logs
-            // Linia a linia
-        /* foreach (var tier in lifestyleTiers)
+        //LifestyleTier[] tempArray = JsonUtility.FromJson<LifestyleWrapper>(jsonData.text).Items;
+        LifestyleWrapper lifestyleWrapper = JsonConvert.DeserializeObject<LifestyleWrapper>(jsonData.text);
+        if (lifestyleWrapper != null && lifestyleWrapper.Items != null)
         {
-            Debug.Log($"Carregat lifestyle Tier {tier.TierID}, {tier.TierName}");
-            foreach (var demand in tier.LifestyleDemands)
-            {
-                Debug.Log($"{demand.resourceType}, {demand.quantityPerThousand} {demand.monthsCritical} {demand.monthsTotal} {demand.resourceVariety}");
-            }
-        } */
-        Debug.Log($"Llistats de LifestyleTier i LifestyleData carregats. "+
-            $"Total de LifestyleTiers: {DataManager.lifestyleTiers.Count}");
+            DataManager.lifestyleTiers = new List<LifestyleTier>(lifestyleWrapper.Items);
+            Debug.Log($"Llistats de LifestyleTier i LifestyleData carregats. Total de LifestyleTiers: {DataManager.lifestyleTiers.Count}");
 
+            // Debugs
+            /* foreach (var tier in DataManager.lifestyleTiers)
+            {
+                Debug.Log($"Loaded LifestyleTier: {tier.TierID}, {tier.TierName}, NextTierID: {tier.NextTierID}, Demands: {tier.LifestyleDemands.Count}");
+                foreach (var demand in tier.LifestyleDemands)
+                {
+                    Debug.Log($"  Demand - ResType: {demand.ResType}, DemType: {demand.DemType}, Position: {demand.Position}, MonthlyQty: {demand.MonthlyQty}, MonthsCrit: {demand.MonthsCrit}, MonthsTotal: {demand.MonthsTotal}");
+                }
+            } */
+        }
+        else
+        {
+            Debug.LogError("Error en deserialitzar les dades del JSON.");
+        }
+        
     }
 
     private void LoadResourceData()

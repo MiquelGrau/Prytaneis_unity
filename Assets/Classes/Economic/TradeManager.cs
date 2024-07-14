@@ -32,6 +32,9 @@ public class TradeManager : MonoBehaviour
         // Afegir escoltadors d'esdeveniments als desplegables
         cityDropdown.onValueChanged.AddListener(OnCitySelected);
         agentDropdown.onValueChanged.AddListener(OnAgentSelected);
+
+        /* Button tradeCompleteButton = tradeInterface.tradeCompleteButton;
+        tradeCompleteButton.onClick.AddListener(FinalizeTrade); */
     }
 
     public class TradeDesk  // La classe amb "tota la negociació". No nomes les linies, sino diners totals i info de les parts. 
@@ -254,14 +257,10 @@ public class TradeManager : MonoBehaviour
     {
         // Obtenir les referències a les dades de la ciutat i de l'agent des de GameManager
         CityData currentCity = GameManager.Instance.CurrentCity;
+        currentCityInventory = currentCity.CityInventory;
         Agent currentAgent = GameManager.Instance.CurrentAgent;
-
-        // Obtenir els inventaris de la ciutat i de l'agent
-        //CityInventory currentCityInventory = currentCity?.CityInventory;
-        currentCityInventory = currentCity?.CityInventory;
-        AgentInventory agentInventory = currentAgent?.Inventory;
+        AgentInventory agentInventory = currentAgent.Inventory;
         
-
         
         // Aquest diccionari temporal ajudarà a gestionar les TradeResourceLines de manera eficient
         Dictionary<string, TradeResourceLine> tempTradeLines = new Dictionary<string, TradeResourceLine>();
@@ -381,6 +380,10 @@ public class TradeManager : MonoBehaviour
             CurrentTrade.LeftMoneyMid += resourceLine.BuyPriceCurrent;
             CurrentTrade.RightMoneyMid -= resourceLine.BuyPriceCurrent;
             resourceLine.ToTradeMoney -= resourceLine.BuyPriceCurrent;
+            
+            // Recalcular el valor unitari ponderat
+            int oldQtyCurrentRight = resourceLine.QtyCurrentRight - 1; // Quantitat abans de la compra actual
+            resourceLine.ValueCurrentRight = Mathf.RoundToInt((oldQtyCurrentRight * resourceLine.ValueCurrentRight + resourceLine.BuyPriceCurrent) / resourceLine.QtyCurrentRight);
 
             // Recalcular preu per aquest recurs
             RecalcPriceForResource(resourceLine);
@@ -440,6 +443,90 @@ public class TradeManager : MonoBehaviour
         CurrentTrade.RightMoneyEnd = CurrentTrade.RightMoneyStart;
         CurrentTrade.LeftWaresEnd = CurrentTrade.LeftWaresStart;
         CurrentTrade.RightWaresEnd = CurrentTrade.RightWaresStart;
+    }
+
+    public void FinalizeTrade()
+    {
+        Debug.Log("Finalitzant la venda...");
+        foreach (var resourceLine in CurrentTrade.TradeResourceLines)
+        {
+            if (resourceLine.ToTradeQty != 0)
+            {   
+                float unitPrice = resourceLine.ToTradeMoney / resourceLine.ToTradeQty;
+
+                // Si ToTradeQty és positiu, significa compra (city ven a l'agent)
+                if (resourceLine.ToTradeQty > 0)
+                {
+                    // Restar de l'inventari de la ciutat
+                    var cityResource = currentCityInventory.InventoryResources.FirstOrDefault(r => r.ResourceID == resourceLine.ResourceID);
+                    if (cityResource != null)
+                    {
+                        cityResource.Quantity -= resourceLine.ToTradeQty;
+                    }
+
+                    // Sumar a l'inventari de l'agent
+                    var agentResource = currentAgentInventory.InventoryResources.FirstOrDefault(r => r.ResourceID == resourceLine.ResourceID);
+                    if (agentResource != null)
+                    {
+                        int oldQty = (int)agentResource.Quantity;
+                        agentResource.Quantity += resourceLine.ToTradeQty;
+                        agentResource.CurrentValue = Mathf.RoundToInt((oldQty * agentResource.CurrentValue + resourceLine.ToTradeQty * unitPrice) / (oldQty + resourceLine.ToTradeQty));
+                    }
+                    else
+                    {
+                        currentAgentInventory.InventoryResources.Add(new InventoryResource
+                        {
+                            ResourceID = resourceLine.ResourceID,
+                            ResourceType = resourceLine.ResourceType,
+                            Quantity = resourceLine.ToTradeQty,
+                            CurrentValue = Mathf.RoundToInt(unitPrice)
+                        });
+                    }
+                }
+                // Si ToTradeQty és negatiu, significa venda (agent ven a la ciutat)
+                else if (resourceLine.ToTradeQty < 0)
+                {
+                    // Restar de l'inventari de l'agent
+                    var agentResource = currentAgentInventory.InventoryResources.FirstOrDefault(r => r.ResourceID == resourceLine.ResourceID);
+                    if (agentResource != null)
+                    {
+                        agentResource.Quantity += resourceLine.ToTradeQty; // Aquí ToTradeQty és negatiu
+                    }
+
+                    // Sumar a l'inventari de la ciutat
+                    var cityResource = currentCityInventory.InventoryResources.FirstOrDefault(r => r.ResourceID == resourceLine.ResourceID);
+                    if (cityResource != null)
+                    {
+                        int oldQty = (int)cityResource.Quantity;
+                        cityResource.Quantity -= resourceLine.ToTradeQty; // Aquí ToTradeQty és negatiu, així que es suma
+                        cityResource.CurrentValue = Mathf.RoundToInt((oldQty * cityResource.CurrentValue - resourceLine.ToTradeQty * unitPrice) / (oldQty - resourceLine.ToTradeQty));
+                    }
+                    
+                    else
+                    {
+                        currentCityInventory.InventoryResources.Add(new CityInventoryResource
+                        (
+                            resourceLine.ResourceID,
+                            -resourceLine.ToTradeQty,
+                            Mathf.RoundToInt(unitPrice)
+                        ));
+                        
+                    }
+                }
+            }
+        }
+
+        // Transferir els diners
+        currentCityInventory.CityInvMoney += Mathf.RoundToInt(CurrentTrade.LeftMoneyMid);
+        currentAgentInventory.InventoryMoney += Mathf.RoundToInt(CurrentTrade.RightMoneyMid);
+
+        // Reiniciar els valors de la taula de comerç
+        TradeDeskCleanup();
+        SetUpTradeLines();
+
+        // Actualitzar la UI
+        tradeInterface.UpdateTradeInterface();
+        Debug.Log("Venda finalitzada.");
     }
 
 }

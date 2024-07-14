@@ -94,7 +94,17 @@ public class TradeInterface : MonoBehaviour
             sellButton.interactable = line.QtyCurrentRight > 0;
         }
 
+        // Botó per finalitzar la venda
+        Button finalizeTradeButton = tradeIM.transform.Find("FinalizeTradeBB").GetComponent<Button>();
         
+        finalizeTradeButton.interactable = 
+            tradeManager.CurrentTrade.TradeResourceLines.Any(line => line.ToTradeQty != 0) &&
+            tradeManager.CurrentTrade.LeftMoneyEnd > 0 &&
+            tradeManager.CurrentTrade.RightMoneyEnd > 0;
+
+        finalizeTradeButton.onClick.RemoveAllListeners();
+        finalizeTradeButton.onClick.AddListener(tradeManager.FinalizeTrade);
+
     }
 
     // Potser vols una funció que s'activi quan es selecciona una ciutat o agent per actualitzar la UI

@@ -8,8 +8,7 @@ using UnityEngine;
 public class DemandManager : MonoBehaviour
 {
     
-    public DataManager dataManager; 
-    public List<LifestyleTier> lifestyleTiers; 
+    //public List<LifestyleTier> demandTiers; 
     
     public TextMeshProUGUI inventoryDisplayText; 
 
@@ -20,15 +19,17 @@ public class DemandManager : MonoBehaviour
     private void Start()
     {  
         Debug.Log("Iniciant DemandManager...");
-        lifestyleTiers = DataManager.lifestyleTiers; 
+        //demandTiers = DataManager.Instance.lifestyleTiers; 
         
         // Calcula les demandes basades en la ciutat actual
-        foreach (CityData city in dataManager.allCityList)
+        foreach (CityData city in DataManager.Instance.allCityList)
         {
             GetTierNeedsForCity(city);
+            GenerateMarketDemands(city);
+            CalculateAllCityPrices(city);
         }
-        GenerateMarketDemands();
-        CalculateAllCityPrices();
+        
+       
         Debug.Log("Demandes per població a la ciutat calculades");
         
     }
@@ -38,116 +39,15 @@ public class DemandManager : MonoBehaviour
         
         if (GlobalTime.Instance.currentDayTime >= timeToWait && !firstDemand) // Aplico directament el "daytime", que és com la hora
         {
-            Debug.Log("Aplicats calculs a segon 2");
+            Debug.Log("Aplicats calculs de demanda a segon 2");
 
             //AssignDemandsToVarieties();
-            GenerateMarketDemands();    // Versió simple, només a currentcity
+            GenerateMarketDemands(GameManager.Instance.CurrentCity);  
+            CalculateAllCityPrices(GameManager.Instance.CurrentCity); 
             inventoryDisplayText.text = GetCityInventoryDisplayText();
-            CalculateAllCityPrices();   // Versio simple, només ho fa a la CurrentCity
             firstDemand = true;
         }
     }
-
-    /* private void GetTierNeedsForCity(CityData chosenCity) 
-    {
-        if (chosenCity == null)
-        {
-            Debug.LogError("La ciutat passada a GetTierNeedsForCity és null.");
-            return;
-        }
-
-        CityInventory chosenCityInventory = chosenCity.CityInventory;
-        if (chosenCityInventory  == null)
-        {
-            Debug.LogError("No s'ha assignat cap inventari de ciutat.");
-            return;
-        }
-        
-        // Netejar les CityDemands existents
-        chosenCityInventory.Demands.Clear();
-
-        // Obtenir els LifestyleTiers per a cada grup de població
-        LifestyleTier[] specificTiers = {
-            lifestyleTiers.Find(tier => tier.TierID == chosenCity.PoorLifestyleID),
-            lifestyleTiers.Find(tier => tier.TierID == chosenCity.MidLifestyleID),
-            lifestyleTiers.Find(tier => tier.TierID == chosenCity.RichLifestyleID)
-        };
-
-        int[] populations = { chosenCity.PoorPopulation, chosenCity.MidPopulation, chosenCity.RichPopulation };
-        string[] populationNames = { "pobra", "mitjana", "rica" };
-
-
-        // Inicialitzar o resetejar les línies de CityInventoryResource per a cada ResourceType
-        foreach (var tier in specificTiers)
-        {
-            foreach (var need in tier.LifestyleDemands)
-            {
-                var headerResource = chosenCityInventory.InventoryResources
-                    .FirstOrDefault(resline => resline.ResourceType == need.resourceType && resline.ResourceID == null);
-
-                if (headerResource == null)
-                {
-                    headerResource = new CityInventoryResource(need.resourceType);
-                    chosenCityInventory.InventoryResources.Add(headerResource);
-                }
-                else
-                {
-                    headerResource.Quantity = 0;
-                    headerResource.DemandConsume = 0;
-                    headerResource.DemandCritical = 0;
-                    headerResource.DemandTotal = 0;
-                }
-            }
-        }
-
-        // Ara calcula les demandes per a cada grup de població. Es queda guardat a DEMANDS, no a inventory. 
-        for (int i = 0; i < specificTiers.Length; i++)
-        {
-            LifestyleTier tier = specificTiers[i];
-            // Debug part
-            if (tier == null)
-            {
-                Debug.LogError($"El tier per a la població {populationNames[i]} és null.");
-                continue;
-            }
-            
-            // Per a cada tier que tinc a la ciutat (es a dir, els 3 que hi ha), llista les needs i volca-ho al CityInventory
-            foreach (var need in tier.LifestyleDemands)
-            {
-                
-                // Inicialitzar o resetejar les línies de CityInventoryResource basades en ResourceType
-                var headerResource = chosenCityInventory.InventoryResources
-                .FirstOrDefault(resline => resline.ResourceType == need.resourceType && resline.ResourceID == null);
-                
-                CityInventory.CityDemands newDemand = new CityInventory.CityDemands(
-                    CityInventory.CityDemands.DemandType.ResourceType, 
-                    need.resourceType, 
-                    populationNames[i], 
-                    need.resourceVariety);
-                
-                // Calcular les demandes
-                newDemand.DemandConsume = populations[i] * need.quantityPerThousand / 1000;
-                newDemand.DemandCritical = newDemand.DemandConsume * need.monthsCritical;
-                newDemand.DemandTotal = newDemand.DemandConsume * need.monthsTotal;
-
-                // Afegir a la llista de CityDemands
-                chosenCityInventory.Demands.Add(newDemand);
-
-                    
-                // Mou al Inventoryresource
-                headerResource.DemandConsume += newDemand.DemandConsume;
-                headerResource.DemandCritical += newDemand.DemandCritical;
-                headerResource.DemandTotal += newDemand.DemandTotal;
-     
-                // Log de la informació
-                //Debug.Log($"ResourceType: {newDemand.ResourceType}, PopulationType: {newDemand.PopulationType}, " +
-                //        $"Variety: {newDemand.Variety}, Demands: {newDemand.DemandConsume} / " +
-                //        $"{newDemand.DemandCritical} / {newDemand.DemandTotal}");
-                
-            }
-        }
-
-    } */
 
     private void GetTierNeedsForCity(CityData chosenCity) 
     {
@@ -157,6 +57,7 @@ public class DemandManager : MonoBehaviour
             Debug.LogError("La ciutat passada a GetTierNeedsForCity és null.");
             return;
         }
+        Debug.Log($"Processant la ciutat: {chosenCity.cityName} (ID: {chosenCity.cityID})");
 
         CityInventory chosenCityInventory = chosenCity.CityInventory;
         if (chosenCityInventory == null)
@@ -167,15 +68,30 @@ public class DemandManager : MonoBehaviour
         
         // Netejar les PopDemands existents
         chosenCityInventory.PopDemands.Clear();
+        Debug.Log($"Inventari de ciutat netejat per {chosenCity.cityName}.");
+
 
         // Obtenir els LifestyleTiers per a cada grup de població
         var totalPopDemands = new List<LifestyleTier>
         {
-            lifestyleTiers.Find(tier => tier.TierID == chosenCity.PoorLifestyleID),
-            lifestyleTiers.Find(tier => tier.TierID == chosenCity.MidLifestyleID),
-            lifestyleTiers.Find(tier => tier.TierID == chosenCity.RichLifestyleID)
+            DataManager.lifestyleTiers.Find(tier => tier.TierID == chosenCity.PoorLifestyleID),
+            DataManager.lifestyleTiers.Find(tier => tier.TierID == chosenCity.MidLifestyleID),
+            DataManager.lifestyleTiers.Find(tier => tier.TierID == chosenCity.RichLifestyleID)
         };
-
+        
+        if (totalPopDemands[0] == null)
+        {
+            Debug.LogError($"No s'ha trobat LifestyleTier per PoorLifestyleID: {chosenCity.PoorLifestyleID}");
+        }
+        if (totalPopDemands[1] == null)
+        {
+            Debug.LogError($"No s'ha trobat LifestyleTier per MidLifestyleID: {chosenCity.MidLifestyleID}");
+        }
+        if (totalPopDemands[2] == null)
+        {
+            Debug.LogError($"No s'ha trobat LifestyleTier per RichLifestyleID: {chosenCity.RichLifestyleID}");
+        }
+        
         int[] populations = { chosenCity.PoorPopulation, chosenCity.MidPopulation, chosenCity.RichPopulation };
         string[] populationClasses = { "Poor", "Mid", "Rich" };
 
@@ -183,6 +99,12 @@ public class DemandManager : MonoBehaviour
         for (int i = 0; i < totalPopDemands.Count; i++)
         {
             var tier = totalPopDemands[i];
+            if (tier == null)
+            {
+                Debug.LogError($"El LifestyleTier per {populationClasses[i]} és null. Saltant aquest grup de població.");
+                continue;
+            }
+            
             foreach (var demand in tier.LifestyleDemands)
             {
                 var newDemand = new PopulationDemand(
@@ -195,97 +117,33 @@ public class DemandManager : MonoBehaviour
                 newDemand.ConsumeQty = populations[i] * demand.MonthlyQty / 1000;
                 newDemand.CritQty = newDemand.ConsumeQty * demand.MonthsCrit;
                 newDemand.TotalQty = newDemand.ConsumeQty * demand.MonthsTotal;
-
+                
                 // Afegir a la llista de PopDemands
                 chosenCityInventory.PopDemands.Add(newDemand);
             }
         }
+        Debug.Log($"Processament de demandes complet per la ciutat: {chosenCity.cityName} (ID: {chosenCity.cityID})");
     }
 
 
-    /* public void AssignDemandsToVarieties()
+    private void GenerateMarketDemands(CityData city)
     {
-        CityData currentCity = GameManager.Instance.CurrentCity;
-        CityInventory currentCityInventory = currentCity.CityInventory;
+        //CityData currentCity = GameManager.Instance.CurrentCity;
+        CityInventory cityInventory = city.CityInventory;
 
-        // Primer, netejar les demandes existents de linies de recursos d'inventari
-        foreach (var resline in currentCityInventory.InventoryResources)
-        {
-            if (resline.ResourceID != null)
-            {
-                resline.DemandConsume = 0;
-                resline.DemandCritical = 0;
-                resline.DemandTotal = 0;
-            }
-        }
-
-        // Assignar les demandes a les varietats
-        foreach (var demand in currentCityInventory.Demands)
-        {
-            // Ordenar els resource lines d'inventari per quantitat, de major a menor
-            var sortedInventoryResLines = currentCityInventory.InventoryResources
-                .Where(resline => resline.ResourceType == demand.ResourceType && resline.ResourceID != null)
-                .OrderByDescending(resline => resline.Quantity)
-                .ToList();
-
-            // Assignar les demandes a les varietats
-            for (int i = 0; i < demand.Variety && i < sortedInventoryResLines.Count; i++)
-            {
-                var resline = sortedInventoryResLines[i];
-                resline.DemandConsume += demand.DemandConsume / demand.Variety;
-                resline.DemandCritical += demand.DemandCritical / demand.Variety;
-                resline.DemandTotal += demand.DemandTotal / demand.Variety;
-
-                // Buscar el nom del recurs
-                var matchedResource = DataManager.resourcemasterlist.FirstOrDefault(r => r.ResourceID == resline.ResourceID);
-                string resourceName = matchedResource != null ? matchedResource.ResourceName : "Desconegut";
-
-                // Afegir log per a cada resource line
-                //Debug.Log($"ResourceType: {resline.ResourceType}, ID: {resline.ResourceID}, {resourceName}, Qty: {resline.Quantity} " +
-                //$"Demands: {resline.DemandConsume} / {resline.DemandCritical} / {resline.DemandTotal}");
-            }
-        }
-
-        // Sumar les quantitats per a cada ResourceType i assignar-les als elements header
-        foreach (var resourceType in currentCityInventory.InventoryResources.Select(resline => resline.ResourceType).Distinct())
-        {
-            var headerResource = currentCityInventory.InventoryResources
-                .FirstOrDefault(resline => resline.ResourceType == resourceType && resline.ResourceID == null);
-
-            if (headerResource != null)
-            {
-                float totalQuantity = currentCityInventory.InventoryResources
-                    .Where(resline => resline.ResourceType == resourceType && resline.ResourceID != null)
-                    .Sum(resline => resline.Quantity);
-
-                headerResource.Quantity = totalQuantity;
-
-                // Opcional: Afegir un log per confirmar l'assignació
-                //Debug.Log($"HeaderResource per a {resourceType}: Total Quantity = {totalQuantity}");
-            }
-        }
-
-
-    } */
-    
-    private void GenerateMarketDemands()
-    {
-        CityData currentCity = GameManager.Instance.CurrentCity;
-        CityInventory currentCityInventory = currentCity.CityInventory;
-
-        if (currentCityInventory == null)
+        if (cityInventory == null)
         {
             Debug.LogError("No s'ha assignat cap inventari de ciutat.");
             return;
         }
 
         // Netejar les MarketDemands existents
-        currentCityInventory.MarketDemands.Clear();
+        cityInventory.MarketDemands.Clear();
 
         // Processar les PopulationDemands
-        foreach (var populationDemand in currentCityInventory.PopDemands)
+        foreach (var populationDemand in cityInventory.PopDemands)
         {
-            var existingMarketDemand = currentCityInventory.MarketDemands
+            var existingMarketDemand = cityInventory.MarketDemands
                 .FirstOrDefault(md => md.ResType == populationDemand.ResourceType && 
                                       md.PositionPoor == populationDemand.Position && 
                                       md.PositionMid == populationDemand.Position && 
@@ -322,18 +180,18 @@ public class DemandManager : MonoBehaviour
                     populationDemand.Class == "Pid" ? populationDemand.Position : 0,
                     populationDemand.Class == "Rich" ? populationDemand.Position : 0);
 
-                currentCityInventory.MarketDemands.Add(newMarketDemand);
+                cityInventory.MarketDemands.Add(newMarketDemand);
             }
         }
 
         // Ordenar les MarketDemands per ConsumeQty descendent
-        currentCityInventory.MarketDemands = currentCityInventory.MarketDemands
+        cityInventory.MarketDemands = cityInventory.MarketDemands
             .OrderByDescending(md => md.ConsumeQty).ToList();
 
         // Assignar recursos del inventari, a les demandes de població. Edificis vindran després. 
-        foreach (var marketDemand in currentCityInventory.MarketDemands)
+        foreach (var marketDemand in cityInventory.MarketDemands)
         {
-            var matchingResources = currentCityInventory.InventoryResources
+            var matchingResources = cityInventory.InventoryResources
                 .Where(ir => ir.ResourceType == marketDemand.ResType && ir.ResourceID != null)
                 .OrderByDescending(ir => ir.Quantity)
                 .ToList();
@@ -351,11 +209,11 @@ public class DemandManager : MonoBehaviour
         }
 
         // Processar les BuildingDemands
-        foreach (var buildingDemand in currentCityInventory.BuildingDemands)
+        foreach (var buildingDemand in cityInventory.BuildingDemands)
         {
             if (buildingDemand.AssignedResource != null)
         {
-            var existingMarketDemandWithResource = currentCityInventory.MarketDemands
+            var existingMarketDemandWithResource = cityInventory.MarketDemands
                 .FirstOrDefault(md => md.ResType == buildingDemand.ResType && md.AssignedResource != null && md.AssignedResource.ResourceID == buildingDemand.AssignedResource.ResourceID);
 
             if (existingMarketDemandWithResource != null)
@@ -368,7 +226,7 @@ public class DemandManager : MonoBehaviour
             else
             {
                 // Si no hi ha cap línia amb el mateix ResourceAssigned, buscar per ResType
-                var existingMarketDemand = currentCityInventory.MarketDemands
+                var existingMarketDemand = cityInventory.MarketDemands
                     .FirstOrDefault(md => md.ResType == buildingDemand.ResType && md.AssignedResource == null);
 
                 if (existingMarketDemand != null)
@@ -392,13 +250,13 @@ public class DemandManager : MonoBehaviour
                         0,
                         0);
 
-                    currentCityInventory.MarketDemands.Add(newMarketDemand);
+                    cityInventory.MarketDemands.Add(newMarketDemand);
                 }
             }
         }
         else
         {
-            var existingMarketDemand = currentCityInventory.MarketDemands
+            var existingMarketDemand = cityInventory.MarketDemands
                 .FirstOrDefault(md => md.ResType == buildingDemand.ResType);
 
             if (existingMarketDemand != null)
@@ -419,45 +277,49 @@ public class DemandManager : MonoBehaviour
                     0,
                     0);
 
-                currentCityInventory.MarketDemands.Add(newMarketDemand);
+                cityInventory.MarketDemands.Add(newMarketDemand);
             }
         }
         }
 
         // Ordenar de nou després de processar les BuildingDemands
-        currentCityInventory.MarketDemands = currentCityInventory.MarketDemands
+        cityInventory.MarketDemands = cityInventory.MarketDemands
             .OrderByDescending(md => md.ConsumeQty).ToList();
 
         Debug.Log("MarketDemands generades correctament.");
     }
 
-    public void CalculateAllCityPrices()
+    public void CalculateAllCityPrices(CityData city)
     {
-        CityData currentCity = GameManager.Instance.CurrentCity;
-        CityInventory currentCityInventory = currentCity.CityInventory;
+        CityInventory cityInventory = city.CityInventory;
 
-        foreach (var resline in currentCityInventory.InventoryResources)
+        foreach (var resline in cityInventory.InventoryResources)
         {
             if (resline.ResourceID != null)
             {
-                // Calcula el quantitat de diferencia respecte la demanda
-                float difQty = resline.DemandTotal == 0 ? 3f : 
-                    ((float)resline.Quantity - (float)resline.DemandTotal) / (float)resline.DemandTotal;
-
-                // Calcula la price elasticity segons la fórmula donada: y= -0.6x^3 +0.8x^2 -0.6x +1
-                float priceElasticity = -0.6f * Mathf.Pow(difQty, 3) + 0.8f * Mathf.Pow(difQty, 2) - 0.6f * difQty + 1f;
-
-                // Assegura't que la price elasticity no sigui negativa, posa valor minim, 25%
-                if (priceElasticity < 0f) { priceElasticity = 0.25f; }
-
-                // Troba el base price del recurs
-                var matchedResource = DataManager.resourcemasterlist.FirstOrDefault(r => r.ResourceID == resline.ResourceID);
-                float basePrice = matchedResource != null ? matchedResource.BasePrice : 0f;
-
-                // Calcula el CurrentPrice
-                resline.CurrentPrice = Mathf.RoundToInt(priceElasticity * basePrice);
+                FindPriceForCityResource(resline);  // Separat aixi es pot cridar més vegades
             }
         }
+    }
+
+    private void FindPriceForCityResource(CityInventoryResource resline) // Aqui centralitzo la funció de preu per ciutats
+    {
+        // Calcula el quantitat de diferencia respecte la demanda
+        float difQty = resline.DemandTotal == 0 ? 3f : 
+            ((float)resline.Quantity - (float)resline.DemandTotal) / (float)resline.DemandTotal;
+
+        // Calcula la price elasticity segons la fórmula donada: y= -0.6x^3 +0.8x^2 -0.6x +1
+        float priceElasticity = -0.6f * Mathf.Pow(difQty, 3) + 0.8f * Mathf.Pow(difQty, 2) - 0.6f * difQty + 1f;
+
+        // Assegura't que la price elasticity no sigui negativa, posa valor minim, 25%
+        if (priceElasticity < 0f) { priceElasticity = 0.25f; }
+
+        // Troba el base price del recurs
+        var matchedResource = DataManager.resourcemasterlist.FirstOrDefault(r => r.ResourceID == resline.ResourceID);
+        float basePrice = matchedResource != null ? matchedResource.BasePrice : 0f;
+
+        // Calcula el CurrentPrice
+        resline.CurrentPrice = Mathf.RoundToInt(priceElasticity * basePrice);
     }
     
     // DISPLAY TEXTS

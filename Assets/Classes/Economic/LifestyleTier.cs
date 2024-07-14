@@ -7,12 +7,13 @@ public class LifestyleTier
 {
     public string TierID; 
     public string TierName; 
-    public List<LifestyleDemand> LifestyleDemands;
     public string NextTierID;
+    public List<LifestyleDemand> LifestyleDemands;
     
-    public LifestyleTier(string tierID, string nextTierID)
+    public LifestyleTier(string tierID, string tierName, string nextTierID)
     {
         TierID = tierID;
+        TierName = tierName;
         NextTierID = nextTierID;
         LifestyleDemands = new List<LifestyleDemand>();
         

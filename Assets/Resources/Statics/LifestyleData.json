@@ -1,66 +1,72 @@
-{
+{ 
   "Items":[ 
     {
-      "TierID": 1, "TierName": "Starving",
+      "TierID": "C1", "TierName": "Starving", "NextTierID": "C2",
       "LifestyleDemands": [
-        { "resourceType": "Basic food","quantityPerThousand": 6,"monthsCritical": 1,"monthsTotal": 2,"resourceVariety": 1 }, 
-        { "resourceType": "Heating","quantityPerThousand": 3,"monthsCritical": 0,"monthsTotal": 1,"resourceVariety": 1 }, 
-        { "resourceType": "Textiles","quantityPerThousand": 2,"monthsCritical": 0,"monthsTotal": 1,"resourceVariety": 1 }
+        { "ResType": "Basic food","DemType": "Essential","Position": 1,"MonthlyQty": 6,"MonthsCrit": 1,"MonthsTotal": 2 }, 
+        { "ResType": "Heating","DemType": "Extra","Position": 1,"MonthlyQty": 3,"MonthsCrit": 0,"MonthsTotal": 1 }, 
+        { "ResType": "Textiles","DemType": "Extra","Position": 1,"MonthlyQty": 2,"MonthsCrit": 0,"MonthsTotal": 1 }
       ]
     }, 
     {
-      "TierID": 2, "TierName": "Struggling",
+      "TierID": "C2", "TierName": "Struggling", "NextTierID": "C3",
       "LifestyleDemands": [
-        { "resourceType": "Basic food","quantityPerThousand": 8,"monthsCritical": 1,"monthsTotal": 2,"resourceVariety": 1 }, 
-        { "resourceType": "Everyday food","quantityPerThousand": 4,"monthsCritical": 1,"monthsTotal": 2,"resourceVariety": 1 }, 
-        { "resourceType": "Heating","quantityPerThousand": 3,"monthsCritical": 1,"monthsTotal": 2,"resourceVariety": 1 }, 
-        { "resourceType": "Beverage","quantityPerThousand": 6,"monthsCritical": 0,"monthsTotal": 1,"resourceVariety": 1 }, 
-        { "resourceType": "Textiles","quantityPerThousand": 3,"monthsCritical": 0,"monthsTotal": 1,"resourceVariety": 1 }, 
-        { "resourceType": "Utensils","quantityPerThousand": 0.6,"monthsCritical": 0,"monthsTotal": 1,"resourceVariety": 1 }
+        { "ResType": "Basic food","DemType": "Essential","Position": 1,"MonthlyQty": 8,"MonthsCrit": 1,"MonthsTotal": 2 }, 
+        { "ResType": "Everyday food","DemType": "Normal","Position": 1,"MonthlyQty": 4,"MonthsCrit": 1,"MonthsTotal": 2 }, 
+        { "ResType": "Heating","DemType": "Normal","Position": 1,"MonthlyQty": 3,"MonthsCrit": 1,"MonthsTotal": 2 }, 
+        { "ResType": "Beverage","DemType": "Extra","Position": 1,"MonthlyQty": 6,"MonthsCrit": 0,"MonthsTotal": 1 }, 
+        { "ResType": "Textiles","DemType": "Extra","Position": 1,"MonthlyQty": 3,"MonthsCrit": 0,"MonthsTotal": 1 }, 
+        { "ResType": "Utensils","DemType": "Extra","Position": 1,"MonthlyQty": 0.6,"MonthsCrit": 0,"MonthsTotal": 1 }
       ]
     }, 
     {
-      "TierID": 3, "TierName": "Frugal",
+      "TierID": "C3", "TierName": "Frugal", "NextTierID": "C4",
       "LifestyleDemands": [
-        { "resourceType": "Basic food","quantityPerThousand": 10,"monthsCritical": 1,"monthsTotal": 3,"resourceVariety": 2 }, 
-        { "resourceType": "Everyday food","quantityPerThousand": 5,"monthsCritical": 1,"monthsTotal": 2,"resourceVariety": 1 }, 
-        { "resourceType": "Seasonings","quantityPerThousand": 1,"monthsCritical": 0,"monthsTotal": 1,"resourceVariety": 1 }, 
-        { "resourceType": "Heating","quantityPerThousand": 3,"monthsCritical": 1,"monthsTotal": 2,"resourceVariety": 1 }, 
-        { "resourceType": "Beverage","quantityPerThousand": 7,"monthsCritical": 1,"monthsTotal": 2,"resourceVariety": 1 }, 
-        { "resourceType": "Textiles","quantityPerThousand": 4,"monthsCritical": 1,"monthsTotal": 2,"resourceVariety": 1 }, 
-        { "resourceType": "Clothing","quantityPerThousand": 2,"monthsCritical": 0,"monthsTotal": 1,"resourceVariety": 1 }, 
-        { "resourceType": "Utensils","quantityPerThousand": 0.8,"monthsCritical": 0,"monthsTotal": 1,"resourceVariety": 1 }
+        { "ResType": "Basic food","DemType": "Essential","Position": 1,"MonthlyQty": 8,"MonthsCrit": 1,"MonthsTotal": 3 }, 
+        { "ResType": "Basic food","DemType": "Normal","Position": 2,"MonthlyQty": 2,"MonthsCrit": 1,"MonthsTotal": 3 }, 
+        { "ResType": "Everyday food","DemType": "Normal","Position": 1,"MonthlyQty": 5,"MonthsCrit": 1,"MonthsTotal": 2 }, 
+        { "ResType": "Seasonings","DemType": "Extra","Position": 1,"MonthlyQty": 1,"MonthsCrit": 0,"MonthsTotal": 1 }, 
+        { "ResType": "Heating","DemType": "Normal","Position": 1,"MonthlyQty": 3,"MonthsCrit": 1,"MonthsTotal": 2 }, 
+        { "ResType": "Beverage","DemType": "Normal","Position": 1,"MonthlyQty": 7,"MonthsCrit": 1,"MonthsTotal": 2 }, 
+        { "ResType": "Textiles","DemType": "Normal","Position": 1,"MonthlyQty": 4,"MonthsCrit": 1,"MonthsTotal": 2 }, 
+        { "ResType": "Clothing","DemType": "Extra","Position": 1,"MonthlyQty": 2,"MonthsCrit": 0,"MonthsTotal": 1 }, 
+        { "ResType": "Utensils","DemType": "Extra","Position": 1,"MonthlyQty": 0.8,"MonthsCrit": 0,"MonthsTotal": 1 }
       ]
     }, 
     {
-      "TierID": 4, "TierName": "Modest",
+      "TierID": "C4", "TierName": "Modest", "NextTierID": "C5",
       "LifestyleDemands": [
-        { "resourceType": "Basic food","quantityPerThousand": 10,"monthsCritical": 2,"monthsTotal": 3,"resourceVariety": 2 }, 
-        { "resourceType": "Everyday food","quantityPerThousand": 6,"monthsCritical": 1,"monthsTotal": 2,"resourceVariety": 1 }, 
-        { "resourceType": "Seasonings","quantityPerThousand": 1,"monthsCritical": 0,"monthsTotal": 1,"resourceVariety": 1 }, 
-        { "resourceType": "Heating","quantityPerThousand": 3,"monthsCritical": 2,"monthsTotal": 3,"resourceVariety": 1 }, 
-        { "resourceType": "Beverage","quantityPerThousand": 8,"monthsCritical": 1,"monthsTotal": 4,"resourceVariety": 1 }, 
-        { "resourceType": "Textiles","quantityPerThousand": 4,"monthsCritical": 1,"monthsTotal": 2,"resourceVariety": 1 }, 
-        { "resourceType": "Clothing","quantityPerThousand": 3,"monthsCritical": 0,"monthsTotal": 1,"resourceVariety": 1 }, 
-        { "resourceType": "Utensils","quantityPerThousand": 0.8,"monthsCritical": 1,"monthsTotal": 2,"resourceVariety": 1 }, 
-        { "resourceType": "House goods","quantityPerThousand": 1,"monthsCritical": 0,"monthsTotal": 1,"resourceVariety": 1 }, 
-        { "resourceType": "Medicine","quantityPerThousand": 0.5,"monthsCritical": 0,"monthsTotal": 1,"resourceVariety": 1 }
+        { "ResType": "Basic food","DemType": "Essential","Position": 1,"MonthlyQty": 7,"MonthsCrit": 2,"MonthsTotal": 3 }, 
+        { "ResType": "Basic food","DemType": "Normal","Position": 2,"MonthlyQty": 3,"MonthsCrit": 2,"MonthsTotal": 3 }, 
+        { "ResType": "Everyday food","DemType": "Normal","Position": 1,"MonthlyQty": 6,"MonthsCrit": 1,"MonthsTotal": 2 }, 
+        { "ResType": "Seasonings","DemType": "Extra","Position": 1,"MonthlyQty": 1,"MonthsCrit": 0,"MonthsTotal": 1 }, 
+        { "ResType": "Heating","DemType": "Normal","Position": 1,"MonthlyQty": 3,"MonthsCrit": 2,"MonthsTotal": 3 }, 
+        { "ResType": "Beverage","DemType": "Normal","Position": 1,"MonthlyQty": 8,"MonthsCrit": 1,"MonthsTotal": 4 }, 
+        { "ResType": "Textiles","DemType": "Normal","Position": 1,"MonthlyQty": 4,"MonthsCrit": 1,"MonthsTotal": 2 }, 
+        { "ResType": "Clothing","DemType": "Extra","Position": 1,"MonthlyQty": 3,"MonthsCrit": 0,"MonthsTotal": 1 }, 
+        { "ResType": "Utensils","DemType": "Normal","Position": 1,"MonthlyQty": 0.8,"MonthsCrit": 1,"MonthsTotal": 2 }, 
+        { "ResType": "House goods","DemType": "Extra","Position": 1,"MonthlyQty": 1,"MonthsCrit": 0,"MonthsTotal": 1 }, 
+        { "ResType": "Medicine","DemType": "Extra","Position": 1,"MonthlyQty": 0.5,"MonthsCrit": 0,"MonthsTotal": 1 }
       ]
     }, 
     {
-      "TierID": 5, "TierName": "Satisfied",
+      "TierID": "C5", "TierName": "Satisfied", "NextTierID": "",
       "LifestyleDemands": [
-        { "resourceType": "Basic food","quantityPerThousand": 11,"monthsCritical": 2,"monthsTotal": 4,"resourceVariety": 2 }, 
-        { "resourceType": "Everyday food","quantityPerThousand": 8,"monthsCritical": 2,"monthsTotal": 3,"resourceVariety": 2 }, 
-        { "resourceType": "Luxury food","quantityPerThousand": 1,"monthsCritical": 1,"monthsTotal": 4,"resourceVariety": 1 }, 
-        { "resourceType": "Seasonings","quantityPerThousand": 1.1,"monthsCritical": 1,"monthsTotal": 4,"resourceVariety": 1 }, 
-        { "resourceType": "Heating","quantityPerThousand": 4,"monthsCritical": 2,"monthsTotal": 4,"resourceVariety": 1 }, 
-        { "resourceType": "Beverage","quantityPerThousand": 8,"monthsCritical": 1,"monthsTotal": 4,"resourceVariety": 2 }, 
-        { "resourceType": "Textiles","quantityPerThousand": 4,"monthsCritical": 2,"monthsTotal": 3,"resourceVariety": 2 }, 
-        { "resourceType": "Clothing","quantityPerThousand": 3,"monthsCritical": 1,"monthsTotal": 2,"resourceVariety": 1 }, 
-        { "resourceType": "Utensils","quantityPerThousand": 1,"monthsCritical": 1,"monthsTotal": 2,"resourceVariety": 1 }, 
-        { "resourceType": "House goods","quantityPerThousand": 2,"monthsCritical": 1,"monthsTotal": 2,"resourceVariety": 1 }, 
-        { "resourceType": "Medicine","quantityPerThousand": 0.6,"monthsCritical": 0,"monthsTotal": 1,"resourceVariety": 1 }
+        { "ResType": "Basic food","DemType": "Essential","Position": 1,"MonthlyQty": 7,"MonthsCrit": 2,"MonthsTotal": 4 }, 
+        { "ResType": "Basic food","DemType": "Normal","Position": 2,"MonthlyQty": 4,"MonthsCrit": 2,"MonthsTotal": 4 }, 
+        { "ResType": "Everyday food","DemType": "Essential","Position": 1,"MonthlyQty": 6,"MonthsCrit": 2,"MonthsTotal": 3 }, 
+        { "ResType": "Everyday food","DemType": "Normal","Position": 2,"MonthlyQty": 2,"MonthsCrit": 2,"MonthsTotal": 3 }, 
+        { "ResType": "Luxury food","DemType": "Normal","Position": 1,"MonthlyQty": 1,"MonthsCrit": 1,"MonthsTotal": 4 }, 
+        { "ResType": "Seasonings","DemType": "Normal","Position": 1,"MonthlyQty": 1.1,"MonthsCrit": 1,"MonthsTotal": 4 }, 
+        { "ResType": "Heating","DemType": "Normal","Position": 1,"MonthlyQty": 4,"MonthsCrit": 2,"MonthsTotal": 4 }, 
+        { "ResType": "Beverage","DemType": "Essential","Position": 1,"MonthlyQty": 6,"MonthsCrit": 1,"MonthsTotal": 4 }, 
+        { "ResType": "Beverage","DemType": "Normal","Position": 2,"MonthlyQty": 2,"MonthsCrit": 1,"MonthsTotal": 4 }, 
+        { "ResType": "Textiles","DemType": "Essential","Position": 1,"MonthlyQty": 3,"MonthsCrit": 2,"MonthsTotal": 3 }, 
+        { "ResType": "Textiles","DemType": "Normal","Position": 2,"MonthlyQty": 1,"MonthsCrit": 2,"MonthsTotal": 3 }, 
+        { "ResType": "Clothing","DemType": "Normal","Position": 1,"MonthlyQty": 3,"MonthsCrit": 1,"MonthsTotal": 2 }, 
+        { "ResType": "Utensils","DemType": "Normal","Position": 1,"MonthlyQty": 1,"MonthsCrit": 1,"MonthsTotal": 2 }, 
+        { "ResType": "House goods","DemType": "Normal","Position": 1,"MonthlyQty": 2,"MonthsCrit": 1,"MonthsTotal": 2 }, 
+        { "ResType": "Medicine","DemType": "Extra","Position": 1,"MonthlyQty": 0.6,"MonthsCrit": 0,"MonthsTotal": 1 }
       ]
     }
   ]
