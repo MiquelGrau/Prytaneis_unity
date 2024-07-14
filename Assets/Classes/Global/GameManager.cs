@@ -75,10 +75,10 @@ public class GameManager : MonoBehaviour
         {
             Debug.Log($"La ciutat assignada és '{CurrentCity.cityName}'");
         }
-        else
+        /* else
         {
-            Debug.LogError($"No s'ha trobat cap ciutat amb l'ID '{cityID}'");
-        }
+            Debug.LogError($"No s'ha trobat cap ciutat amb l'ID inicial");
+        } */
     }
     public void AssignCurrentAgent(string agentID)
     {

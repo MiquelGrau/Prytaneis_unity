@@ -56,11 +56,10 @@ public class DataManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        LoadCityData();
-
+        
         // Depuració per a confirmar la càrrega de dades
-        Debug.Log($"Nombre de templates productius carregats: {productiveTemplates.Count}");
-        Debug.Log($"Nombre de templates cívics carregats: {civicTemplates.Count}");
+        //Debug.Log($"Nombre de templates productius carregats: {productiveTemplates.Count}");
+        //Debug.Log($"Nombre de templates cívics carregats: {civicTemplates.Count}");
         
     }
 
@@ -70,53 +69,21 @@ public class DataManager : MonoBehaviour
         File.WriteAllText(dataPath, json);
     }
     
-    public List<CityData> GetCities()
-    {
-        if (dataItems is CityDataList cityDataList)
-        {
-            return cityDataList.cities;
-        }
-        else
-        {
-            Debug.LogError("DataManager no conté una instància de CityDataList.");
-            return new List<CityData>();
-        }
-    }
-
-    private void LoadCityData()
-    {
-        TextAsset cityDataAsset = Resources.Load<TextAsset>("CityData");
-
-        if (cityDataAsset != null)
-        {
-            dataItems = JsonConvert.DeserializeObject<CityDataList>(cityDataAsset.text);
-            //Debug.Log("Dades carregades: " + cityDataAsset.text);
-
-            if (dataItems == null)
-            {
-                Debug.LogError("La deserialització ha fallat. Es pot que el format JSON no coincideixi amb l'estructura de dades esperada.");
-            }
-            else
-            {
-                // Emplenem la llista `allCityList` amb les dades llegides
-                allCityList = new List<CityData>(dataItems.cities); // Crea una nova llista amb les dades deserialitzades
-                Debug.Log($"S'han carregat {allCityList.Count} ciutats.");
-            }
-        }
-        else
-        {
-            dataItems = new CityDataList();
-            Debug.LogError("No es pot trobar el fitxer CityData.json a la carpeta Resources.");
-        }
-    }
+    
     
     //////////////
     // BUSCADORS
     //////////////
 
+    public List<CityData> GetCities()
+    {
+        return allCityList;
+    }
+
     public CityData GetCityDataByID(string cityID)  // Te la demanaran mil vegades, millor tenir això aqui dins
     {
-        return dataItems.cities.FirstOrDefault(city => city.cityID == cityID);
+        //return dataItems.cities.FirstOrDefault(city => city.cityID == cityID);
+        return allCityList.FirstOrDefault(city => city.cityID == cityID);
     }
 
     public List<Agent> GetAgents()

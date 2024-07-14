@@ -18,19 +18,58 @@ public class StartContentImporter : MonoBehaviour
             Debug.LogError("DataManager no trobat en la escena.");
             return;
         }
+        // Hem de separar en dos passos, awake i start, o alguna cosa no s'executarà. 
+        // P. ex. primer posar Cities, i després lo que vagi a dins, com Buildings o Governments. 
+        LoadCityData();
         LoadCityInventory();
         LoadStartAgents();
         LoadAgentInventories();
-        ImportBuildings();
         ImportMineralResources();
     }
 
     private void Start()
     {
+        ImportBuildings();
         ConnectCityAndCityInv();
         ConnectAgentAndAgentInv();
         Debug.Log("Acabada fase Start de l'importador! Connectats inventaris a Ciutats i a Agents");
     }
+
+
+    private void LoadCityData()
+    {
+        //TextAsset cityDataAsset = Resources.Load<TextAsset>("CityData");
+        string path = "Assets/Resources/StartValues/Places";
+        string[] files = Directory.GetFiles(path, "*.json");
+
+        dataManager.allCityList = new List<CityData>();
+
+        foreach (string file in files)
+        {
+            string jsonContent = File.ReadAllText(file);
+            CityDataList cityDataList = JsonConvert.DeserializeObject<CityDataList>(jsonContent);
+
+            if (cityDataList != null && cityDataList.cities != null)
+            {
+                dataManager.allCityList.AddRange(cityDataList.cities);
+                Debug.Log($"S'han carregat {cityDataList.cities.Count} ciutats des de {file}.");
+            }
+            else
+            {
+                Debug.LogError($"No s'ha pogut deserialitzar el contingut de {file}");
+            }
+        }
+
+        if (dataManager.allCityList.Count == 0)
+        {
+            Debug.LogError("No s'ha pogut carregar cap ciutat des dels fitxers JSON.");
+        }
+        else
+        {
+            Debug.Log($"S'han carregat un total de {dataManager.allCityList.Count} ciutats.");
+        }
+    }
+    
 
     private void LoadCityInventory()
     {
@@ -127,7 +166,8 @@ public class StartContentImporter : MonoBehaviour
     {
         Debug.Log("ConnectCityAndCityInv: Començant a connectar ciutats");
         
-        var cities = dataManager.GetCities();
+        //var cities = dataManager.GetCities();
+        var cities = dataManager.allCityList;
         if (cities == null || cities.Count == 0)
         {
             Debug.LogError("ConnectCityAndCityInv: La llista de ciutats és nul·la o buida.");
@@ -425,6 +465,14 @@ public class StartContentImporter : MonoBehaviour
     }
 
 
+}
+
+// WRAPPERS
+
+[System.Serializable]
+public class CityDataList
+{
+    public List<CityData> cities;
 }
 
 
