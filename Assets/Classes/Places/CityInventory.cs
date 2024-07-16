@@ -12,9 +12,6 @@ public class CityInventory
     public List<CityInventoryResource> InventoryResources { get; set; } // Els recursos en sí
     public List<PopulationDemand> PopDemands { get; set; } = new List<PopulationDemand>();  // Demandes de població
     public List<BuildingDemand> BuildingDemands { get; set; } = new List<BuildingDemand>(); // Demandes de edificis
-    public List<ResourceDemand> MarketDemands { get; set; } = new List<ResourceDemand>(); // Tot conjunt i volcat a l'inventari
-
-
     
     // Constructor
     public CityInventory(string cityInvID, string cityID, int cityInvMoney, List<CityInventoryResource> resources)
@@ -42,8 +39,10 @@ public class CityInventoryResource : InventoryResource // El mateix que el Resou
     public float DemandConsume { get; set; }
     public float DemandCritical { get; set; }
     public float DemandTotal { get; set; }
-    public int VarietyAssigned { get; set; }
     public int CurrentPrice { get; set; }
+    public int PositionPoor { get; set; }
+    public int PositionMid { get; set; }
+    public int PositionRich { get; set; }
     
     // Constructors
 
@@ -66,9 +65,10 @@ public class CityInventoryResource : InventoryResource // El mateix que el Resou
         DemandConsume = 0;
         DemandCritical = 0;
         DemandTotal = 0;
-        VarietyAssigned = 0;
         CurrentPrice = 0;
-        
+        PositionPoor = 0;
+        PositionMid = 0;
+        PositionRich = 0;
     }
 
     // Demandes a través de LifestyleTier, crea Resourcetype, nomes la capçalera (header)
@@ -83,8 +83,10 @@ public class CityInventoryResource : InventoryResource // El mateix que el Resou
         DemandConsume = 0;
         DemandCritical = 0;
         DemandTotal = 0;
-        VarietyAssigned = 0;
         CurrentPrice = 0;
+        PositionPoor = 0;
+        PositionMid = 0;
+        PositionRich = 0;
         
     }
     
@@ -94,10 +96,10 @@ public class CityInventoryResource : InventoryResource // El mateix que el Resou
 public class PopulationDemand
 {
     public string Class { get; private set; }
-    public string ResourceType { get; private set; }
+    public string ResourceType { get; set; }
     public string DemType { get; set; }
     public int Position { get; set; }
-    public Resource AssignedResource { get; private set; }
+    public string AssignedResID { get; set; }
     public float CoveredQty { get; set; }
     public float ConsumeQty { get; set; }
     public float CritQty { get; set; }  
@@ -112,7 +114,7 @@ public class PopulationDemand
         ResourceType = resourceType;
         DemType = demType;
         Position = position;
-        AssignedResource = null;
+        AssignedResID = null;
         ConsumeQty = 0;
         CritQty = 0;
         TotalQty = 0;
@@ -126,30 +128,27 @@ public class PopulationDemand
 public class BuildingDemand
 {
     public string ResType { get; private set; }
-    public Resource AssignedResource { get; private set; }
-    public string RelatedBuildID { get; private set; }
+    public string AssignedResID { get; set; }
+    public string RelatedBuildID { get; set; }
     public float CoveredQty { get; set; }
     public float ConsumeQty { get; set; }
     public float CritQty { get; set; }
     public float TotalQty { get; set; }
 
-    // Constructor per ResourceType
-    public BuildingDemand(string resType, string relatedBuildID, float consumeQty, float critQty, float totalQty)
+    // Constructor únic per ResourceType o ResourceID
+    public BuildingDemand(string resTypeOrAssignedResID, string relatedBuildID, float consumeQty, 
+                            float critQty, float totalQty, bool isResType = true)
     {
-        ResType = resType;
-        RelatedBuildID = relatedBuildID;
-        ConsumeQty = consumeQty;
-        CritQty = critQty;
-        TotalQty = totalQty;
-        AssignedResource = null; // Inicialment null
-        CoveredQty = 0; // Inicialment zero
-    }
-
-    // Constructor per ResourceID
-    public BuildingDemand(Resource assignedResource, string relatedBuildID, float consumeQty, float critQty, float totalQty)
-    {
-        ResType = null;
-        AssignedResource = assignedResource;
+        if (isResType)
+        {
+            ResType = resTypeOrAssignedResID;
+            AssignedResID = null;
+        }
+        else
+        {
+            ResType = null;
+            AssignedResID = resTypeOrAssignedResID;
+        }
         RelatedBuildID = relatedBuildID;
         ConsumeQty = consumeQty;
         CritQty = critQty;
@@ -158,29 +157,3 @@ public class BuildingDemand
     }
 }
 
-
-[System.Serializable]
-public class ResourceDemand
-{
-    public string ResType { get; set; }
-    public Resource AssignedResource { get; set; }
-    public float ConsumeQty { get; set; }
-    public float CritQty { get; set; }
-    public float TotalQty { get; set; }
-    public int PositionPoor { get; set; }
-    public int PositionMid { get; set; }
-    public int PositionRich { get; set; }
-
-    // Constructor
-    public ResourceDemand(string resType, Resource assignedResource, float consumeQty, float critQty, float totalQty, int positionPoor, int positionMid, int positionRich)
-    {
-        ResType = resType;
-        AssignedResource = assignedResource;
-        ConsumeQty = consumeQty;
-        CritQty = critQty;
-        TotalQty = totalQty;
-        PositionPoor = positionPoor;
-        PositionMid = positionMid;
-        PositionRich = positionRich;
-    }
-}
