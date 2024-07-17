@@ -265,6 +265,17 @@ public class DemandManager : MonoBehaviour
         // Copiar la llista de InventoryResources amb Quantity positiu i ordenar per Quantity descendent
         List<CityInventoryResource> resourcesToCover = cityInventory.InventoryResources
             .Where(ir => ir.Quantity > 0)
+            .Select(ir => new CityInventoryResource(ir.ResourceID, ir.Quantity, ir.CurrentValue)
+            {
+                ResourceType = ir.ResourceType,
+                DemandConsume = ir.DemandConsume,
+                DemandCritical = ir.DemandCritical,
+                DemandTotal = ir.DemandTotal,
+                CurrentPrice = ir.CurrentPrice,
+                PositionPoor = ir.PositionPoor,
+                PositionMid = ir.PositionMid,
+                PositionRich = ir.PositionRich
+            })
             .OrderByDescending(ir => ir.Quantity)
             .ToList();
 
@@ -304,7 +315,7 @@ public class DemandManager : MonoBehaviour
                 {
                     populationDemand.AssignedResID = resource.ResourceID;
                     float coveredQty = Mathf.Min(resource.Quantity, populationDemand.ConsumeQty);
-                    populationDemand.CoveredQty = coveredQty;
+                    populationDemand.CoveredQty += coveredQty;
                     resource.Quantity -= coveredQty;
                     populationDemand.Fulfilled = populationDemand.CoveredQty >= populationDemand.ConsumeQty;
                 }
