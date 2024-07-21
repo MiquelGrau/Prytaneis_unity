@@ -1,10 +1,10 @@
 using UnityEngine;
-using System.Collections.Generic; // Afegeix aquesta línia
+using System.Collections.Generic; 
 using System.Linq;
 
 public class Route : MonoBehaviour
 {
-    public GameObject planet; // Assigna això des de l'Inspector d'Unity amb el teu objecte Earth
+    public GameObject planet; 
     private List<RouteData> createdRoutes = new List<RouteData>();
     private int routeCounter = 0;
     private List<GameObject> createdLines = new List<GameObject>();

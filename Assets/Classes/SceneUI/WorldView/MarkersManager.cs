@@ -18,12 +18,7 @@ public class MarkersManager : MonoBehaviour
 
     private void Start()
     {
-        if (dataManager.dataItems == null)
-        {
-            Debug.LogError("dataItems és nul. No s'han carregat les dades correctament des de DataManager.");
-            return;
-        }
-
+        
         // Utilitza dades del DataManager per afegir marcadors per a cada node
         foreach (WorldMapNode node in DataManager.worldMapNodes)
         {
@@ -31,8 +26,8 @@ public class MarkersManager : MonoBehaviour
         } 
     }
 
-    //public void AddMarker(CityData city)
-    public void AddMarker(WorldMapNode node)
+    // PART GRAFICA
+    public void AddMarker(WorldMapNode node) // Afegeix nodes al mapa
     {
         Vector3 position = LatLongToPosition(node.latitude, node.longitude);
         GameObject prefabToUse = markerPrefab;
@@ -91,7 +86,8 @@ public class MarkersManager : MonoBehaviour
         }
         return null;
     }
-
+    
+    // CREADOR DE RUTA, optimitza la linia entre dos punts del mapa
     public void OnNewRouteSelected(string startNodeId, string endNodeId)
     {
         ResetMarkersToDefaultMaterial(); // Restaura marcadors a l'estat per defecte
@@ -104,9 +100,15 @@ public class MarkersManager : MonoBehaviour
         }
 
         var routePaths = WorldMapUtils.DijkstraAlgorithm(startNodeId, endNodeId, DataManager.worldMapNodes, DataManager.worldMapLandPaths);
+        
+        // Representacio grafica al mapa
         if (routePaths != null && routePaths.Count > 0)
         {
-            UpdateMarkerMaterialForRoute(routePaths); // Actualitza els marcadors de la nova ruta
+            // Assignar la ruta a l'agent
+            AssignRouteToAgent(routePaths);
+
+            // Actualitza els marcadors de la nova ruta
+            UpdateMarkerMaterialForRoute(routePaths); 
 
             // Converteix els IDs dels nodes de la ruta en marcadors
             List<Marker> markersInRoute = routePaths.SelectMany(path => new[] { path.startNode, path.endNode })
@@ -122,6 +124,104 @@ public class MarkersManager : MonoBehaviour
                 routeManager.DrawLineOnEarth(pathPoints);
             }
         }
+    }
+
+    private void AssignRouteToAgent(List<WorldMapLandPath> routePaths)
+    {
+        var currentAgent = GameManager.Instance.CurrentAgent;
+        if (currentAgent != null)
+        {
+            if (routePaths.Count > 0)
+            {
+                // Converteix el primer path a AgentTravel i l'assigna a Travel
+                currentAgent.Travel = ConvertPathToTravel(routePaths[0]);
+                currentAgent.Travel.Started = true; // Començar el viatge
+
+                // Converteix la resta de paths a AgentTravel i els afegeix a NextTravelSteps
+                currentAgent.NextTravelSteps = routePaths.Skip(1).Select(path => ConvertPathToTravel(path)).ToList();
+                
+                // Debug log per confirmar la ruta de viatge
+                Debug.Log("Confirmada ruta de viatge");
+
+                float totalLength = 0;
+                float totalDays = 0;
+
+                Debug.Log($"Node inicial: {routePaths[0].startNode}, node destí: {routePaths[0].endNode}, distància: {currentAgent.Travel.LengthTotal}, dies: {currentAgent.Travel.DaysTotal}");
+                totalLength += currentAgent.Travel.LengthTotal;
+                totalDays += currentAgent.Travel.DaysTotal;
+
+                foreach (var travel in currentAgent.NextTravelSteps)
+                {
+                    Debug.Log($"Node inicial: {travel.Current}, node destí: {travel.Destination}, distància: {travel.LengthTotal}, dies: {travel.DaysTotal}");
+                    totalLength += travel.LengthTotal;
+                    totalDays += travel.DaysTotal;
+                }
+
+                Debug.Log($"Distància total de la ruta: {totalLength}, dies totals: {totalDays}");
+            }
+        }
+        else
+        {
+            Debug.LogWarning("No hi ha cap agent seleccionat actualment.");
+        }
+    }
+
+    private AgentTravel ConvertPathToTravel(WorldMapLandPath path)
+    {
+        float lengthTotal = 0.0f;
+        for (int i = 0; i < path.pathArray.Count - 1; i++)
+        {
+            WorldMapMarker marker1 = path.pathArray[i];
+            WorldMapMarker marker2 = path.pathArray[i + 1];
+            lengthTotal += (float)WorldMapUtils.HaversineDistance(marker1, marker2);
+        }
+        
+        var travel = new AgentTravel(path.startNode, path.endNode)
+        {
+            PathID = path.landpathId,
+            LengthTotal = lengthTotal,
+            DaysTotal = lengthTotal / GameManager.Instance.CurrentAgent.speed
+        };
+        return travel;
+    }
+
+    public void MoveAllAgents()
+    {
+        var agents = DataManager.Instance.GetAgents();
+        foreach (var agent in agents)
+        {
+            if (agent.Travel != null && agent.Travel.Started)
+            {
+                agent.Travel.LengthDone += agent.speed;
+                agent.Travel.DaysDone += 1;
+
+                if (agent.Travel.LengthDone >= agent.Travel.LengthTotal)
+                {
+                    FinishAgentTravel(agent, agent.Travel);
+                }
+            }
+        }
+    }
+    public void FinishAgentTravel(Agent agent, AgentTravel travel)
+    {
+        agent.LocationNode = travel.Destination;
+
+        // Elimina el AgentTravel actual
+        agent.Travel = null;
+
+        // Trasllada el primer de NextTravelSteps a Travel
+        if (agent.NextTravelSteps.Count > 0)
+        {
+            agent.Travel = agent.NextTravelSteps[0];
+            agent.Travel.Started = true;
+            agent.NextTravelSteps.RemoveAt(0);
+        }
+
+        // Obté els noms dels nodes per al debug.log
+        var currentNodeName = DataManager.Instance.NodeNameByID(travel.Current);
+        var destinationNodeName = DataManager.Instance.NodeNameByID(travel.Destination);
+
+        Debug.Log($"Viatge fet entre {currentNodeName} i {destinationNodeName}");
     }
 
 
@@ -160,7 +260,8 @@ public class MarkersManager : MonoBehaviour
         }
     }
 
-    public void CreateRouteBetweenMarkers(string startMarkerId, string endMarkerId)
+    // La part de la interficie gràfica en el mapa
+    public void CreateRouteBetweenMarkers(string startMarkerId, string endMarkerId) 
     {
         Marker startMarker = allMarkers.FirstOrDefault(marker => marker.id == startMarkerId);
         Marker endMarker = allMarkers.FirstOrDefault(marker => marker.id == endMarkerId);

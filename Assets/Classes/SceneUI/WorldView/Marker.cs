@@ -31,7 +31,7 @@ public class Marker : MonoBehaviour
         currentMode = newMode;
     }
 
-     private void OnMouseDown()
+    private void OnMouseDown() // LMB, clic esquerra. Info sobre la ciutat, o preparar ruta. 
     {
         switch (currentMode)
         {
@@ -43,11 +43,23 @@ public class Marker : MonoBehaviour
 
             case WorldSceneInteractionMode.Route:
                 Debug.Log($"Mode Route: Creant ruta cap a {cityName}, ID {id}.");
-                string startNodeId = "LN0001";
+                /* string startNodeId = "LN0001";
                 var markersManager = FindObjectOfType<MarkersManager>(); // Troba l'instància de MarkersManager
-                 if (markersManager != null)
+                if (markersManager != null)
                 {
                     markersManager.OnNewRouteSelected(startNodeId, id); // Inicia la generació de la ruta amb l'ID actual com a destí
+                } */
+
+                // Obtenim l'agent actual des de GameManager
+                var currentAgent = GameManager.Instance.CurrentAgent;
+                if (currentAgent != null)
+                {
+                    string startNodeId = currentAgent.LocationNode; 
+                    var markersManager = FindObjectOfType<MarkersManager>(); // Troba l'instància de MarkersManager
+                    if (markersManager != null)
+                    {
+                        markersManager.OnNewRouteSelected(startNodeId, id); // Inicia la generació de la ruta amb l'ID actual com a destí
+                    }
                 }
                 break;
 

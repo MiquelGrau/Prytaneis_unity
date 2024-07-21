@@ -12,6 +12,9 @@ public class GameManager : MonoBehaviour
     public Agent CurrentAgent { get; private set; }
     public AgentInventory CurrentAgentInventory { get; private set; }
 
+    // Referencies a managers
+    public MarkersManager markersManager;
+
     
     
     void Awake()
@@ -55,7 +58,9 @@ public class GameManager : MonoBehaviour
     private void HandleDayChanged()
     {
         Debug.Log($"Un nou dia ha començat: {GlobalTime.Instance.GetCurrentDate()}");
-        ProductionManager.Instance.UpdateProduction();
+        //ProductionManager.Instance.UpdateProduction();
+
+        markersManager.MoveAllAgents();
     }
 
     private void HandleMonthChanged()
@@ -102,4 +107,6 @@ public class GameManager : MonoBehaviour
             Debug.LogError($"No s'ha trobat cap agent amb l'ID '{agentID}'");
         }
     }
+
+    
 }

@@ -7,14 +7,26 @@ public class Agent
 {
     public string agentID;
     public string agentName;   // wil get the main character's name, probably
+    
+    // Propietats relacionals
     public string LocationNode; 
+    // Owner
+    
+    // Propietats de contingut
     public string AgentInventoryID; 
     public AgentInventory Inventory; 
     public string MainCharID; 
     public Character MainCharacter; 
     //public List<Character> CompanionCharacters; 
     //public List<Vehicle> VehicleList; 
+    
+    // Propietats de viatge
     public string TravelMode; // "land", "water", "messenger", "star"
+    public float speed; 
+    public AgentTravel Travel; 
+    public List<AgentTravel> NextTravelSteps; 
+
+
 
     /* public Agent()
     {
@@ -33,6 +45,9 @@ public class Agent
         //this.CompanionCharacters = companionCharacters ?? new List<Character>(); 
         //this.VehicleList = vehicleList ?? new List<Vehicle>(); 
         this.TravelMode = null; // Es calcula
+        this.speed = 20.0f; // Velocitat fixa inicial
+        this.Travel = null; // Inicialitza la propietat Travel
+        this.NextTravelSteps = new List<AgentTravel>(); // Inicialitza la llista de Travel
     }
 
     
@@ -40,20 +55,47 @@ public class Agent
     // Pots afegir aquí mètodes específics d'Agent si és necessari
 }
 
-
-
-/* [System.Serializable]
-public class Agent
+[System.Serializable]
+public class AgentTravel
 {
-    public string agentID;
-    public string agentName;
-    public string locationNodeID; 
-    public AgentInventory AgInventoryID { get; set; }
-    //public int inventoryID; 
-    //public int money;
-    
+    public string TravelID;
+    public string Current;
+    public string Destination;
+    public string PathID;
+    public float LengthDone;
+    public float LengthTotal;
+    public float DaysTotal;
+    public float DaysDone;
+    public bool Started;
+
+    // Constructor per inicialitzar les propietats de AgentTravel amb current i destination
+    public AgentTravel(string current, string destination)
+    {
+        this.TravelID = ""; 
+        this.Current = current;
+        this.Destination = destination;
+        this.PathID = "";
+        this.LengthDone = 0.0f;
+        this.LengthTotal = 0.0f;
+        this.DaysTotal = 0.0f;
+        this.DaysDone = 0.0f;
+        this.Started = false;
+    }
+
+    // Constructor per inicialitzar les propietats de AgentTravel amb pathID
+    public AgentTravel(string pathID)
+    {
+        this.TravelID = ""; 
+        this.Current = "";
+        this.Destination = "";
+        this.PathID = pathID;
+        this.LengthDone = 0.0f;
+        this.LengthTotal = 0.0f;
+        this.DaysTotal = 0.0f;
+        this.DaysDone = 0.0f;
+        this.Started = false;
+    }
 }
- */
 
 [System.Serializable]
 public class AgentString

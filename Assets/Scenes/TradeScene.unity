@@ -5106,7 +5106,7 @@ GameObject:
   - component: {fileID: 1301510096}
   - component: {fileID: 1301510097}
   m_Layer: 0
-  m_Name: GOLoaders
+  m_Name: GOGlobals
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
