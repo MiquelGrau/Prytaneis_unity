@@ -111,6 +111,11 @@ public class DataManager : MonoBehaviour
     {
         return worldMapNodes.FirstOrDefault(node => node.id == nodeId);
     }
+    public string NodeNameByID(string nodeId)
+    {
+        var node = worldMapNodes.FirstOrDefault(n => n.id == nodeId);
+        return node != null ? node.name : "Unknown Node";
+    }
 
     
     // Funció per obtenir el nom de la plantilla basant-se en l'ID
