@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Planet : MonoBehaviour {
-
-    [Range(2,256)]
+public class Planet : MonoBehaviour
+{
+    [Range(2, 256)]
     public int resolution = 10;
 
     [SerializeField, HideInInspector]
@@ -18,14 +18,18 @@ public class Planet : MonoBehaviour {
     private RotateObject rotateObject;
     private List<GameObject> objectsToDestroy = new List<GameObject>();
 
-    private void Start() {
-        ManuallyUpdatePlanet();
-
+    private void Awake()
+    {
         mainCamera = Camera.main;
         zoomCamera = mainCamera.GetComponent<ZoomCamera>();
         rotateObject = GetComponent<RotateObject>();
     }
-     
+
+    private void Start()
+    {
+        ManuallyUpdatePlanet();
+    }
+
     public void ManuallyUpdatePlanet()
     {
         Initialize();
@@ -34,14 +38,13 @@ public class Planet : MonoBehaviour {
 
     void Initialize()
     {
-        // Elimina els chunks i les meshes existents
         foreach (Transform child in transform)
         {
             objectsToDestroy.Add(child.gameObject);
         }
         foreach (var obj in objectsToDestroy)
         {
-            DestroyImmediate(obj);
+            Destroy(obj);
         }
         objectsToDestroy.Clear();
 
@@ -55,11 +58,12 @@ public class Planet : MonoBehaviour {
             GameObject meshObj = new GameObject("mesh");
             meshObj.transform.parent = transform;
 
-            meshObj.AddComponent<MeshRenderer>().sharedMaterial = earthMaterial;
+            var meshRenderer = meshObj.AddComponent<MeshRenderer>();
+            meshRenderer.sharedMaterial = earthMaterial;
             meshFilters[i] = meshObj.AddComponent<MeshFilter>();
             meshFilters[i].sharedMesh = new Mesh();
 
-            terrainFaces[i] = new TerrainFace(meshFilters[i].sharedMesh, resolution, directions[i], heightMap, heightMultiplier, meshObj.GetComponent<MeshRenderer>(), earthMaterial);
+            terrainFaces[i] = new TerrainFace(meshFilters[i].sharedMesh, resolution, directions[i], heightMap, heightMultiplier, meshRenderer, earthMaterial);
         }
     }
 
@@ -85,12 +89,12 @@ public class Planet : MonoBehaviour {
         {
             return;
         }
-        if (mainCamera != null) 
+        if (mainCamera != null)
         {
             Plane[] planes = GeometryUtility.CalculateFrustumPlanes(mainCamera);
             foreach (var face in terrainFaces)
             {
-                if (face != null)  // Afegeix aquesta comprovació
+                if (face != null)
                 {
                     var chunks = face.GetChunks();
                     if (chunks != null)
@@ -119,19 +123,23 @@ public class Planet : MonoBehaviour {
 
     public float GetHeightAtLatLon(float lat, float lon)
     {
-        // Convertir latitud i longitud a coordenades UV
         float u = (lon + 180) / 360f;
         float v = (lat + 90) / 180f;
 
-        // Accedir al píxel corresponent del heightMap
         Color heightColor = heightMap.GetPixelBilinear(u, v);
 
-        // Convertir el color a una altura (suposant que l'altura està emmagatzemada en l'escala de grisos)
         float height = heightColor.grayscale;
-
-        // Escalar l'altura amb el heightMultiplier
         height *= heightMultiplier;
 
         return height;
+    }
+
+    // Nova funció per assignar les malles carregades
+    public void SetMeshRenderers(MeshRenderer[] renderers)
+    {
+        foreach (var renderer in renderers)
+        {
+            renderer.transform.parent = this.transform;
+        }
     }
 }

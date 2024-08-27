@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-public class TerrainFace {    
+public class TerrainFace {
     Mesh mesh;
     int resolution;
     Vector3 localUp;
@@ -15,8 +15,7 @@ public class TerrainFace {
     private List<Chunk> chunks = new List<Chunk>();
     public Material earthMaterial;
 
-    public TerrainFace(Mesh mesh, int resolution, Vector3 localUp, Texture2D heightMap, float heightMultiplier, MeshRenderer meshRenderer, Material earthMaterial)
-    {
+    public TerrainFace(Mesh mesh, int resolution, Vector3 localUp, Texture2D heightMap, float heightMultiplier, MeshRenderer meshRenderer, Material earthMaterial) {
         this.mesh = mesh;
         this.resolution = resolution;
         this.localUp = localUp;
@@ -28,46 +27,36 @@ public class TerrainFace {
         axisA = new Vector3(localUp.y, localUp.z, localUp.x);
         axisB = Vector3.Cross(localUp, axisA);
 
-        int chunksPerFace = resolution / 40;
-        for (int y = 0; y < chunksPerFace; y++)
-        {
-            for (int x = 0; x < chunksPerFace; x++)
-            {
+        int chunksPerFace = Mathf.CeilToInt((float)resolution / 40);
+        for (int y = 0; y < chunksPerFace; y++) {
+            for (int x = 0; x < chunksPerFace; x++) {
                 Chunk newChunk = new Chunk(meshRenderer.transform, earthMaterial, 40);
                 chunks.Add(newChunk);
             }
         }
-
-        int expectedChunks = chunksPerFace * chunksPerFace;
     }
 
-    public void ConstructMesh()
-    {
-        int chunkResolution = 40; // això és el tamany de cada chunk
-        int chunksPerFace = resolution / chunkResolution;
+    public void ConstructMesh() {
+        int chunkResolution = 40;
+        int chunksPerFace = Mathf.CeilToInt((float)resolution / chunkResolution);
 
-        for (int y = 0; y < chunksPerFace; y++)
-        {
-            for (int x = 0; x < chunksPerFace; x++)
-            {
+        for (int y = 0; y < chunksPerFace; y++) {
+            for (int x = 0; x < chunksPerFace; x++) {
                 int chunkIndex = x + y * chunksPerFace;
                 chunks[chunkIndex].UpdateChunk(x * chunkResolution, y * chunkResolution, chunkResolution, resolution, localUp, axisA, axisB, heightMap, heightMultiplier);
             }
         }
     }
 
-    public Vector3[] GetVertices()
-    {
+    public Vector3[] GetVertices() {
         return vertices;
     }
 
-    public Vector2[] GetUVs()
-    {
-        return uvs ?? new Vector2[0]; 
+    public Vector2[] GetUVs() {
+        return uvs ?? new Vector2[0];
     }
 
-    public List<Chunk> GetChunks()
-    {
+    public List<Chunk> GetChunks() {
         return chunks;
     }
 }
