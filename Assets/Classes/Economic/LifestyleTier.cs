@@ -9,6 +9,8 @@ public class LifestyleTier
     public string TierName; 
     public string NextTierID;
     public List<LifestyleDemand> LifestyleDemands;
+    public List<ServiceDemand> ServiceDemands; 
+
     
     public LifestyleTier(string tierID, string tierName, string nextTierID)
     {
@@ -16,7 +18,7 @@ public class LifestyleTier
         TierName = tierName;
         NextTierID = nextTierID;
         LifestyleDemands = new List<LifestyleDemand>();
-        
+        ServiceDemands = new List<ServiceDemand>(); 
     }
     
 }
@@ -43,3 +45,23 @@ public class LifestyleDemand
     }
 }
 
+[System.Serializable]
+public class ServiceDemand
+{
+    public string ResType { get; set; }
+    public string DemType { get; set; }
+    public int Position { get; set; }
+    public float MonthlyQty { get; set; }
+    public float Minimum { get; set; }  
+    public float Optimum { get; set; }  
+
+    public ServiceDemand(string resType, string demType, int position, float monthlyQty, float minimum, float optimum)
+    {
+        ResType = resType;
+        DemType = demType;
+        Position = position;
+        MonthlyQty = monthlyQty;
+        Minimum = minimum;
+        Optimum = optimum;
+    }
+}

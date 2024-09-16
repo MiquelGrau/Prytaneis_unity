@@ -35,7 +35,6 @@ public class Inventory
             // Crear un nou InventoryResource si no existeix
             var matchedResource = DataManager.resourcemasterlist.FirstOrDefault(r => r.ResourceID == resourceID);
             var newResourceType = matchedResource != null ? matchedResource.ResourceType : null;
-
             var newResource = new InventoryResource
             {
                 ResourceID = resourceID,
@@ -46,7 +45,7 @@ public class Inventory
             InventoryResources.Add(newResource);
         }
     }
-
+    
     
 
     // Potser voldràs incloure mètodes per a interactuar amb la funció TransferQtyAndValue.
@@ -90,4 +89,26 @@ public class InventoryItem
 
     
 }
+
+[System.Serializable]
+public class Service : InventoryResource
+{
+    //public string ResourceID { get; set; }
+    //public string ResourceType { get; set; }
+    //public float Quantity { get; set; }
+    //public int CurrentValue { get; set; }
+    public float Price { get; set; } 
+
+    public Service(string resourceID, float quantity)
+    {
+        ResourceID = resourceID;
+        Quantity = quantity;
+        Price = 0;
+        CurrentValue = 0;
+
+        var matchedResource = DataManager.resourcemasterlist.FirstOrDefault(r => r.ResourceID == resourceID);
+        ResourceType = matchedResource != null ? matchedResource.ResourceType : null;
+    }
+}
+
 

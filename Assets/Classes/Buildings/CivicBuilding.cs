@@ -8,6 +8,8 @@ public class CivicBuilding : Building
     public int JobsPoor { get; private set; }
     public int JobsMid { get; private set; }
     public int JobsRich { get; private set; }
+    public List<Service> ServOffered { get; private set; }
+    public List<Service> ServNeeded { get; private set; }
 
     public CivicBuilding(string id, string name, string templateID, string location, string ownerID, string inventoryID,
                           string activity, int size, int hpCurrent, int hpMax, int capacity,
@@ -18,6 +20,9 @@ public class CivicBuilding : Building
         JobsPoor = jobsPoor;
         JobsMid = jobsMid;
         JobsRich = jobsRich;
+
+        ServOffered = new List<Service>();
+        ServNeeded = new List<Service>();
     }
 }
 

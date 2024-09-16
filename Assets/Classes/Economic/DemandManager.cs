@@ -27,6 +27,7 @@ public class DemandManager : MonoBehaviour
             GetTierNeedsForCity(city);
             GenerateMarketDemands(city);
             CalculateAllCityPrices(city);
+            GetServiceNeedsForCity(city);
         }
         
        
@@ -363,6 +364,104 @@ public class DemandManager : MonoBehaviour
         resline.CurrentPrice = Mathf.RoundToInt(priceElasticity * basePrice);
     }
     
+    private void GetServiceNeedsForCity(CityData chosenCity)
+    {
+        
+        Debug.Log($"Processant serveis per a la ciutat: {chosenCity.cityName} (ID: {chosenCity.cityID})");
+
+        CityInventory chosenCityInventory = chosenCity.CityInventory;
+        if (chosenCityInventory == null)
+        {
+            Debug.LogError("No s'ha assignat cap inventari de ciutat.");
+            return;
+        }
+        
+        // Netejar els serveis existents
+        chosenCityInventory.Services.Clear();
+        Debug.Log($"Inventari de serveis netejat per {chosenCity.cityName}.");
+
+        // Obtenir els LifestyleTiers per a cada grup de població
+        var totalPopDemands = new List<LifestyleTier>
+        {
+            DataManager.lifestyleTiers.Find(tier => tier.TierID == chosenCity.PoorLifestyleID),
+            DataManager.lifestyleTiers.Find(tier => tier.TierID == chosenCity.MidLifestyleID),
+            DataManager.lifestyleTiers.Find(tier => tier.TierID == chosenCity.RichLifestyleID)
+        };
+
+        if (totalPopDemands[0] == null)
+        {
+            Debug.LogError($"No s'ha trobat LifestyleTier per PoorLifestyleID: {chosenCity.PoorLifestyleID}");
+        }
+        if (totalPopDemands[1] == null)
+        {
+            Debug.LogError($"No s'ha trobat LifestyleTier per MidLifestyleID: {chosenCity.MidLifestyleID}");
+        }
+        if (totalPopDemands[2] == null)
+        {
+            Debug.LogError($"No s'ha trobat LifestyleTier per RichLifestyleID: {chosenCity.RichLifestyleID}");
+        }
+
+        int[] populations = { chosenCity.PoorPopulation, chosenCity.MidPopulation, chosenCity.RichPopulation };
+        string[] populationClasses = { "Poor", "Mid", "Rich" };
+
+        // Ara calcula les demandes de serveis per a cada grup de població
+        for (int i = 0; i < totalPopDemands.Count; i++)
+        {
+            var tier = totalPopDemands[i];
+            if (tier == null)
+            {
+                Debug.LogError($"El LifestyleTier per {populationClasses[i]} és null. Saltant aquest grup de població.");
+                continue;
+            }
+
+            foreach (var service in tier.ServiceDemands)
+            {
+                var existingService = chosenCityInventory.Services.FirstOrDefault(s => s.ResourceType == service.ResType);
+                
+                if (existingService != null)
+                {
+                    // Si el servei ja existeix, només cal sumar la demanda i actualitzar la posició
+                    existingService.Demand += populations[i] * service.MonthlyQty / 1000;
+
+                    if (i == 0) existingService.PositionPoor = service.Position;
+                    if (i == 1) existingService.PositionMid = service.Position;
+                    if (i == 2) existingService.PositionRich = service.Position;
+                }
+                
+                else
+                {
+                    // Si no existeix, crear un nou servei
+                    var newService = new CityService(
+                        service.ResType,
+                        populations[i] * service.MonthlyQty / 1000 
+                    )
+                    {
+                        PositionPoor = (i == 0) ? service.Position : 0,
+                        PositionMid = (i == 1) ? service.Position : 0,
+                        PositionRich = (i == 2) ? service.Position : 0,
+                        MinRatio = service.Minimum,
+                        OptimalRatio = service.Optimum,
+                        FulfilledRatio = 0  // Potser es calcula més tard
+                    };
+                    // Afegir el nou servei a la llista de serveis de la ciutat
+                    chosenCityInventory.Services.Add(newService);
+                }
+            }
+        }
+        
+        // Un cop ha acabat de repassar tots els serveis, fer el Debug.Log per cada servei
+        /* foreach (var service in chosenCityInventory.Services)
+        {
+            Debug.Log($"Service: {service.ResourceType}, Demand: {service.Demand}, " +
+                    $"Positions: {service.PositionPoor}/{service.PositionMid}/{service.PositionRich}, " +
+                    $"Ratio {service.FulfilledRatio}, Min {service.MinRatio}, Opt {service.OptimalRatio}");
+        } */
+        
+        Debug.Log($"Processament de serveis complet per la ciutat: {chosenCity.cityName} (ID: {chosenCity.cityID})");
+    }
+
+
+
     // DISPLAY TEXTS
 
     private string GetCityInventoryDisplayText()

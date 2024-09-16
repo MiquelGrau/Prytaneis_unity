@@ -9,9 +9,11 @@ public class CityInventory
     public string CityInvID { get; set; }
     public string CityID { get; set; }  
     public int CityInvMoney { get; set; }
-    public List<CityInventoryResource> InventoryResources { get; set; } // Els recursos en sí
-    public List<PopulationDemand> PopDemands { get; set; } = new List<PopulationDemand>();  // Demandes de població
-    public List<BuildingDemand> BuildingDemands { get; set; } = new List<BuildingDemand>(); // Demandes de edificis
+    public List<CityInventoryResource> InventoryResources { get; set; } // Wares: population + building dems
+    public List<PopulationDemand> PopDemands { get; set; } = new List<PopulationDemand>();  // Demandes de recursos, població
+    public List<BuildingDemand> BuildingDemands { get; set; } = new List<BuildingDemand>(); // Demandes de recursos, edificis
+    public List<CityService> Services { get; set; } = new List<CityService>(); // Services
+    
     
     // Constructor
     public CityInventory(string cityInvID, string cityID, int cityInvMoney, List<CityInventoryResource> resources)
@@ -21,9 +23,6 @@ public class CityInventory
         CityInvMoney = cityInvMoney;
         InventoryResources = resources ?? new List<CityInventoryResource>(); 
     }
-    
-
-    
     
 }
 
@@ -57,9 +56,6 @@ public class CityInventoryResource : InventoryResource // El mateix que el Resou
         // Busca el ResourceType corresponent al ResourceID
         var matchedResource = DataManager.resourcemasterlist.FirstOrDefault(r => r.ResourceID == resourceId);
         ResourceType = matchedResource != null ? matchedResource.ResourceType : null;
-
-
-        //ResourceType = null;
         
         // Resta de la inicialització
         DemandConsume = 0;
@@ -155,5 +151,61 @@ public class BuildingDemand
         TotalQty = totalQty;
         CoveredQty = 0; // Inicialment zero
     }
+}
+
+[System.Serializable]
+public class CityService : InventoryResource
+{
+    //public string ResourceID { get; set; }
+    //public string ResourceType { get; set; }
+    //public float Quantity { get; set; }
+    //public int CurrentValue { get; set; }
+    public float Demand { get; set; }
+    public float Price { get; set; }
+    public int PositionPoor { get; set; }
+    public int PositionMid { get; set; }
+    public int PositionRich { get; set; }
+    public float FulfilledRatio { get; set; }
+    public float MinRatio { get; set; }
+    public float OptimalRatio { get; set; }
+
+    // Constructor per inicialitzar la classe
+    [JsonConstructor]
+    public CityService(string resourceId)
+    {
+        ResourceID = resourceId;
+        
+        // Buscar el ResourceType corresponent al ResourceID
+        var matchedResource = DataManager.resourcemasterlist.FirstOrDefault(r => r.ResourceID == resourceId);
+        ResourceType = matchedResource != null ? matchedResource.ResourceType : null;
+
+        // Inicialitzar la resta de propietats
+        Demand = 0;
+        Price = 0;
+        PositionPoor = 0;
+        PositionMid = 0;
+        PositionRich = 0;
+        FulfilledRatio = 0;
+        MinRatio = 0;
+        OptimalRatio = 0;
+    }
+
+    // Nou constructor per ResourceType
+    public CityService(string resourceType, float demand)
+    {
+        ResourceID = null;  // Deixem el ResourceID com a null
+        ResourceType = resourceType;
+        Demand = demand;
+        Price = 0;
+
+        // Inicialitzar la resta de propietats a zero
+        PositionPoor = 0;
+        PositionMid = 0;
+        PositionRich = 0;
+        FulfilledRatio = 0;
+        MinRatio = 0;
+        OptimalRatio = 0;
+    }
+    
 }
 

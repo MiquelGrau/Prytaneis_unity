@@ -12,8 +12,12 @@ public class Resource
     public string ResourceSubtype;
     public int BasePrice;
     public float BaseWeight;
+    public bool Perishable;   
+    public bool Service;      
 
-    public Resource(string id, string name, string type, string subtype, int price, float weight)
+
+    //public Resource(string id, string name, string type, string subtype, int price, float weight, bool perishable, bool service)
+    public Resource(string id, string name, string type, string subtype, int price, float weight, bool perishable, bool service)
     {
         ResourceID = id;
         ResourceName = name;
@@ -21,6 +25,8 @@ public class Resource
         ResourceSubtype = subtype;
         BasePrice = price;
         BaseWeight = weight;
+        Perishable = perishable;
+        Service = service;
     }
 
 }

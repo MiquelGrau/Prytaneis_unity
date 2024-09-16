@@ -59,7 +59,15 @@ public class CityInterface : MonoBehaviour
             }
             else if (building is ProductiveBuilding productive && productive.MethodActive != null)
             {
-                outputText.text = productive.MethodActive.MethodName;
+                ProductionMethod method = DataManager.Instance.GetProductionMethodByID(productive.MethodActive);
+                if (method != null)
+                {
+                    outputText.text = method.MethodName;
+                }
+                else
+                {
+                    outputText.text = "Method not found";
+                }
             }
             else
             {
@@ -260,7 +268,26 @@ public class CityInterface : MonoBehaviour
             methodDropdown.onValueChanged.AddListener(delegate {
                 OnMethodSelected(methodDropdown, productive);
             });
+
+            // Mostrar el MethodActive utilitzant el seu ID
+            if (!string.IsNullOrEmpty(productive.MethodActive))
+            {
+                var activeMethod = DataManager.Instance.GetProductionMethodByID(productive.MethodActive);
+                if (activeMethod != null)
+                {
+                    prodPanel.transform.Find("BProdMethodActive").GetComponent<TMP_Text>().text = activeMethod.MethodName;
+                }
+                else
+                {
+                    prodPanel.transform.Find("BProdMethodActive").GetComponent<TMP_Text>().text = "No active method";
+                }
+            }
+            else
+            {
+                prodPanel.transform.Find("BProdMethodActive").GetComponent<TMP_Text>().text = "No active method";
+            }
         }
+
     }
 
     private void PopulateProductiveFactors(ProductiveBuilding building, Transform factorsPanel)
@@ -292,9 +319,14 @@ public class CityInterface : MonoBehaviour
     {
         dropdown.ClearOptions();
         List<string> methodoptions = new List<string>();
-        foreach (var method in building.MethodsAvailable)
+        
+        foreach (var methodID in building.MethodsAvailable)
         {
-            methodoptions.Add(method.MethodName);
+            var method = DataManager.Instance.GetProductionMethodByID(methodID);
+            if (method != null)
+            {
+                methodoptions.Add(method.MethodName);
+            }
         }
         dropdown.AddOptions(methodoptions);
     }
@@ -304,8 +336,8 @@ public class CityInterface : MonoBehaviour
         int index = dropdown.value;
         if (index >= 0 && index < building.MethodsAvailable.Count)
         {
-            ProductionMethod selectedMethod = building.MethodsAvailable[index];
-            ProductionManager.Instance.SetupNewBatch(selectedMethod, building);
+            string selectedMethodID = building.MethodsAvailable[index];  
+            ProductionManager.Instance.SetupNewBatch(selectedMethodID, building);  
         }
     }
     
