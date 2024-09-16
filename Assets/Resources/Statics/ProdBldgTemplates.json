@@ -1,0 +1,16 @@
+{
+  "Templates": [
+    {
+      "TemplateID": "BT001", "ClassName": "Iron workshop", "TemplateType": "Productive", "TemplateSubtype": "Factory",
+      "JobsPoor": 50, "JobsMid": 12, "JobsRich": 3, "DefaultMethod": "PM001", "Capacity": 100,
+      "PossibleMethods": [ "PM001" ,"PM002" ,"PM003" ,"PM004" ,"PM005"  ],
+      "Factors": [ "FPE001" ,"FPE003"  ]
+    },
+    {
+      "TemplateID": "BT002", "ClassName": "Smithy", "TemplateType": "Productive", "TemplateSubtype": "Factory",
+      "JobsPoor": 20, "JobsMid": 10, "JobsRich": 0, "DefaultMethod": "PM001", "Capacity": 50,
+      "PossibleMethods": [ "PM001" ,"PM002" ,"PM006" ,"PM007"  ],
+      "Factors": [ "FPE002" ,"FPE003" ,"FPR001"  ]
+    }
+  ]
+}

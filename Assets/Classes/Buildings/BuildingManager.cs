@@ -67,7 +67,7 @@ public class BuildingManager : MonoBehaviour
         }
         else if (selectedTemplate is CivicTemplate)
         {
-            AddCivicBuilding(selectedTemplate as CivicTemplate);
+            //AddCivicBuilding(selectedTemplate as CivicTemplate);
         }
     } 
 
@@ -125,7 +125,7 @@ public class BuildingManager : MonoBehaviour
         Debug.Log($"Número de ProductionMethods disponibles: {newBuilding.MethodsAvailable.Count}");
     }
 
-    private void AddCivicBuilding(CivicTemplate template)
+    /* private void AddCivicBuilding(CivicTemplate template)
     {
         // Aquí crearem la lògica per a crear un nou CivicBuilding amb la informació de la template
         CivicBuilding newBuilding = new CivicBuilding(
@@ -139,7 +139,6 @@ public class BuildingManager : MonoBehaviour
             1, // Mida de l'edifici
             0, // HPCurrent
             0, // HPMaximum
-            template.Capacity,
             template.Function,
             template.JobsPoor,
             template.JobsMid,
@@ -149,7 +148,7 @@ public class BuildingManager : MonoBehaviour
         // Aquí es podria afegir el nou edifici a una llista d'edificis dins de la ciutat actual, per exemple
         AddBuildingToCurrentCity(newBuilding);
         Debug.Log("Nou edifici cívic creat: " + newBuilding.BuildingName);
-    }
+    } */
 
 
     public void AddBuildingToCurrentCity(Building newBuilding)
@@ -196,8 +195,16 @@ public class BuildingManager : MonoBehaviour
         /* CityInventory cityInventory = gameManager.CurrentCity.CityInventory;
         Debug.Log($"[SetupFactors] Obtenint inventari de la ciutat: {gameManager.CurrentCity.cityName}"); */
 
-        foreach (TemplateFactor templateFactor in template.Factors)
+        //foreach (TemplateFactor templateFactor in template.Factors)
+        foreach (string factorID in template.Factors) 
         {
+            TemplateFactor templateFactor = DataManager.Instance.GetFactorById(factorID);
+            if (templateFactor == null)
+            {
+                Debug.LogWarning($"No s'ha trobat cap factor amb ID {factorID} per l'edifici {newBuilding.BuildingID}");
+                continue;
+            }
+
             if (templateFactor is EmployeeFT employeeFT)
             {
                 // Crear un nou EmployeePT i assignar-li les propietats

@@ -13,6 +13,7 @@
         "poorLifestyleID": "C2", 
         "midLifestyleID": "C3",  
         "richLifestyleID": "C4", 
+        "BuildPoints": 10000,
         "nodeId": "N00021",
         "grid": [
           ["House1", "House2", "Market1", "StoneRoad1", "House1"],
@@ -34,6 +35,7 @@
         "poorLifestyleID": "C2", 
         "midLifestyleID": "C3",  
         "richLifestyleID": "C5", 
+        "BuildPoints": 10000,
         "nodeId": "N00022",
         "grid": [
           ["House1", "House2", "Market1", "StoneRoad1", "House1"],
@@ -55,6 +57,7 @@
         "poorLifestyleID": "C2", 
         "midLifestyleID": "C3",  
         "richLifestyleID": "C4", 
+        "BuildPoints": 10000,
         "nodeId": "N00023",
         "grid": [
           ["House1", "House2", "Market1", "StoneRoad1", "House1"],
@@ -76,6 +79,7 @@
         "poorLifestyleID": "C1", 
         "midLifestyleID": "C3",  
         "richLifestyleID": "C5", 
+        "BuildPoints": 10000,
         "nodeId": "N00024",
         "grid": [
           ["House1", "House2", "House1", "House1", "House1"],
@@ -98,6 +102,7 @@
         "poorLifestyleID": "C1", 
         "midLifestyleID": "C2", 
         "richLifestyleID": "C4", 
+        "BuildPoints": 10000,
         "nodeId": "N00025",
         "grid": [
           ["House1", "House2", "Market1", "StoneRoad1", "House1"],

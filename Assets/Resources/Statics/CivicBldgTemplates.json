@@ -1,0 +1,613 @@
+{
+  "Templates": [
+    {
+      "TemplateID": "BT003", "Name": "Monastery guesthouse", "Function": "Logistics",
+      "Labour": 10, "HardMat": 5, "LightMat": 10, "SpecialMat": 5,
+      "JobsPoor": 5, "JobsMid": 5, "JobsRich": 0,
+      "Repeat": 0.2, "BuildPoints": 50, "Water": "", "WaterYes": false,
+      "Effects": [
+        { "Effect": "Visitors", "Amount": 300 }
+      ],
+      "Needs": [
+        { "Need": "Food", "Amount": 100 },
+        { "Need": "Religion", "Amount": 50 }
+      ]
+    },
+    {
+      "TemplateID": "BT004", "Name": "Pilgrim hostel", "Function": "Logistics",
+      "Labour": 10, "HardMat": 5, "LightMat": 5, "SpecialMat": 0,
+      "JobsPoor": 3, "JobsMid": 2, "JobsRich": 0,
+      "Repeat": 0.3, "BuildPoints": 30, "Water": "", "WaterYes": false,
+      "Effects": [
+        { "Effect": "Visitors", "Amount": 150 }
+      ],
+      "Needs": [
+        { "Need": "Food", "Amount": 50 }
+      ]
+    },
+    {
+      "TemplateID": "BT005", "Name": "Abbey", "Function": "Religion",
+      "Labour": 60, "HardMat": 40, "LightMat": 60, "SpecialMat": 10,
+      "JobsPoor": 30, "JobsMid": 17, "JobsRich": 3,
+      "Repeat": 0.4, "BuildPoints": 460, "Water": "", "WaterYes": false,
+      "Effects": [
+        { "Effect": "Religion", "Amount": 3000 },
+        { "Effect": "Health", "Amount": 1500 },
+        { "Effect": "Food", "Amount": 1500 }
+      ],
+      "Needs": [
+        { "Need": "Light logs", "Amount": 100 }
+      ]
+    },
+    {
+      "TemplateID": "BT006", "Name": "Boat dock", "Function": "Maritime",
+      "Labour": 10, "HardMat": 0, "LightMat": 10, "SpecialMat": 5,
+      "JobsPoor": 10, "JobsMid": 0, "JobsRich": 0,
+      "Repeat": 0.05, "BuildPoints": 32, "Water": "Both", "WaterYes": false,
+      "Effects": [
+        { "Effect": "Docking", "Amount": 100 }
+      ],
+      "Needs": [
+        { "Need": "Light logs", "Amount": 30 }
+      ]
+    },
+    {
+      "TemplateID": "BT007", "Name": "River dock", "Function": "Maritime",
+      "Labour": 15, "HardMat": 5, "LightMat": 15, "SpecialMat": 10,
+      "JobsPoor": 15, "JobsMid": 5, "JobsRich": 0,
+      "Repeat": 0.15, "BuildPoints": 73, "Water": "River", "WaterYes": false,
+      "Effects": [
+        { "Effect": "Docking", "Amount": 300 }
+      ],
+      "Needs": [
+        { "Need": "Shipbuilding", "Amount": 20 },
+        { "Need": "Light logs", "Amount": 60 },
+        { "Need": "Hard logs", "Amount": 20 }
+      ]
+    },
+    {
+      "TemplateID": "BT008", "Name": "Sea docks", "Function": "Maritime",
+      "Labour": 20, "HardMat": 5, "LightMat": 20, "SpecialMat": 10,
+      "JobsPoor": 15, "JobsMid": 5, "JobsRich": 0,
+      "Repeat": 0.1, "BuildPoints": 81, "Water": "Sea", "WaterYes": false,
+      "Effects": [
+        { "Effect": "Docking", "Amount": 300 }
+      ],
+      "Needs": [
+        { "Need": "Shipbuilding", "Amount": 40 },
+        { "Need": "Light logs", "Amount": 60 },
+        { "Need": "Hard logs", "Amount": 20 }
+      ]
+    },
+    {
+      "TemplateID": "BT009", "Name": "Deep docks", "Function": "Maritime",
+      "Labour": 50, "HardMat": 25, "LightMat": 15, "SpecialMat": 10,
+      "JobsPoor": 15, "JobsMid": 5, "JobsRich": 0,
+      "Repeat": 0.05, "BuildPoints": 145, "Water": "Sea", "WaterYes": false,
+      "Effects": [
+        { "Effect": "Docking", "Amount": 500 }
+      ],
+      "Needs": [
+        { "Need": "Shipbuilding", "Amount": 50 },
+        { "Need": "Light logs", "Amount": 50 },
+        { "Need": "Hard logs", "Amount": 20 }
+      ]
+    },
+    {
+      "TemplateID": "BT010", "Name": "Boat cranes", "Function": "Maritime",
+      "Labour": 20, "HardMat": 0, "LightMat": 10, "SpecialMat": 10,
+      "JobsPoor": 8, "JobsMid": 2, "JobsRich": 0,
+      "Repeat": 0.1, "BuildPoints": 60, "Water": "Both", "WaterYes": false,
+      "Effects": [
+        { "Effect": "Light logs", "Amount": 250 }
+      ],
+      "Needs": [
+        { "Need": "Hard logs", "Amount": 50 }
+      ]
+    },
+    {
+      "TemplateID": "BT011", "Name": "Harbour", "Function": "Maritime",
+      "Labour": 150, "HardMat": 20, "LightMat": 40, "SpecialMat": 40,
+      "JobsPoor": 40, "JobsMid": 25, "JobsRich": 10,
+      "Repeat": 0.4, "BuildPoints": 410, "Water": "Both", "WaterYes": false,
+      "Effects": [
+        { "Effect": "Docking", "Amount": 2000 },
+        { "Effect": "Light logs", "Amount": 1000 },
+        { "Effect": "Int goods", "Amount": 500 }
+      ],
+      "Needs": [
+        { "Need": "Shipbuilding", "Amount": 400 },
+        { "Need": "Hard logs", "Amount": 200 }
+      ]
+    },
+    {
+      "TemplateID": "BT012", "Name": "Fishing traps", "Function": "Food",
+      "Labour": 10, "HardMat": 0, "LightMat": 8, "SpecialMat": 2,
+      "JobsPoor": 10, "JobsMid": 0, "JobsRich": 0,
+      "Repeat": 0.05, "BuildPoints": 39, "Water": "All", "WaterYes": false,
+      "Effects": [
+        { "Effect": "Food", "Amount": 200 }
+      ],
+      "Needs": [
+        { "Need": "Light logs", "Amount": 10 }
+      ]
+    },
+    {
+      "TemplateID": "BT013", "Name": "Fisher's lodge", "Function": "Food",
+      "Labour": 20, "HardMat": 0, "LightMat": 15, "SpecialMat": 5,
+      "JobsPoor": 10, "JobsMid": 5, "JobsRich": 0,
+      "Repeat": 0.1, "BuildPoints": 88, "Water": "All", "WaterYes": false,
+      "Effects": [
+        { "Effect": "Food", "Amount": 500 }
+      ],
+      "Needs": [
+        { "Need": "Light logs", "Amount": 20 },
+        { "Need": "Docking", "Amount": 10 }
+      ]
+    },
+    {
+      "TemplateID": "BT014", "Name": "Fishery", "Function": "Food",
+      "Labour": 30, "HardMat": 0, "LightMat": 25, "SpecialMat": 15,
+      "JobsPoor": 15, "JobsMid": 12, "JobsRich": 3,
+      "Repeat": 0.1, "BuildPoints": 267, "Water": "All", "WaterYes": false,
+      "Effects": [
+        { "Effect": "Food", "Amount": 2000 }
+      ],
+      "Needs": [
+        { "Need": "Light logs", "Amount": 30 },
+        { "Need": "Docking", "Amount": 40 }
+      ]
+    },
+    {
+      "TemplateID": "BT015", "Name": "Fish smokehouse", "Function": "Food",
+      "Labour": 20, "HardMat": 0, "LightMat": 10, "SpecialMat": 10,
+      "JobsPoor": 15, "JobsMid": 5, "JobsRich": 0,
+      "Repeat": 0.05, "BuildPoints": 65, "Water": "All", "WaterYes": false,
+      "Effects": [
+        { "Effect": "Production", "Amount": 500 }
+      ],
+      "Needs": [
+        { "Need": "Food", "Amount": 250 },
+        { "Need": "Light logs", "Amount": 50 }
+      ]
+    },
+    {
+      "TemplateID": "BT016", "Name": "Boatbuilder", "Function": "Shipbuilding",
+      "Labour": 10, "HardMat": 0, "LightMat": 8, "SpecialMat": 2,
+      "JobsPoor": 2, "JobsMid": 3, "JobsRich": 0,
+      "Repeat": 0.05, "BuildPoints": 22, "Water": "All", "WaterYes": false,
+      "Effects": [
+        { "Effect": "Shipbuilding", "Amount": 40 }
+      ],
+      "Needs": [
+        { "Need": "Light logs", "Amount": 20 }
+      ]
+    },
+    {
+      "TemplateID": "BT017", "Name": "Shipbuilder", "Function": "Shipbuilding",
+      "Labour": 30, "HardMat": 0, "LightMat": 20, "SpecialMat": 5,
+      "JobsPoor": 5, "JobsMid": 4, "JobsRich": 1,
+      "Repeat": 0.2, "BuildPoints": 61, "Water": "Both", "WaterYes": false,
+      "Effects": [
+        { "Effect": "Shipbuilding", "Amount": 100 }
+      ],
+      "Needs": [
+        { "Need": "Light logs", "Amount": 40 },
+        { "Need": "Hard logs", "Amount": 10 },
+        { "Need": "Docking", "Amount": 30 }
+      ]
+    },
+    {
+      "TemplateID": "BT018", "Name": "Shipyard", "Function": "Shipbuilding",
+      "Labour": 80, "HardMat": 10, "LightMat": 40, "SpecialMat": 20,
+      "JobsPoor": 10, "JobsMid": 25, "JobsRich": 5,
+      "Repeat": 0.3, "BuildPoints": 230, "Water": "Both", "WaterYes": false,
+      "Effects": [
+        { "Effect": "Shipbuilding", "Amount": 1000 }
+      ],
+      "Needs": [
+        { "Need": "Light logs", "Amount": 200 },
+        { "Need": "Hard logs", "Amount": 50 },
+        { "Need": "Docking", "Amount": 100 }
+      ]
+    },
+    {
+      "TemplateID": "BT019", "Name": "Dry dock", "Function": "Shipbuilding",
+      "Labour": 200, "HardMat": 20, "LightMat": 80, "SpecialMat": 50,
+      "JobsPoor": 30, "JobsMid": 40, "JobsRich": 10,
+      "Repeat": 0.8, "BuildPoints": 600, "Water": "Sea", "WaterYes": false,
+      "Effects": [
+        { "Effect": "Shipbuilding", "Amount": 3000 }
+      ],
+      "Needs": [
+        { "Need": "Light logs", "Amount": 500 },
+        { "Need": "Hard logs", "Amount": 200 },
+        { "Need": "Docking", "Amount": 250 }
+      ]
+    },
+    {
+      "TemplateID": "BT020", "Name": "Small stable", "Function": "Logistics",
+      "Labour": 5, "HardMat": 0, "LightMat": 10, "SpecialMat": 0,
+      "JobsPoor": 8, "JobsMid": 2, "JobsRich": 0,
+      "Repeat": 0.2, "BuildPoints": 18, "Water": "", "WaterYes": false,
+      "Effects": [
+        { "Effect": "Hard logs", "Amount": 150 }
+      ],
+      "Needs": [
+        { "Need": "Food", "Amount": 120 }
+      ]
+    },
+    {
+      "TemplateID": "BT021", "Name": "Stables", "Function": "Logistics",
+      "Labour": 10, "HardMat": 5, "LightMat": 10, "SpecialMat": 5,
+      "JobsPoor": 15, "JobsMid": 5, "JobsRich": 0,
+      "Repeat": 0.1, "BuildPoints": 40, "Water": "", "WaterYes": false,
+      "Effects": [
+        { "Effect": "Hard logs", "Amount": 500 },
+        { "Effect": "Ext goods", "Amount": 100 },
+        { "Effect": "Visitors", "Amount": 100 }
+      ],
+      "Needs": [
+        { "Need": "Food", "Amount": 400 },
+        { "Need": "Light logs", "Amount": 100 }
+      ]
+    },
+    {
+      "TemplateID": "BT022", "Name": "Public Warehouse", "Function": "Logistics",
+      "Labour": 25, "HardMat": 10, "LightMat": 20, "SpecialMat": 10,
+      "JobsPoor": 25, "JobsMid": 4, "JobsRich": 1,
+      "Repeat": 0.1, "BuildPoints": 120, "Water": "", "WaterYes": false,
+      "Effects": [
+        { "Effect": "Int goods", "Amount": 1000 }
+      ],
+      "Needs": [
+        { "Need": "Light logs", "Amount": 450 },
+        { "Need": "Hard logs", "Amount": 50 }
+      ]
+    },
+    {
+      "TemplateID": "BT023", "Name": "External Warehouse", "Function": "Logistics",
+      "Labour": 25, "HardMat": 10, "LightMat": 20, "SpecialMat": 10,
+      "JobsPoor": 25, "JobsMid": 4, "JobsRich": 1,
+      "Repeat": 0.1, "BuildPoints": 120, "Water": "", "WaterYes": false,
+      "Effects": [
+        { "Effect": "Ext goods", "Amount": 1000 }
+      ],
+      "Needs": [
+        { "Need": "Light logs", "Amount": 450 },
+        { "Need": "Hard logs", "Amount": 50 }
+      ]
+    },
+    {
+      "TemplateID": "BT024", "Name": "Guest House", "Function": "Logistics",
+      "Labour": 10, "HardMat": 0, "LightMat": 10, "SpecialMat": 0,
+      "JobsPoor": 3, "JobsMid": 2, "JobsRich": 0,
+      "Repeat": 0.2, "BuildPoints": 30, "Water": "", "WaterYes": false,
+      "Effects": [
+        { "Effect": "Visitors", "Amount": 250 }
+      ],
+      "Needs": [
+        { "Need": "Food", "Amount": 150 }
+      ]
+    },
+    {
+      "TemplateID": "BT025", "Name": "Tavern", "Function": "Entertainment",
+      "Labour": 20, "HardMat": 5, "LightMat": 10, "SpecialMat": 5,
+      "JobsPoor": 8, "JobsMid": 2, "JobsRich": 0,
+      "Repeat": 0.1, "BuildPoints": 30, "Water": "", "WaterYes": false,
+      "Effects": [
+        { "Effect": "Visitors", "Amount": 300 },
+        { "Effect": "Entertainment", "Amount": 600 }
+      ],
+      "Needs": [
+        { "Need": "Food", "Amount": 400 },
+        { "Need": "Security", "Amount": 80 }
+      ]
+    },
+    {
+      "TemplateID": "BT026", "Name": "Inn", "Function": "Logistics",
+      "Labour": 30, "HardMat": 15, "LightMat": 15, "SpecialMat": 10,
+      "JobsPoor": 10, "JobsMid": 8, "JobsRich": 2,
+      "Repeat": 0.1, "BuildPoints": 90, "Water": "", "WaterYes": false,
+      "Effects": [
+        { "Effect": "Visitors", "Amount": 600 },
+        { "Effect": "Ext goods", "Amount": 200 },
+        { "Effect": "Trade", "Amount": 200 }
+      ],
+      "Needs": [
+        { "Need": "Food", "Amount": 400 },
+        { "Need": "Light logs", "Amount": 100 },
+        { "Need": "Security", "Amount": 50 }
+      ]
+    },
+    {
+      "TemplateID": "BT027", "Name": "Caravenserai", "Function": "Logistics",
+      "Labour": 20, "HardMat": 10, "LightMat": 10, "SpecialMat": 10,
+      "JobsPoor": 15, "JobsMid": 10, "JobsRich": 5,
+      "Repeat": 0.25, "BuildPoints": 40, "Water": "", "WaterYes": false,
+      "Effects": [
+        { "Effect": "Visitors", "Amount": 1000 },
+        { "Effect": "Ext goods", "Amount": 800 },
+        { "Effect": "Trade", "Amount": 200 }
+      ],
+      "Needs": [
+        { "Need": "Food", "Amount": 600 },
+        { "Need": "Light logs", "Amount": 150 },
+        { "Need": "Security", "Amount": 100 }
+      ]
+    },
+    {
+      "TemplateID": "BT028", "Name": "Brothel", "Function": "Entertainment",
+      "Labour": 40, "HardMat": 20, "LightMat": 10, "SpecialMat": 20,
+      "JobsPoor": 30, "JobsMid": 16, "JobsRich": 4,
+      "Repeat": 0.3, "BuildPoints": 220, "Water": "", "WaterYes": false,
+      "Effects": [
+        { "Effect": "Entertainment", "Amount": 1500 },
+        { "Effect": "Visitors", "Amount": 800 },
+        { "Effect": "Crime", "Amount": 200 }
+      ],
+      "Needs": [
+        { "Need": "Food", "Amount": 200 },
+        { "Need": "Security", "Amount": 300 }
+      ]
+    },
+    {
+      "TemplateID": "BT029", "Name": "Post house", "Function": "Logistics",
+      "Labour": 20, "HardMat": 15, "LightMat": 15, "SpecialMat": 10,
+      "JobsPoor": 10, "JobsMid": 12, "JobsRich": 3,
+      "Repeat": 0.6, "BuildPoints": 60, "Water": "", "WaterYes": false,
+      "Effects": [
+        { "Effect": "Visitors", "Amount": 300 },
+        { "Effect": "Hard logs", "Amount": 100 },
+        { "Effect": "Ext goods", "Amount": 100 }
+      ],
+      "Needs": [
+        { "Need": "Food", "Amount": 300 },
+        { "Need": "Light logs", "Amount": 50 },
+        { "Need": "Security", "Amount": 40 }
+      ]
+    },
+    {
+      "TemplateID": "BT030", "Name": "Simple huts", "Function": "Housing",
+      "Labour": 5, "HardMat": 0, "LightMat": 5, "SpecialMat": 0,
+      "JobsPoor": 1, "JobsMid": 0, "JobsRich": 0,
+      "Repeat": 0.3, "BuildPoints": 25, "Water": "", "WaterYes": false,
+      "Effects": [
+        { "Effect": "HousePoor", "Amount": 150 }
+      ],
+      "Needs": [
+      ]
+    },
+    {
+      "TemplateID": "BT031", "Name": "House simple", "Function": "Housing",
+      "Labour": 10, "HardMat": 2, "LightMat": 10, "SpecialMat": 3,
+      "JobsPoor": 3, "JobsMid": 0, "JobsRich": 0,
+      "Repeat": 0.1, "BuildPoints": 27, "Water": "", "WaterYes": false,
+      "Effects": [
+        { "Effect": "Int goods", "Amount": 20 },
+        { "Effect": "HousePoor", "Amount": 360 },
+        { "Effect": "HouseMid", "Amount": 40 }
+      ],
+      "Needs": [
+      ]
+    },
+    {
+      "TemplateID": "BT032", "Name": "House middle", "Function": "Housing",
+      "Labour": 20, "HardMat": 5, "LightMat": 10, "SpecialMat": 5,
+      "JobsPoor": 4, "JobsMid": 2, "JobsRich": 0,
+      "Repeat": 0.1, "BuildPoints": 43, "Water": "", "WaterYes": false,
+      "Effects": [
+        { "Effect": "Int goods", "Amount": 30 },
+        { "Effect": "HousePoor", "Amount": 60 },
+        { "Effect": "HouseMid", "Amount": 240 }
+      ],
+      "Needs": [
+      ]
+    },
+    {
+      "TemplateID": "BT033", "Name": "House better", "Function": "Housing",
+      "Labour": 40, "HardMat": 15, "LightMat": 5, "SpecialMat": 10,
+      "JobsPoor": 6, "JobsMid": 4, "JobsRich": 0,
+      "Repeat": 0.1, "BuildPoints": 75, "Water": "", "WaterYes": false,
+      "Effects": [
+        { "Effect": "Int goods", "Amount": 50 },
+        { "Effect": "HousePoor", "Amount": 20 },
+        { "Effect": "HouseMid", "Amount": 100 },
+        { "Effect": "HouseRich", "Amount": 80 }
+      ],
+      "Needs": [
+      ]
+    },
+    {
+      "TemplateID": "BT034", "Name": "House villa", "Function": "Housing",
+      "Labour": 60, "HardMat": 20, "LightMat": 10, "SpecialMat": 20,
+      "JobsPoor": 20, "JobsMid": 8, "JobsRich": 2,
+      "Repeat": 0.2, "BuildPoints": 115, "Water": "", "WaterYes": false,
+      "Effects": [
+        { "Effect": "Int goods", "Amount": 50 },
+        { "Effect": "HouseMid", "Amount": 40 },
+        { "Effect": "HouseRich", "Amount": 120 }
+      ],
+      "Needs": [
+      ]
+    },
+    {
+      "TemplateID": "BT035", "Name": "Palace", "Function": "Housing",
+      "Labour": 150, "HardMat": 40, "LightMat": 20, "SpecialMat": 40,
+      "JobsPoor": 25, "JobsMid": 20, "JobsRich": 5,
+      "Repeat": 0.25, "BuildPoints": 260, "Water": "", "WaterYes": false,
+      "Effects": [
+        { "Effect": "Int goods", "Amount": 100 },
+        { "Effect": "HouseMid", "Amount": 20 },
+        { "Effect": "HouseRich", "Amount": 180 }
+      ],
+      "Needs": [
+      ]
+    },
+    {
+      "TemplateID": "BT036", "Name": "Notary", "Function": "Legal",
+      "Labour": 20, "HardMat": 5, "LightMat": 5, "SpecialMat": 5,
+      "JobsPoor": 0, "JobsMid": 5, "JobsRich": 5,
+      "Repeat": 0.5, "BuildPoints": 85, "Water": "", "WaterYes": false,
+      "Effects": [
+        { "Effect": "Legal", "Amount": 500 }
+      ],
+      "Needs": [
+      ]
+    },
+    {
+      "TemplateID": "BT037", "Name": "Lawyer", "Function": "Legal",
+      "Labour": 20, "HardMat": 5, "LightMat": 5, "SpecialMat": 5,
+      "JobsPoor": 0, "JobsMid": 5, "JobsRich": 5,
+      "Repeat": 0.5, "BuildPoints": 85, "Water": "", "WaterYes": false,
+      "Effects": [
+        { "Effect": "Legal", "Amount": 500 }
+      ],
+      "Needs": [
+      ]
+    },
+    {
+      "TemplateID": "BT038", "Name": "Scribe", "Function": "Legal",
+      "Labour": 20, "HardMat": 5, "LightMat": 5, "SpecialMat": 5,
+      "JobsPoor": 0, "JobsMid": 5, "JobsRich": 5,
+      "Repeat": 0.5, "BuildPoints": 85, "Water": "", "WaterYes": false,
+      "Effects": [
+        { "Effect": "Legal", "Amount": 500 }
+      ],
+      "Needs": [
+      ]
+    },
+    {
+      "TemplateID": "BT039", "Name": "Translator", "Function": "Legal",
+      "Labour": 20, "HardMat": 5, "LightMat": 5, "SpecialMat": 5,
+      "JobsPoor": 0, "JobsMid": 5, "JobsRich": 5,
+      "Repeat": 0.5, "BuildPoints": 85, "Water": "", "WaterYes": false,
+      "Effects": [
+        { "Effect": "Legal", "Amount": 500 }
+      ],
+      "Needs": [
+      ]
+    },
+    {
+      "TemplateID": "BT040", "Name": "Moneychanger", "Function": "Finance",
+      "Labour": 20, "HardMat": 5, "LightMat": 5, "SpecialMat": 5,
+      "JobsPoor": 2, "JobsMid": 5, "JobsRich": 3,
+      "Repeat": 0.2, "BuildPoints": 48, "Water": "", "WaterYes": false,
+      "Effects": [
+        { "Effect": "Finance", "Amount": 150 },
+        { "Effect": "Trade", "Amount": 250 }
+      ],
+      "Needs": [
+        { "Need": "Legal", "Amount": 20 },
+        { "Need": "Visitors", "Amount": 50 }
+      ]
+    },
+    {
+      "TemplateID": "BT041", "Name": "Lending house", "Function": "Finance",
+      "Labour": 30, "HardMat": 10, "LightMat": 5, "SpecialMat": 5,
+      "JobsPoor": 2, "JobsMid": 6, "JobsRich": 5,
+      "Repeat": 0.2, "BuildPoints": 95, "Water": "", "WaterYes": false,
+      "Effects": [
+        { "Effect": "Finance", "Amount": 500 },
+        { "Effect": "Trade", "Amount": 250 }
+      ],
+      "Needs": [
+        { "Need": "Legal", "Amount": 50 }
+      ]
+    },
+    {
+      "TemplateID": "BT042", "Name": "Banker office", "Function": "Finance",
+      "Labour": 40, "HardMat": 10, "LightMat": 10, "SpecialMat": 10,
+      "JobsPoor": 5, "JobsMid": 15, "JobsRich": 10,
+      "Repeat": 0.25, "BuildPoints": 185, "Water": "", "WaterYes": false,
+      "Effects": [
+        { "Effect": "Finance", "Amount": 1250 },
+        { "Effect": "Trade", "Amount": 250 }
+      ],
+      "Needs": [
+        { "Need": "Legal", "Amount": 100 },
+        { "Need": "Visitors", "Amount": 50 }
+      ]
+    },
+    {
+      "TemplateID": "BT043", "Name": "Large bank", "Function": "Finance",
+      "Labour": 100, "HardMat": 40, "LightMat": 20, "SpecialMat": 40,
+      "JobsPoor": 5, "JobsMid": 25, "JobsRich": 20,
+      "Repeat": 0.25, "BuildPoints": 650, "Water": "", "WaterYes": false,
+      "Effects": [
+        { "Effect": "Finance", "Amount": 5000 },
+        { "Effect": "Trade", "Amount": 500 }
+      ],
+      "Needs": [
+        { "Need": "Legal", "Amount": 500 },
+        { "Need": "Visitors", "Amount": 200 }
+      ]
+    },
+    {
+      "TemplateID": "BT044", "Name": "Insurer", "Function": "Finance",
+      "Labour": 30, "HardMat": 10, "LightMat": 5, "SpecialMat": 5,
+      "JobsPoor": 2, "JobsMid": 6, "JobsRich": 5,
+      "Repeat": 0.1, "BuildPoints": 110, "Water": "", "WaterYes": false,
+      "Effects": [
+        { "Effect": "Finance", "Amount": 750 }
+      ],
+      "Needs": [
+        { "Need": "Legal", "Amount": 150 }
+      ]
+    },
+    {
+      "TemplateID": "BT045", "Name": "Wandering merchant", "Function": "Finance",
+      "Labour": 5, "HardMat": 0, "LightMat": 0, "SpecialMat": 5,
+      "JobsPoor": 5, "JobsMid": 2, "JobsRich": 3,
+      "Repeat": 0.2, "BuildPoints": 35, "Water": "", "WaterYes": false,
+      "Effects": [
+        { "Effect": "Trade", "Amount": 350 },
+        { "Effect": "Finance", "Amount": 150 }
+      ],
+      "Needs": [
+        { "Need": "Visitors", "Amount": 100 }
+      ]
+    },
+    {
+      "TemplateID": "BT046", "Name": "Wandering lawyer", "Function": "Legal",
+      "Labour": 5, "HardMat": 0, "LightMat": 0, "SpecialMat": 5,
+      "JobsPoor": 1, "JobsMid": 2, "JobsRich": 2,
+      "Repeat": 0.2, "BuildPoints": 20, "Water": "", "WaterYes": false,
+      "Effects": [
+        { "Effect": "Legal", "Amount": 150 },
+        { "Effect": "Finance", "Amount": 100 }
+      ],
+      "Needs": [
+        { "Need": "Visitors", "Amount": 50 }
+      ]
+    },
+    {
+      "TemplateID": "BT047", "Name": "Market stall", "Function": "Trade",
+      "Labour": 5, "HardMat": 0, "LightMat": 5, "SpecialMat": 5,
+      "JobsPoor": 5, "JobsMid": 4, "JobsRich": 1,
+      "Repeat": 0.2, "BuildPoints": 50, "Water": "", "WaterYes": false,
+      "Effects": [
+        { "Effect": "Trade", "Amount": 500 },
+        { "Effect": "Ext goods", "Amount": 100 },
+        { "Effect": "Finance", "Amount": 100 }
+      ],
+      "Needs": [
+        { "Need": "Visitors", "Amount": 150 },
+        { "Need": "Light logs", "Amount": 100 },
+        { "Need": "Security", "Amount": 50 }
+      ]
+    },
+    {
+      "TemplateID": "BT048", "Name": "Market square", "Function": "Trade",
+      "Labour": 30, "HardMat": 5, "LightMat": 15, "SpecialMat": 10,
+      "JobsPoor": 20, "JobsMid": 15, "JobsRich": 5,
+      "Repeat": 0.1, "BuildPoints": 210, "Water": "", "WaterYes": false,
+      "Effects": [
+        { "Effect": "Trade", "Amount": 2000 }
+      ],
+      "Needs": [
+        { "Need": "Visitors", "Amount": 500 }
+      ]
+    }
+  ]
+}

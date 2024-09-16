@@ -16,19 +16,15 @@ public class CityData
     public int PoorPopulation { get; set; }
     public int MidPopulation { get; set; }
     public int RichPopulation { get; set; }
-
-    public int Population
-    {
-        get { return PoorPopulation + MidPopulation + RichPopulation; }
-    }
+    public int Population { get { return PoorPopulation + MidPopulation + RichPopulation; } }
 
     public string PoorLifestyleID; 
     public string MidLifestyleID; 
     public string RichLifestyleID; 
     
-    //public List<BuildingInstanceData> buildings;
     public List<Building> CityBuildings { get; set; } = new List<Building>(); 
     public string[][] grid;
+    public float BuildPoints { get; set; } 
     
 }
 
@@ -47,18 +43,15 @@ public class Settlement
     public int SettlementMoney { get; set; }
     public List<CityInventoryResource> SettlResources { get; set; }
     
-    //public int PoorLifestyleID;   // més endavant, nivell de satisfaccio que determina la demanda
+    public string SettlLifestyleID;   
     //public List<CityDemands> Demands { get; set; } = new List<CityDemands>();
     
     public int PoorPopulation { get; set; }
     public int MidPopulation { get; set; }
     public int RichPopulation { get; set; }
-
-    public int Population
-    {
-        get { return PoorPopulation + MidPopulation + RichPopulation; }
-    }
+    public int Population { get { return PoorPopulation + MidPopulation + RichPopulation; } }
     
+    public float BuildPoints { get; set; } 
     
 }
 

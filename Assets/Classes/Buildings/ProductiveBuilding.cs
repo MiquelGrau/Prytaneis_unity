@@ -6,9 +6,9 @@ public class ProductiveBuilding : Building
 {
     public string ProductionTempID { get; private set; }
     public List<ProductiveFactor> CurrentFactors { get; set; } 
-    public List<ProductionMethod> MethodsAvailable { get; private set; }
-    public ProductionMethod MethodActive { get; private set; }
-    public ProductionMethod MethodDefault { get; private set; }
+    public List<string> MethodsAvailable { get; private set; }
+    public string MethodActive { get; private set; }
+    public string MethodDefault { get; private set; }
     public Batch BatchCurrent { get; set; } 
     public List<Batch> BatchBacklog { get; private set; } 
     public float LinearOutput { get; set; }
@@ -22,15 +22,15 @@ public class ProductiveBuilding : Building
 
     public ProductiveBuilding(string id, string name, string templateID, string location, string ownerID, string inventoryID,
                               string activity, int size, int hpCurrent, int hpMax, int capacity,
-                              string productionTempID, List<ProductiveFactor> currentFactors, List<ProductionMethod> methodsAvailable,
-                              ProductionMethod methodActive, ProductionMethod methodDefault, Batch batchCurrent, 
+                              string productionTempID, List<ProductiveFactor> currentFactors, List<string> methodsAvailable,
+                              string methodActive, string methodDefault, Batch batchCurrent, 
                               List<Batch> batchBacklog, float linearOutput, float inputEfficiency, float outputEfficiency,
                               float cycleEfficiency, float salaryEfficiency, int jobsPoor, int jobsMid, int jobsRich)
         : base(id, name, templateID, location, ownerID, inventoryID, activity, size, hpCurrent, hpMax, capacity)
     {
         ProductionTempID = productionTempID;
         CurrentFactors = currentFactors ?? new List<ProductiveFactor>();
-        MethodsAvailable = methodsAvailable ?? new List<ProductionMethod>();
+        MethodsAvailable = methodsAvailable ?? new List<string>();
         MethodActive = methodActive;
         MethodDefault = methodDefault;
         BatchCurrent = batchCurrent;
@@ -67,9 +67,9 @@ public class ProductiveTemplate : BuildingTemplate
     //public string ClassName { get; private set; }
     //public string TemplateType { get; private set; }
     //public string TemplateSubtype { get; private set; }
-    public ProductionMethod DefaultMethod { get; set; }
-    public List<ProductionMethod> PossibleMethods { get; set; } = new List<ProductionMethod>();
-    public List<TemplateFactor> Factors { get; set; } = new List<TemplateFactor>();
+    public string DefaultMethod { get; set; }
+    public List<string> PossibleMethods { get; set; } = new List<string>();
+    public List<string> Factors { get; set; } = new List<string>();
     public int JobsPoor { get; private set; }
     public int JobsMid { get; private set; }
     public int JobsRich { get; private set; }
@@ -77,14 +77,14 @@ public class ProductiveTemplate : BuildingTemplate
     
     // Constructor
     public ProductiveTemplate(string templateID, string className, string templateType, string templateSubtype, 
-                              ProductionMethod defaultMethod, List<ProductionMethod> possibleMethods,
-                              List<TemplateFactor> factors, int jobsPoor, int jobsMid, int jobsRich, int capacity)
+                              string defaultMethod, List<string> possibleMethods,
+                              List<string> factors, int jobsPoor, int jobsMid, int jobsRich, int capacity)
         : base(templateID, className, templateType, templateSubtype)
     {
     
         DefaultMethod = defaultMethod;
-        PossibleMethods = possibleMethods ?? new List<ProductionMethod>(); 
-        Factors = factors ?? new List<TemplateFactor>(); 
+        PossibleMethods = possibleMethods ?? new List<string>(); 
+        Factors = factors ?? new List<string>(); 
         JobsPoor = jobsPoor;
         JobsMid = jobsMid;
         JobsRich = jobsRich;
@@ -98,13 +98,13 @@ public class AgriculturalBuilding : ProductiveBuilding
     
     public float FrostEffect { get; private set; }
     public float HeatEffect { get; private set; }
-    public int MethodAge { get; private set; }
+    public int MethodAge { get; private set; }  // edat de la planta, produirà a partir de X temps segons la especie. 
     public float SoilHealth { get; private set; }
 
     public AgriculturalBuilding(string id, string name, string templateID, string location, string ownerID, string inventoryID,
                                 string activity, int size, int hpCurrent, int hpMax, int capacity,
-                                string productionTempID, List<ProductiveFactor> currentFactors, List<ProductionMethod> methodsAvailable,
-                                ProductionMethod methodActive, ProductionMethod methodDefault, Batch batchCurrent,
+                                string productionTempID, List<ProductiveFactor> currentFactors, List<string> methodsAvailable,
+                                string methodActive, string methodDefault, Batch batchCurrent,
                                 List<Batch> batchBacklog, float linearOutput, float inputEfficiency, float outputEfficiency,
                                 float cycleEfficiency, float salaryEfficiency, int jobsPoor, int jobsMid, int jobsRich,
                                 float frostEffect, float heatEffect, int methodAge, float soilHealth)

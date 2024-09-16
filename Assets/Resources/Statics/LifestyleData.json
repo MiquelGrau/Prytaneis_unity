@@ -6,7 +6,14 @@
         { "ResType": "Basic food","DemType": "Essential","Position": 1,"MonthlyQty": 6,"MonthsCrit": 1,"MonthsTotal": 2 }, 
         { "ResType": "Heating","DemType": "Extra","Position": 1,"MonthlyQty": 3,"MonthsCrit": 0,"MonthsTotal": 1 }, 
         { "ResType": "Textiles","DemType": "Extra","Position": 1,"MonthlyQty": 2,"MonthsCrit": 0,"MonthsTotal": 1 }
+      ],
+      "ServiceDemands": [
+        { "ResType": "Food","DemType": "Startup","Position": 1,"MonthlyQty": 0.3,"Minimum": 0.4,"Optimum": 1 }, 
+        { "ResType": "Production","DemType": "Startup","Position": 1,"MonthlyQty": 0.2,"Minimum": 0.4,"Optimum": 1 }, 
+        { "ResType": "Religion","DemType": "Service","Position": 1,"MonthlyQty": 0.5,"Minimum": 0.5,"Optimum": 0.8 } 
+      
       ]
+
     }, 
     {
       "TierID": "C2", "TierName": "Struggling", "NextTierID": "C3",
@@ -17,7 +24,16 @@
         { "ResType": "Beverage","DemType": "Extra","Position": 1,"MonthlyQty": 6,"MonthsCrit": 0,"MonthsTotal": 1 }, 
         { "ResType": "Textiles","DemType": "Extra","Position": 1,"MonthlyQty": 3,"MonthsCrit": 0,"MonthsTotal": 1 }, 
         { "ResType": "Utensils","DemType": "Extra","Position": 1,"MonthlyQty": 0.6,"MonthsCrit": 0,"MonthsTotal": 1 }
+      ],
+      "ServiceDemands": [
+        { "ResType": "Food","DemType": "Startup","Position": 1,"MonthlyQty": 0.4,"Minimum": 0.4,"Optimum": 1 }, 
+        { "ResType": "Production","DemType": "Startup","Position": 1,"MonthlyQty": 0.3,"Minimum": 0.4,"Optimum": 1 }, 
+        { "ResType": "Religion","DemType": "Service","Position": 1,"MonthlyQty": 0.5,"Minimum": 0.5,"Optimum": 0.8 }, 
+        { "ResType": "Entertainment","DemType": "Service","Position": 1,"MonthlyQty": 0.1,"Minimum": 0.3,"Optimum": 0.7 }, 
+        { "ResType": "Accomodation","DemType": "Service","Position": 1,"MonthlyQty": 0.1,"Minimum": 0.3,"Optimum": 0.7 } 
+      
       ]
+
     }, 
     {
       "TierID": "C3", "TierName": "Frugal", "NextTierID": "C4",
@@ -31,7 +47,17 @@
         { "ResType": "Textiles","DemType": "Normal","Position": 1,"MonthlyQty": 4,"MonthsCrit": 1,"MonthsTotal": 2 }, 
         { "ResType": "Clothing","DemType": "Extra","Position": 1,"MonthlyQty": 2,"MonthsCrit": 0,"MonthsTotal": 1 }, 
         { "ResType": "Utensils","DemType": "Extra","Position": 1,"MonthlyQty": 0.8,"MonthsCrit": 0,"MonthsTotal": 1 }
+      ],
+      "ServiceDemands": [
+        { "ResType": "Food","DemType": "Startup","Position": 1,"MonthlyQty": 0.6,"Minimum": 0.4,"Optimum": 1 }, 
+        { "ResType": "Production","DemType": "Startup","Position": 1,"MonthlyQty": 0.5,"Minimum": 0.4,"Optimum": 1 }, 
+        { "ResType": "Religion","DemType": "Service","Position": 1,"MonthlyQty": 0.6,"Minimum": 0.5,"Optimum": 0.8 }, 
+        { "ResType": "Entertainment","DemType": "Service","Position": 1,"MonthlyQty": 0.2,"Minimum": 0.3,"Optimum": 0.7 }, 
+        { "ResType": "Accomodation","DemType": "Service","Position": 1,"MonthlyQty": 0.2,"Minimum": 0.3,"Optimum": 0.7 }, 
+        { "ResType": "Legal","DemType": "Service","Position": 1,"MonthlyQty": 0.1,"Minimum": 0.3,"Optimum": 0.75 } 
+      
       ]
+
     }, 
     {
       "TierID": "C4", "TierName": "Modest", "NextTierID": "C5",
@@ -47,7 +73,18 @@
         { "ResType": "Utensils","DemType": "Normal","Position": 1,"MonthlyQty": 0.8,"MonthsCrit": 1,"MonthsTotal": 2 }, 
         { "ResType": "House goods","DemType": "Extra","Position": 1,"MonthlyQty": 1,"MonthsCrit": 0,"MonthsTotal": 1 }, 
         { "ResType": "Medicine","DemType": "Extra","Position": 1,"MonthlyQty": 0.5,"MonthsCrit": 0,"MonthsTotal": 1 }
+      ],
+      "ServiceDemands": [
+        { "ResType": "Food","DemType": "Startup","Position": 1,"MonthlyQty": 0.6,"Minimum": 0.4,"Optimum": 1 }, 
+        { "ResType": "Production","DemType": "Startup","Position": 1,"MonthlyQty": 0.5,"Minimum": 0.4,"Optimum": 1 }, 
+        { "ResType": "Religion","DemType": "Service","Position": 1,"MonthlyQty": 0.6,"Minimum": 0.5,"Optimum": 0.8 }, 
+        { "ResType": "Entertainment","DemType": "Service","Position": 1,"MonthlyQty": 0.2,"Minimum": 0.3,"Optimum": 0.7 }, 
+        { "ResType": "Accomodation","DemType": "Service","Position": 1,"MonthlyQty": 0.2,"Minimum": 0.3,"Optimum": 0.7 }, 
+        { "ResType": "Legal","DemType": "Service","Position": 1,"MonthlyQty": 0.1,"Minimum": 0.4,"Optimum": 0.75 }, 
+        { "ResType": "Finance","DemType": "Service","Position": 1,"MonthlyQty": 0.1,"Minimum": 0.2,"Optimum": 0.75 } 
+      
       ]
+
     }, 
     {
       "TierID": "C5", "TierName": "Satisfied", "NextTierID": "",
@@ -67,6 +104,17 @@
         { "ResType": "Utensils","DemType": "Normal","Position": 1,"MonthlyQty": 1,"MonthsCrit": 1,"MonthsTotal": 2 }, 
         { "ResType": "House goods","DemType": "Normal","Position": 1,"MonthlyQty": 2,"MonthsCrit": 1,"MonthsTotal": 2 }, 
         { "ResType": "Medicine","DemType": "Extra","Position": 1,"MonthlyQty": 0.6,"MonthsCrit": 0,"MonthsTotal": 1 }
+      ],
+      "ServiceDemands": [
+        { "ResType": "Food","DemType": "Startup","Position": 1,"MonthlyQty": 0.6,"Minimum": 0.4,"Optimum": 1 }, 
+        { "ResType": "Production","DemType": "Startup","Position": 1,"MonthlyQty": 0.5,"Minimum": 0.4,"Optimum": 1 }, 
+        { "ResType": "Religion","DemType": "Service","Position": 1,"MonthlyQty": 0.6,"Minimum": 0.5,"Optimum": 0.8 }, 
+        { "ResType": "Entertainment","DemType": "Service","Position": 1,"MonthlyQty": 0.2,"Minimum": 0.3,"Optimum": 0.7 }, 
+        { "ResType": "Accomodation","DemType": "Service","Position": 1,"MonthlyQty": 0.2,"Minimum": 0.3,"Optimum": 0.7 }, 
+        { "ResType": "Legal","DemType": "Service","Position": 1,"MonthlyQty": 0.2,"Minimum": 0.4,"Optimum": 0.75 }, 
+        { "ResType": "Finance","DemType": "Service","Position": 1,"MonthlyQty": 0.2,"Minimum": 0.3,"Optimum": 0.75 }, 
+        { "ResType": "Culture","DemType": "Service","Position": 1,"MonthlyQty": 0.1,"Minimum": 0.2,"Optimum": 0.75 } 
+      
       ]
     }
   ]

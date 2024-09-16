@@ -13,6 +13,9 @@ public class DataManager : MonoBehaviour
 
     // Classes estatiques, definicions
     public static List<Resource> resourcemasterlist;
+    public static List<ResourceType> ResTypesList;
+    public static List<ResourceSubtype> ResSubtypesList;
+    
     public static List<LifestyleTier> lifestyleTiers;
     public List<ProductiveTemplate> productiveTemplates = new List<ProductiveTemplate>();
     public List<CivicTemplate> civicTemplates = new List<CivicTemplate>();
@@ -117,7 +120,11 @@ public class DataManager : MonoBehaviour
         return node != null ? node.name : "Unknown Node";
     }
 
-    
+    public ProductionMethod GetProductionMethodByID(string methodID)
+    {
+        return productionMethods.FirstOrDefault(method => method.MethodID == methodID);
+    }
+
     // Funció per obtenir el nom de la plantilla basant-se en l'ID
     public string GetTemplateNameByID(string templateID)
     {
@@ -126,6 +133,28 @@ public class DataManager : MonoBehaviour
         
         return template?.ClassName ?? "Unknown Template";
     }
+
+    public TemplateFactor GetFactorById(string factorID)
+    {
+        // Buscar primer a la llista de EmployeeFT
+        var employeeFactor = employeeFactors.FirstOrDefault(factor => factor.FactorID == factorID);
+        if (employeeFactor != null)
+        {
+            return employeeFactor;
+        }
+
+        // Si no es troba a EmployeeFT, buscar a la llista de ResourceFT
+        var resourceFactor = resourceFactors.FirstOrDefault(factor => factor.FactorID == factorID);
+        if (resourceFactor != null)
+        {
+            return resourceFactor;
+        }
+
+        // Si no es troba a cap llista, retornar null
+        Debug.LogWarning($"No s'ha trobat cap factor amb ID: {factorID}");
+        return null;
+    }
+
 
     
     /* public List<Agent> GetAgents()

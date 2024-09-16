@@ -147,8 +147,15 @@ public class ProductionManager : MonoBehaviour
         }
     }
 
-    public void SetupNewBatch(ProductionMethod method, ProductiveBuilding building)
+    public void SetupNewBatch(string methodID, ProductiveBuilding building)
     {
+        var method = DataManager.Instance.GetProductionMethodByID(methodID);  
+        if (method == null)
+        {
+            Debug.LogError($"No s'ha trobat ProductionMethod amb ID: {methodID}");
+            return;
+        }
+        
         var inputs = new List<Batch.BatchInput>();
         foreach (var input in method.Inputs)
         {

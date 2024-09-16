@@ -29,7 +29,8 @@ public class DatabaseImporter : MonoBehaviour
         LoadResourceData();
         LoadProductionMethods();
         LoadFactorTemplates();
-        LoadBuildingTemplates();    
+        LoadProductiveTemplates();
+        LoadCivicTemplates();    
         
         Debug.Log("Acabada fase Awake de l'importador! Ciutats, Lifestyle, Resources, Inventaris, etc");
     }
@@ -156,22 +157,31 @@ public class DatabaseImporter : MonoBehaviour
             Debug.LogError("No es pot trobar el fitxer LifestyleData.json a la ruta especificada.");
             return;
         }
-        //LifestyleTier[] tempArray = JsonUtility.FromJson<LifestyleWrapper>(jsonData.text).Items;
+        // Deserialitzar el JSON, en el wrapper
         LifestyleWrapper lifestyleWrapper = JsonConvert.DeserializeObject<LifestyleWrapper>(jsonData.text);
         if (lifestyleWrapper != null && lifestyleWrapper.Items != null)
+        
         {
             DataManager.lifestyleTiers = new List<LifestyleTier>(lifestyleWrapper.Items);
             Debug.Log($"Llistats de LifestyleTier i LifestyleData carregats. Total de LifestyleTiers: {DataManager.lifestyleTiers.Count}");
-
+            
             // Debugs
-            /* foreach (var tier in DataManager.lifestyleTiers)
+            foreach (var tier in DataManager.lifestyleTiers)
             {
-                Debug.Log($"Loaded LifestyleTier: {tier.TierID}, {tier.TierName}, NextTierID: {tier.NextTierID}, Demands: {tier.LifestyleDemands.Count}");
-                foreach (var demand in tier.LifestyleDemands)
+                //Debug.Log($"Loaded LifestyleTier: {tier.TierID}, {tier.TierName}, NextTierID: {tier.NextTierID}, Demands: {tier.LifestyleDemands.Count}");
+                Debug.Log($"Loaded LifestyleTier: {tier.TierID}, {tier.TierName}, NextTierID: {tier.NextTierID}, LifestyleDemands: {tier.LifestyleDemands.Count}, ServiceDemands: {tier.ServiceDemands.Count}");
+                
+                /* foreach (var demand in tier.LifestyleDemands)
                 {
-                    Debug.Log($"  Demand - ResType: {demand.ResType}, DemType: {demand.DemType}, Position: {demand.Position}, MonthlyQty: {demand.MonthlyQty}, MonthsCrit: {demand.MonthsCrit}, MonthsTotal: {demand.MonthsTotal}");
+                    Debug.Log($"  LifestyleDemand - ResType: {demand.ResType}, DemType: {demand.DemType}, Position: {demand.Position}, MonthlyQty: {demand.MonthlyQty}, MonthsCrit: {demand.MonthsCrit}, MonthsTotal: {demand.MonthsTotal}");
                 }
-            } */
+                
+                foreach (var service in tier.ServiceDemands)
+                {
+                    Debug.Log($"  ServiceDemand - ResType: {service.ResType}, DemType: {service.DemType}, Position: {service.Position}, MonthlyQty: {service.MonthlyQty}, Minimum: {service.Minimum}, Optimum: {service.Optimum}");
+                } */
+                
+            }
         }
         else
         {
@@ -179,6 +189,13 @@ public class DatabaseImporter : MonoBehaviour
         }
         
     }
+    [System.Serializable]
+    public class LifestyleWrapper
+    {
+        public LifestyleTier[] Items;
+    }
+
+
 
     private void LoadResourceData()
     {
@@ -188,37 +205,81 @@ public class DatabaseImporter : MonoBehaviour
             Debug.LogError("No es pot trobar el fitxer ResourceData.json a la ruta especificada.");
             return;
         }
-        ListWrapper<Resource> resourceListWrapper = JsonConvert.DeserializeObject<ListWrapper<Resource>>(jsonData.text);
+
+        // Deserialitzar el JSON en WrapperResource
+        ListWrapper<WrapperResource> resourceListWrapper = JsonConvert.DeserializeObject<ListWrapper<WrapperResource>>(jsonData.text);
         if (resourceListWrapper == null || resourceListWrapper.Items == null)
         {
             Debug.LogError("Error en deserialitzar el JSON. Verifica que el format sigui correcte.");
             return;
         }
-        DataManager.resourcemasterlist = resourceListWrapper.Items;
-
-        //DataManager.resources = JsonUtility.FromJson<ListWrapper<Resource>>(jsonData.text).Items;
-        //var resourceList = JsonUtility.FromJson<ListWrapper<Resource>>(jsonData.text).Items;
-        //DataManager.resourcemasterlist = resourceList;
-
-        // Crear HashSets per emmagatzemar tipus i subtipus únics
+        
+        // Inicialitzar llistes a DataManager, i HashSets per garantir que no hi hagi duplicats
+        DataManager.resourcemasterlist = new List<Resource>();
+        DataManager.ResTypesList = new List<ResourceType>();
+        DataManager.ResSubtypesList = new List<ResourceSubtype>();
         HashSet<string> uniqueResourceTypes = new HashSet<string>();
         HashSet<string> uniqueResourceSubtypes = new HashSet<string>();
         
         // Log de linia a linia de recursos
-        foreach (var resource in DataManager.resourcemasterlist)
+        foreach (var wrapperResource  in resourceListWrapper.Items)
         {
-            uniqueResourceTypes.Add(resource.ResourceType);
-            uniqueResourceSubtypes.Add(resource.ResourceSubtype);
+            bool isPerishable = wrapperResource.Per.ToLower() == "yes";
+            bool isService = wrapperResource.Serv.ToLower() == "yes";
+            
+
+            // Afegir o obtenir el ResourceType corresponent
+            if (!uniqueResourceTypes.Contains(wrapperResource.Type))
+            {
+                // Només afegim el ResourceType si no existeix ja
+                ResourceType resourceType = new ResourceType(wrapperResource.Type, isService);
+                DataManager.ResTypesList.Add(resourceType);
+                uniqueResourceTypes.Add(wrapperResource.Type);
+            }
+
+            // Afegir o obtenir el ResourceSubtype corresponent
+            if (!uniqueResourceSubtypes.Contains(wrapperResource.Subtype))
+            {
+                // Només afegim el ResourceSubtype si no existeix ja
+                ResourceSubtype resourceSubtype = new ResourceSubtype(wrapperResource.Subtype);
+                DataManager.ResSubtypesList.Add(resourceSubtype);
+                uniqueResourceSubtypes.Add(wrapperResource.Subtype);
+            }
+            
+            
+            // Crear una instància de Resource amb les dades convertides
+            Resource resource = new Resource(
+                wrapperResource.ID,
+                wrapperResource.Name,
+                wrapperResource.Type,
+                wrapperResource.Subtype,
+                wrapperResource.Price,
+                wrapperResource.Weight,
+                isPerishable,
+                isService
+            );
+            // Entrega el que acabem de crear a DataManager
+            DataManager.resourcemasterlist.Add(resource);
+                        
             /* Debug.Log($"Carregat recurs: {resource.ResourceID}, {resource.ResourceName}, {resource.ResourceType}, " +
-                    $"{resource.ResourceSubtype}, {resource.BasePrice}, {resource.BaseWeight}"); */
+                $"{resource.ResourceSubtype}, {resource.BasePrice}, {resource.BaseWeight}, {resource.Perishable}, {resource.Service}"); */
         }
-        //Debug.Log("Llistat de recursos carregats");
-        //Debug.Log($"Llistat de recursos carregats. Total de recursos: {resourceList.Count}, "+
-        //    $"Resource Types: {uniqueResourceTypes.Count}, Resource Subtypes: {uniqueResourceSubtypes.Count}");
         Debug.Log($"Llistat de recursos carregats. Total de recursos: {DataManager.resourcemasterlist.Count}, " +
             $"Resource Types: {uniqueResourceTypes.Count}, Resource Subtypes: {uniqueResourceSubtypes.Count}");
+        
     }
-    
+    [System.Serializable]
+    public class WrapperResource
+    {
+        public string ID;      
+        public string Name;    
+        public string Type;    
+        public string Subtype; 
+        public int Price;      
+        public float Weight;   
+        public string Per;     
+        public string Serv;    
+    }
     
 
     
@@ -319,11 +380,11 @@ public class DatabaseImporter : MonoBehaviour
         }
 
         // Logs per confirmar la càrrega
-        Debug.Log($"Total de Factors de Treballaors carregats: {dataManager.employeeFactors.Count}");
+        Debug.Log($"Total de Factors de Treballadors carregats: {dataManager.employeeFactors.Count}");
         Debug.Log($"Total de Factors de Recurs carregats: {dataManager.resourceFactors.Count}");
     }
 
-    private void LoadBuildingTemplates()
+    /* private void LoadBuildingTemplates()
     {
         string jsonContent = Resources.Load<TextAsset>("Statics/BuildingTemplates").text;
         BuildingTemplateListWrapper templateWrapper = JsonConvert.DeserializeObject<BuildingTemplateListWrapper>(jsonContent);
@@ -413,8 +474,177 @@ public class DatabaseImporter : MonoBehaviour
 
         Debug.Log($"Total de Plantilles Productives carregades: {dataManager.productiveTemplates.Count}");
         Debug.Log($"Total de Plantilles Cíviques carregades: {dataManager.civicTemplates.Count}");
+    } */
+
+    private void LoadCivicTemplates()
+    {
+        string jsonContent = Resources.Load<TextAsset>("Statics/CivicBldgTemplates").text;
+        CivicTemplateListWrapper templateWrapper = JsonConvert.DeserializeObject<CivicTemplateListWrapper>(jsonContent);
+        Debug.Log($"Total de Civic Templates llegits: {templateWrapper.Templates.Count}");
+
+        foreach (var templateData in templateWrapper.Templates)
+        {
+            List<Service> servOffered = new List<Service>();
+            List<Service> servNeeded = new List<Service>();
+
+            // Afegir els Effects com a ServOffered
+            foreach (var effect in templateData.Effects)
+            {
+                servOffered.Add(new Service(effect.Effect, effect.Amount));
+            }
+
+            // Afegir els Needs com a ServNeeded
+            foreach (var need in templateData.Needs)
+            {
+                servNeeded.Add(new Service(need.Need, need.Amount));
+            }
+
+            var civicTemplate = new CivicTemplate(
+                templateData.TemplateID,
+                templateData.Name,
+                "Civic", // TemplateType fixed to Civic
+                "", // TemplateSubtype can be added if needed
+                templateData.Function,
+                templateData.JobsPoor,
+                templateData.JobsMid,
+                templateData.JobsRich,
+                templateData.Repeat,
+                templateData.Labour,
+                templateData.HardMat,
+                templateData.LightMat,
+                templateData.SpecialMat,
+                templateData.BuildPoints,
+                templateData.Water,
+                templateData.WaterYes,
+                servOffered,
+                servNeeded
+            );
+            dataManager.civicTemplates.Add(civicTemplate);
+        }
+
+        Debug.Log($"Total de Plantilles Cíviques carregades: {dataManager.civicTemplates.Count}");
+    }
+    public class CivicTemplateListWrapper
+    {
+        public List<CivicTemplateJSON> Templates { get; set; }
+    }
+    public class CivicTemplateJSON
+    {
+        public string TemplateID { get; set; }
+        public string Name { get; set; }
+        public string Function { get; set; }
+        public float Labour { get; set; }
+        public float HardMat { get; set; }
+        public float LightMat { get; set; }
+        public float SpecialMat { get; set; }
+        public int JobsPoor { get; set; }
+        public int JobsMid { get; set; }
+        public int JobsRich { get; set; }
+        public float Repeat { get; set; }
+        public float BuildPoints { get; set; }
+        public string Water { get; set; }
+        public bool WaterYes { get; set; }
+
+        public List<EffectData> Effects { get; set; }
+        public List<NeedData> Needs { get; set; }
     }
 
+    public class EffectData
+    {
+        public string Effect { get; set; }
+        public int Amount { get; set; }
+    }
+
+    public class NeedData
+    {
+        public string Need { get; set; }
+        public int Amount { get; set; }
+    }
+
+    private void LoadProductiveTemplates()
+    {
+        string jsonContent = Resources.Load<TextAsset>("Statics/ProdBldgTemplates").text;
+        ProductiveTemplateListWrapper templateWrapper = JsonConvert.DeserializeObject<ProductiveTemplateListWrapper>(jsonContent);
+        Debug.Log($"Total de Productive Templates llegits: {templateWrapper.Templates.Count}");
+
+        foreach (var templateData in templateWrapper.Templates)
+        {
+            var productiveTemplate = new ProductiveTemplate(
+                templateData.TemplateID,
+                templateData.ClassName,
+                templateData.TemplateType,
+                templateData.TemplateSubtype,
+                templateData.DefaultMethod, 
+                new List<string>(),
+                new List<string>(),
+                templateData.JobsPoor,
+                templateData.JobsMid,
+                templateData.JobsRich,
+                templateData.Capacity
+            );
+
+            // Assignar els PossibleMethods com a IDs
+            if (templateData.PossibleMethods != null && templateData.PossibleMethods.Count > 0)
+            {
+                foreach (var methodID in templateData.PossibleMethods)
+                {
+                    productiveTemplate.PossibleMethods.Add(methodID); 
+                }
+            }
+            
+            /* // Assigna els ProductionMethods disponibles
+            if (templateData.PossibleMethods != null && templateData.PossibleMethods.Count > 0)
+            {
+                foreach (var methodReference in templateData.PossibleMethods)
+                {
+                    ProductionMethod foundMethod = FindMethodById(methodReference.MethodID);
+                    if (foundMethod != null)
+                    {
+                        productiveTemplate.PossibleMethods.Add(foundMethod);
+                    }
+                    else
+                    {
+                        Debug.LogWarning($"No s'ha trobat ProductionMethod amb ID: {methodReference.MethodID}");
+                    }
+                }
+            } */
+
+            // Verifica si hi ha factors a assignar
+            /* if (templateData.Factors != null && templateData.Factors.Count > 0)
+            {
+                foreach (var factorReference in templateData.Factors)
+                {
+                    TemplateFactor foundFactor = FindFactorById(factorReference.FactorID);
+                    if (foundFactor != null)
+                    {
+                        productiveTemplate.Factors.Add(foundFactor);
+                    }
+                    else
+                    {
+                        Debug.LogWarning($"No s'ha trobat Factor amb ID: {factorReference.FactorID}");
+                    }
+                }
+            } */
+
+            // Assignar els Factors com a IDs
+            if (templateData.Factors != null && templateData.Factors.Count > 0)
+            {
+                foreach (var factorID in templateData.Factors)
+                {
+                    productiveTemplate.Factors.Add(factorID); 
+                }
+            }
+
+            dataManager.productiveTemplates.Add(productiveTemplate);
+        }
+
+        Debug.Log($"Total de Plantilles Productives carregades: {dataManager.productiveTemplates.Count}");
+    }
+
+    public class ProductiveTemplateListWrapper
+    {
+        public List<ProductiveTemplate> Templates { get; set; }
+    }
     private TemplateFactor FindFactorById(string factorId)
     {
         return dataManager.employeeFactors.FirstOrDefault(f => f.FactorID == factorId) ??
@@ -468,18 +698,12 @@ public class ClimateDataWrapper
     public List<Climate> Climates;
 }
 
-[System.Serializable]
-public class LifestyleWrapper
-{
-    public LifestyleTier[] Items;
-}
 
-
-[System.Serializable]
+/* [System.Serializable]
 public class BuildingTemplateListWrapper
 {
     public List<BuildingTemplateJSON> Templates;
-}
+} */
 
 [System.Serializable]
 public class BuildingTemplateJSON

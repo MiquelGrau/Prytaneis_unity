@@ -24,3 +24,35 @@ public class Resource
     }
 
 }
+
+[System.Serializable]
+public class ResourceType
+{
+    public string Name;
+    public List<ResourceSubtype> Subtypes; 
+    public bool IsService;  
+
+    public ResourceType(string name, bool isService)
+    {
+        Name = name;
+        IsService = isService;
+        Subtypes = new List<ResourceSubtype>();
+    }
+    
+    public void AddSubtype(ResourceSubtype subtype)
+    {
+        Subtypes.Add(subtype);
+    }
+}
+
+[System.Serializable]
+public class ResourceSubtype
+{
+    public string Name;
+
+    public ResourceSubtype(string name)
+    {
+        Name = name;
+    }
+}
+
