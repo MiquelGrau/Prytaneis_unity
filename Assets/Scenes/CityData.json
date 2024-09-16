@@ -1,0 +1,38 @@
+[
+  {
+    "type": "casa_petita",
+    "x": -36,
+    "z": -46,
+    "rotation": 0
+  },
+  {
+    "type": "casa_petita",
+    "x": -28,
+    "z": -50,
+    "rotation": 0
+  },
+  {
+    "type": "casa_petita",
+    "x": -24,
+    "z": -34,
+    "rotation": 0
+  },
+  {
+    "type": "casa_petita",
+    "x": -50,
+    "z": -50,
+    "rotation": 0
+  },
+  {
+    "type": "casa_petita",
+    "x": -46,
+    "z": -24,
+    "rotation": 0
+  },
+  {
+    "type": "casa_petita",
+    "x": -46,
+    "z": -14,
+    "rotation": 0
+  }
+]
