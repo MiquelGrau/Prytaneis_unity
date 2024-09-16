@@ -18,7 +18,7 @@ public class Agent
     public string MainCharID; 
     public Character MainCharacter; 
     //public List<Character> CompanionCharacters; 
-    //public List<Vehicle> VehicleList; 
+    //public List<Vehicle> AgentVehicles; 
     
     // Propietats de viatge
     public string TravelMode; // "land", "water", "messenger", "star"
@@ -31,7 +31,7 @@ public class Agent
     /* public Agent()
     {
         CompanionCharacters = new List<Character>();
-        VehicleList = new List<Vehicle>();
+        AgentVehicles = new List<Vehicle>();
     } */
     public Agent(string agentID, string agentName, string locationNode, string agentInventoryID, string mainCharID) // inputs must agree with JSON definitions
     {
@@ -43,7 +43,7 @@ public class Agent
         this.MainCharID = mainCharID;
         this.MainCharacter = null; // Es crea linkant després
         //this.CompanionCharacters = companionCharacters ?? new List<Character>(); 
-        //this.VehicleList = vehicleList ?? new List<Vehicle>(); 
+        //this.AgentVehicles = agentVehicles ?? new List<Vehicle>(); 
         this.TravelMode = null; // Es calcula
         this.speed = 20.0f; // Velocitat fixa inicial
         this.Travel = null; // Inicialitza la propietat Travel
