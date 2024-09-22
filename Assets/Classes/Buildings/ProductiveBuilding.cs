@@ -21,12 +21,12 @@ public class ProductiveBuilding : Building
     public int JobsRich { get; private set; }
 
     public ProductiveBuilding(string id, string name, string templateID, string location, string ownerID, string inventoryID,
-                              string activity, int size, int hpCurrent, int hpMax, int capacity,
+                              string activity, int size, int hpCurrent, int hpMax,
                               string productionTempID, List<ProductiveFactor> currentFactors, List<string> methodsAvailable,
                               string methodActive, string methodDefault, Batch batchCurrent, 
                               List<Batch> batchBacklog, float linearOutput, float inputEfficiency, float outputEfficiency,
                               float cycleEfficiency, float salaryEfficiency, int jobsPoor, int jobsMid, int jobsRich)
-        : base(id, name, templateID, location, ownerID, inventoryID, activity, size, hpCurrent, hpMax, capacity)
+        : base(id, name, templateID, location, ownerID, inventoryID, activity, size, hpCurrent, hpMax)
     {
         ProductionTempID = productionTempID;
         CurrentFactors = currentFactors ?? new List<ProductiveFactor>();
@@ -102,13 +102,13 @@ public class AgriculturalBuilding : ProductiveBuilding
     public float SoilHealth { get; private set; }
 
     public AgriculturalBuilding(string id, string name, string templateID, string location, string ownerID, string inventoryID,
-                                string activity, int size, int hpCurrent, int hpMax, int capacity,
+                                string activity, int size, int hpCurrent, int hpMax,
                                 string productionTempID, List<ProductiveFactor> currentFactors, List<string> methodsAvailable,
                                 string methodActive, string methodDefault, Batch batchCurrent,
                                 List<Batch> batchBacklog, float linearOutput, float inputEfficiency, float outputEfficiency,
                                 float cycleEfficiency, float salaryEfficiency, int jobsPoor, int jobsMid, int jobsRich,
                                 float frostEffect, float heatEffect, int methodAge, float soilHealth)
-        : base(id, name, templateID, location, ownerID, inventoryID, activity, size, hpCurrent, hpMax, capacity,
+        : base(id, name, templateID, location, ownerID, inventoryID, activity, size, hpCurrent, hpMax,
                productionTempID, currentFactors, methodsAvailable, methodActive, methodDefault, batchCurrent,
                batchBacklog, linearOutput, inputEfficiency, outputEfficiency, cycleEfficiency, salaryEfficiency, jobsPoor, jobsMid, jobsRich)
     {
