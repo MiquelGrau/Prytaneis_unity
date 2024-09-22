@@ -191,13 +191,14 @@ public class CityService : InventoryResource
     }
 
     // Nou constructor per ResourceType
-    public CityService(string resourceType, float demand)
+    public CityService(string resourceType, float quantity, float demand)
     {
         ResourceID = null;  // Deixem el ResourceID com a null
         ResourceType = resourceType;
+        Quantity = quantity;
         Demand = demand;
         Price = 0;
-
+        
         // Inicialitzar la resta de propietats a zero
         PositionPoor = 0;
         PositionMid = 0;

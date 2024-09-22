@@ -86,7 +86,7 @@ public class BuildingManager : MonoBehaviour
     }
 
 
-    private void AddProductiveBuilding(ProductiveTemplate template)
+    public void AddProductiveBuilding(ProductiveTemplate template)
     {
         // Aquí crearem la lògica per a crear un nou ProductiveBuilding amb la informació de la template
         ProductiveBuilding newBuilding = new ProductiveBuilding(
@@ -124,6 +124,7 @@ public class BuildingManager : MonoBehaviour
         Debug.Log($"Número de ProductionMethods disponibles: {newBuilding.MethodsAvailable.Count}");
     }
 
+    // Antiga Civicbuidling, abans dels serveis
     /* private void AddCivicBuilding(CivicTemplate template)
     {
         // Aquí crearem la lògica per a crear un nou CivicBuilding amb la informació de la template
@@ -148,6 +149,35 @@ public class BuildingManager : MonoBehaviour
         AddBuildingToCurrentCity(newBuilding);
         Debug.Log("Nou edifici cívic creat: " + newBuilding.BuildingName);
     } */
+
+    // Nova funció per CivicBuilding, després d'afegir serveis
+    public void AddCivicBuilding(CivicTemplate template)
+    {
+        // Aquí crearem la lògica per a crear un nou CivicBuilding amb la informació de la template
+        CivicBuilding newBuilding = new CivicBuilding(
+            DataManager.Instance.GenerateBuildingID(),  // ID
+            template.ClassName,                         // name
+            template.TemplateID,                        // templateID
+            gameManager.CurrentCity.cityID,             // location
+            "", // OwnerID buit                         // ownerID
+            gameManager.CurrentCity.cityInventoryID,    // inventoryID
+            "Inactive", // Estat inicial d'activitat    // Activity
+            1, // Mida de l'edifici                     // size
+            100, // HPCurrent                           // hp curr
+            100, // HPMaximum                           // hp max  
+            template.Function,                          
+            template.JobsPoor,
+            template.JobsMid,
+            template.JobsRich
+        );
+        newBuilding.ServOffered = new List<Service>(template.ServOffered);
+        newBuilding.ServNeeded = new List<Service>(template.ServNeeded);
+
+
+        // Aquí es podria afegir el nou edifici a una llista d'edificis dins de la ciutat actual, per exemple
+        AddBuildingToCurrentCity(newBuilding);
+        Debug.Log("Nou edifici cívic creat: " + newBuilding.BuildingName);
+    }
 
 
     public void AddBuildingToCurrentCity(Building newBuilding)

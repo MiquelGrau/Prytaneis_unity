@@ -484,21 +484,47 @@ public class DatabaseImporter : MonoBehaviour
 
         foreach (var templateData in templateWrapper.Templates)
         {
+            //Debug.Log($"Processant CivicTemplate: TemplateID = {templateData.TemplateID}, BuildingName = {templateData.Name}");
+
             List<Service> servOffered = new List<Service>();
             List<Service> servNeeded = new List<Service>();
 
             // Afegir els Effects com a ServOffered
             foreach (var effect in templateData.Effects)
             {
-                servOffered.Add(new Service(effect.Effect, effect.Amount));
+                var matchedResource = DataManager.resourcemasterlist.FirstOrDefault(r => r.ResourceName == effect.Effect);
+                if (matchedResource != null)
+                {
+                    servOffered.Add(new Service(effect.Effect, effect.Amount)
+                    {
+                        ResourceType = matchedResource.ResourceType // Assegura't que assignem ResourceType correctament
+                    });
+                    //Debug.Log($"[ServOffered] Type: {matchedResource.ResourceType}, Qty: {effect.Amount}");
+                }
+                else
+                {
+                    Debug.LogWarning($"ResourceID {effect.Effect} no trobat a la llista de recursos!");
+                }
             }
 
             // Afegir els Needs com a ServNeeded
             foreach (var need in templateData.Needs)
             {
-                servNeeded.Add(new Service(need.Need, need.Amount));
+                var matchedResource = DataManager.resourcemasterlist.FirstOrDefault(r => r.ResourceName == need.Need);
+                if (matchedResource != null)
+                {
+                    servNeeded.Add(new Service(need.Need, need.Amount)
+                    {
+                        ResourceType = matchedResource.ResourceType // Assegura't que assignem ResourceType correctament
+                    });
+                    //Debug.Log($"[ServNeeded] Type: {matchedResource.ResourceType}, Qty: {need.Amount}");
+                }
+                else
+                {
+                    Debug.LogWarning($"ResourceID {need.Need} no trobat a la llista de recursos!");
+                }
             }
-
+            
             var civicTemplate = new CivicTemplate(
                 templateData.TemplateID,
                 templateData.Name,

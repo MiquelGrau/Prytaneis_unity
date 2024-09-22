@@ -28,13 +28,16 @@ public class GameManager : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
 
+        AssignCurrentCity("C0001");
+        
+        
     }
 
     void Start()
     {
-        Debug.Log($"Començant fase del GameManager");
         AssignCurrentCity("C0001");
         AssignCurrentAgent("AG0003");
+        Debug.Log($"Començant fase del GameManager");
         
         // Subscripció als esdeveniments de GlobalTime
         GlobalTime.Instance.OnDayChanged += HandleDayChanged;

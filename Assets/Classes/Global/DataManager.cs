@@ -133,6 +133,11 @@ public class DataManager : MonoBehaviour
         
         return template?.ClassName ?? "Unknown Template";
     }
+    public CivicTemplate GetCivicTemplateByID(string templateID)
+    {
+        return civicTemplates.FirstOrDefault(template => template.TemplateID == templateID);
+    }
+
 
     public TemplateFactor GetFactorById(string factorID)
     {

@@ -8,8 +8,8 @@ public class CivicBuilding : Building
     public int JobsPoor { get; private set; }
     public int JobsMid { get; private set; }
     public int JobsRich { get; private set; }
-    public List<Service> ServOffered { get; private set; }
-    public List<Service> ServNeeded { get; private set; }
+    public List<Service> ServOffered { get; set; }
+    public List<Service> ServNeeded { get; set; }
 
     public CivicBuilding(string id, string name, string templateID, string location, string ownerID, string inventoryID,
                           string activity, int size, int hpCurrent, int hpMax,
@@ -42,7 +42,7 @@ public class CivicTemplate : BuildingTemplate
     public float HardMat { get; private set; }
     public float LightMat { get; private set; }
     public float SpecialMat { get; private set; }
-    public float BuildPointCost { get; private set; }
+    public float BuildPointCost { get; set; }   // Obert per a recalcular, al AllocateBuildingMng
     public string WaterSupport { get; private set; }
     public bool WaterCondition { get; private set; }
     

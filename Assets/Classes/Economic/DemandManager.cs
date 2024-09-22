@@ -433,6 +433,7 @@ public class DemandManager : MonoBehaviour
                     // Si no existeix, crear un nou servei
                     var newService = new CityService(
                         service.ResType,
+                        0,
                         populations[i] * service.MonthlyQty / 1000 
                     )
                     {
@@ -450,12 +451,12 @@ public class DemandManager : MonoBehaviour
         }
         
         // Un cop ha acabat de repassar tots els serveis, fer el Debug.Log per cada servei
-        /* foreach (var service in chosenCityInventory.Services)
+        foreach (var service in chosenCityInventory.Services)
         {
             Debug.Log($"Service: {service.ResourceType}, Demand: {service.Demand}, " +
                     $"Positions: {service.PositionPoor}/{service.PositionMid}/{service.PositionRich}, " +
                     $"Ratio {service.FulfilledRatio}, Min {service.MinRatio}, Opt {service.OptimalRatio}");
-        } */
+        }
         
         Debug.Log($"Processament de serveis complet per la ciutat: {chosenCity.cityName} (ID: {chosenCity.cityID})");
     }

@@ -241,19 +241,89 @@ public class StartContentImporter : MonoBehaviour
 
     private void ImportCityBuildings(string jsonContent)
     {
-        var wrapper = JsonConvert.DeserializeObject<Dictionary<string, List<Building>>>(jsonContent);
-        if (wrapper.TryGetValue("CityBuildings", out List<Building> buildings))
+        //var wrapper = JsonConvert.DeserializeObject<Dictionary<string, List<Building>>>(jsonContent);
+        //if (wrapper.TryGetValue("CityBuildings", out List<Building> buildings))
+        var wrapper = JsonConvert.DeserializeObject<Dictionary<string, List<Dictionary<string, object>>>>(jsonContent);
+        if (wrapper.TryGetValue("CityBuildings", out List<Dictionary<string, object>> buildings))
         {
-            foreach (var building in buildings)
+            foreach (var buildingData in buildings)
+            {
+                // Recuperar el tipus d’edifici
+                string buildingType = buildingData["BuildingType"] as string;
+
+                Building building = null;
+
+                if (buildingType == "Civic")
+                {
+                    // Deserialitzar com a CivicBuilding
+                    CivicBuilding civicBuilding = JsonConvert.DeserializeObject<CivicBuilding>(JsonConvert.SerializeObject(buildingData));
+
+                    // Buscar el CivicTemplate que correspon a aquest edifici
+                    CivicTemplate template = DataManager.Instance.GetCivicTemplateByID(civicBuilding.BuildingTemplateID);
+                    if (template != null)
+                    {
+                        civicBuilding.ServOffered = new List<Service>(template.ServOffered);
+                        civicBuilding.ServNeeded = new List<Service>(template.ServNeeded);
+                    }
+
+                    building = civicBuilding;
+                }
+                else if (buildingType == "Productive")
+                {
+                    // Deserialitzar com a ProductiveBuilding
+                    ProductiveBuilding productiveBuilding = JsonConvert.DeserializeObject<ProductiveBuilding>(JsonConvert.SerializeObject(buildingData));
+                    building = productiveBuilding;
+                }
+
+                if (building != null)
+                {
+                    // Assignar l’ID únic
+                    building.BuildingID = DataManager.Instance.GenerateBuildingID();
+
+                    CityData city = FindCityByID(building.BuildingLocation);
+                    if (city != null)
+                    {
+                        city.CityBuildings.Add(building);
+                        Debug.Log($"Nou edifici a {city.cityName}: {building.BuildingName}, ID {building.BuildingID}");
+                    }
+                }
+                else
+                {
+                    Debug.LogWarning($"No s'ha pogut crear un edifici del tipus: {buildingType}");
+                }
+            }
+
+            
+            /* foreach (var building in buildings)
             {
                 building.BuildingID = DataManager.Instance.GenerateBuildingID();
                 CityData city = FindCityByID(building.BuildingLocation);
                 if (city != null)
                 {
+                    // Si l'edifici és un CivicBuilding, busquem la seva plantilla
+                    if (building is CivicBuilding civicBuilding)
+                    {
+                        // Buscar el CivicTemplate que correspon a aquest edifici
+                        CivicTemplate template = DataManager.Instance.GetCivicTemplateByID(civicBuilding.BuildingTemplateID);
+
+                        if (template != null)
+                        {
+                            // Copiar els serveis oferts i necessaris de la plantilla a l'edifici
+                            civicBuilding.ServOffered = new List<Service>(template.ServOffered);
+                            civicBuilding.ServNeeded = new List<Service>(template.ServNeeded);
+                            
+                            Debug.Log($"Serveis copiat per edifici {civicBuilding.BuildingName} basat en template {template.TemplateID}");
+                        }
+                        else
+                        {
+                            Debug.LogWarning($"No s'ha trobat la plantilla CivicTemplate amb ID: {civicBuilding.BuildingTemplateID}");
+                        }
+                    }
+                    
                     city.CityBuildings.Add(building);
-                    Debug.Log($"Building added to city {city.cityName}: {building.BuildingName}");
+                    Debug.Log($"Nou edifici a {city.cityName}: {building.BuildingName}, ID {building.BuildingID}");
                 }
-            }
+            } */
         }
     }
     private void ImportSettlementBuildings(string jsonContent)
