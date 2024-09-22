@@ -12,9 +12,9 @@ public class CivicBuilding : Building
     public List<Service> ServNeeded { get; private set; }
 
     public CivicBuilding(string id, string name, string templateID, string location, string ownerID, string inventoryID,
-                          string activity, int size, int hpCurrent, int hpMax, int capacity,
+                          string activity, int size, int hpCurrent, int hpMax,
                           string function, int jobsPoor, int jobsMid, int jobsRich)
-        : base(id, name, templateID, location, ownerID, inventoryID, activity, size, hpCurrent, hpMax, capacity)
+        : base(id, name, templateID, location, ownerID, inventoryID, activity, size, hpCurrent, hpMax)
     {
         Function = function;
         JobsPoor = jobsPoor;

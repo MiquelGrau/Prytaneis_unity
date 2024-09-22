@@ -100,7 +100,6 @@ public class BuildingManager : MonoBehaviour
             1, // Mida de l'edifici
             0, // HPCurrent
             0, // HPMaximum
-            template.Capacity,
             template.TemplateID,
             new List<ProductiveFactor>(), // CurrentFactors com a llistat buit per ara
             template.PossibleMethods,

@@ -14,11 +14,10 @@ public class Building
     public int BuildingSize { get; set; }
     public int HPCurrent { get; set; }
     public int HPMaximum { get; set; }
-    public int Capacity { get; set; }
 
     // Constructor
     public Building(string id, string name, string templateID, string location, string ownerID, string inventoryID,
-                    string activity, int size, int hpCurrent, int hpMax, int capacity)
+                    string activity, int size, int hpCurrent, int hpMax)
     {
         BuildingID = id;
         BuildingName = name;
@@ -30,7 +29,6 @@ public class Building
         BuildingSize = size;
         HPCurrent = hpCurrent;
         HPMaximum = hpMax;
-        Capacity = capacity;
     }
 
     // Basic functions
