@@ -1,0 +1,43 @@
+{ "CityBuildings": [
+    {
+      "BuildingName": "Monastery guesthouse", "BuildingType": "Civic", "BuildingTemplateID": "BT003",
+      "BuildingSize": 2, "BuildingLocation": "C0001", "BuildingOwnerID": "C0001"
+    },
+    {
+      "BuildingName": "Pilgrim hostel", "BuildingType": "Civic", "BuildingTemplateID": "BT004",
+      "BuildingSize": 1, "BuildingLocation": "C0001", "BuildingOwnerID": "C0001"
+    },
+    {
+      "BuildingName": "Boat dock", "BuildingType": "Civic", "BuildingTemplateID": "BT006",
+      "BuildingSize": 1, "BuildingLocation": "C0001", "BuildingOwnerID": "C0001"
+    },
+    {
+      "BuildingName": "Tavern", "BuildingType": "Civic", "BuildingTemplateID": "BT011",
+      "BuildingSize": 2, "BuildingLocation": "C0001", "BuildingOwnerID": "C0001"
+    },
+    {
+      "BuildingName": "House simple", "BuildingType": "Civic", "BuildingTemplateID": "BT031",
+      "BuildingSize": 4, "BuildingLocation": "C0001", "BuildingOwnerID": "C0001"
+    },
+    {
+      "BuildingName": "House middle", "BuildingType": "Civic", "BuildingTemplateID": "BT010",
+      "BuildingSize": 3, "BuildingLocation": "C0002", "BuildingOwnerID": "C0002"
+    },
+    {
+      "BuildingName": "House better", "BuildingType": "Civic", "BuildingTemplateID": "BT011",
+      "BuildingSize": 2, "BuildingLocation": "C0002", "BuildingOwnerID": "C0002"
+    },
+    {
+      "BuildingName": "Scribe", "BuildingType": "Civic", "BuildingTemplateID": "BT016",
+      "BuildingSize": 1, "BuildingLocation": "C0002", "BuildingOwnerID": "C0002"
+    },
+    {
+      "BuildingName": "Wandering merchant", "BuildingType": "Civic", "BuildingTemplateID": "BT021",
+      "BuildingSize": 3, "BuildingLocation": "C0002", "BuildingOwnerID": "C0002"
+    },
+    {
+      "BuildingName": "Forja de Santa Clara", "BuildingType": "Productive", "BuildingTemplateID": "BT002",
+      "BuildingSize": 2, "BuildingLocation": "C0001", "BuildingOwnerID": "C0001"
+    }
+ ]
+}
