@@ -29,7 +29,7 @@ public class StartContentImporter : MonoBehaviour
 
     private void Start()
     {
-        ConnectCityAndCityInv();
+        //ConnectCityAndCityInv();
         ConnectAgentAndAgentInv();
         ImportBuildings();
         Debug.Log("Acabada fase Start de l'importador! Connectats inventaris a Ciutats i a Agents");
@@ -44,17 +44,39 @@ public class StartContentImporter : MonoBehaviour
         string path = "Assets/Resources/StartValues/Locations";
         string[] files = Directory.GetFiles(path, "*.json");
 
-        dataManager.allCityList = new List<CityData>();
+        DataManager.Instance.allCityList = new List<CityData>();
 
         foreach (string file in files)
         {
             string jsonContent = File.ReadAllText(file);
             CityDataList cityDataList = JsonConvert.DeserializeObject<CityDataList>(jsonContent);
-
-            if (cityDataList != null && cityDataList.cities != null)
+            
+            if (cityDataList != null && cityDataList.Cities != null)
             {
-                dataManager.allCityList.AddRange(cityDataList.cities);
-                Debug.Log($"S'han carregat {cityDataList.cities.Count} ciutats des de {file}.");
+                foreach (var cityWrapper in cityDataList.Cities)
+                {
+                    // Convertir el wrapper en una instància de CityData
+                    CityData cityData = new CityData(
+                        cityWrapper.LocID,
+                        cityWrapper.Name,
+                        cityWrapper.NodeID,
+                        cityWrapper.CityInventoryID,
+                        cityWrapper.PoorPopulation,
+                        cityWrapper.MidPopulation,
+                        cityWrapper.RichPopulation,
+                        cityWrapper.PoorLifestyleID,
+                        cityWrapper.MidLifestyleID,
+                        cityWrapper.RichLifestyleID,
+                        cityWrapper.BuildPoints,
+                        cityWrapper.PoliticalStatus,
+                        cityWrapper.OwnerID
+                    );
+
+                    DataManager.Instance.allCityList.Add(cityData);
+
+                }
+
+                Debug.Log($"S'han carregat {cityDataList.Cities.Count} ciutats des de {file}.");
             }
             else
             {
@@ -71,6 +93,8 @@ public class StartContentImporter : MonoBehaviour
             Debug.Log($"S'han carregat un total de {dataManager.allCityList.Count} ciutats.");
         }
     }
+    
+    
     
 
     private void LoadCityInventory()
@@ -618,8 +642,52 @@ public class StartContentImporter : MonoBehaviour
 [System.Serializable]
 public class CityDataList
 {
-    public List<CityData> cities;
+    [JsonProperty("City")]
+    public List<CityWrapper> Cities { get; set; }
 }
+
+public class CityWrapper
+{
+    [JsonProperty("LocID")]
+    public string LocID { get; set; }
+
+    [JsonProperty("Name")]
+    public string Name { get; set; }
+
+    [JsonProperty("NodeID")]
+    public string NodeID { get; set; }
+
+    [JsonProperty("InvID")]
+    public string CityInventoryID { get; set; }
+    
+    [JsonProperty("PoorPop")]
+    public int PoorPopulation { get; set; }
+
+    [JsonProperty("MidPop")]
+    public int MidPopulation { get; set; }
+
+    [JsonProperty("RichPop")]
+    public int RichPopulation { get; set; }
+
+    [JsonProperty("PoorID")]
+    public string PoorLifestyleID { get; set; }
+
+    [JsonProperty("MidID")]
+    public string MidLifestyleID { get; set; }
+
+    [JsonProperty("RichID")]
+    public string RichLifestyleID { get; set; }
+
+    [JsonProperty("BuildPoints")]
+    public float BuildPoints { get; set; }
+
+    [JsonProperty("Political")]
+    public string PoliticalStatus { get; set; }
+
+    [JsonProperty("OwnerID")]
+    public string OwnerID { get; set; }
+}
+
 
 
 [System.Serializable]

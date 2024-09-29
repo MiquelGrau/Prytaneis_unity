@@ -1,0 +1,116 @@
+{
+    "cities": [
+      {
+        "LocID": "C0001",
+        "Name": "Barcelona",
+        "latitude": 41.3888,
+        "longitude": 2.1629,
+        "buildings": [],
+        "cityInventoryID": "CV0001",
+        "PoorPopulation": 12000, 
+        "MidPopulation": 5000, 
+        "RichPopulation": 2000, 
+        "poorLifestyleID": "C2", 
+        "midLifestyleID": "C3",  
+        "richLifestyleID": "C4", 
+        "BuildPoints": 10000,
+        "nodeId": "N00021",
+        "grid": [
+          ["House1", "House2", "Market1", "StoneRoad1", "House1"],
+          ["House1", "House1", "House1", "StoneRoad1", "House2"],
+          ["House2", "House2", "House1", "StoneRoad1", "House1"],
+          ["House1", "House2", "House2", "Market1", "House1"]
+        ]
+      },
+      {
+        "LocID": "C0002",
+        "Name": "Roma",
+        "latitude": 41.9031,
+        "longitude": 12.4742,
+        "buildings": [],
+        "cityInventoryID": "CV0002",
+        "PoorPopulation": 18000, 
+        "MidPopulation": 6000, 
+        "RichPopulation": 4000, 
+        "poorLifestyleID": "C2", 
+        "midLifestyleID": "C3",  
+        "richLifestyleID": "C5", 
+        "BuildPoints": 10000,
+        "nodeId": "N00022",
+        "grid": [
+          ["House1", "House2", "Market1", "StoneRoad1", "House1"],
+          ["House1", "House1", "House1", "StoneRoad1", "House2"],
+          ["House2", "House2", "House1", "StoneRoad1", "House1"],
+          ["House1", "House2", "House2", "Market1", "House1"]
+        ]
+      },
+      {
+        "LocID": "C0003",
+        "Name": "Firenze",
+        "latitude": 43.7617,
+        "longitude": 11.2904,
+        "buildings": [],
+        "cityInventoryID": "CV0003",
+        "PoorPopulation": 10000, 
+        "MidPopulation": 4500, 
+        "RichPopulation": 1500, 
+        "poorLifestyleID": "C2", 
+        "midLifestyleID": "C3",  
+        "richLifestyleID": "C4", 
+        "BuildPoints": 10000,
+        "nodeId": "N00023",
+        "grid": [
+          ["House1", "House2", "Market1", "StoneRoad1", "House1"],
+          ["House1", "House1", "House1", "StoneRoad1", "House2"],
+          ["House2", "House2", "House1", "StoneRoad1", "House1"],
+          ["House1", "House2", "House2", "Market1", "House1"]
+        ]
+      },
+      {
+        "LocID": "C0004",
+        "Name": "Marseilles",
+        "latitude": 43.2933,
+        "longitude": 5.3759,
+        "buildings": [],
+        "cityInventoryID": "CV0004",
+        "PoorPopulation": 12000, 
+        "MidPopulation": 4000, 
+        "RichPopulation": 3000, 
+        "poorLifestyleID": "C1", 
+        "midLifestyleID": "C3",  
+        "richLifestyleID": "C5", 
+        "BuildPoints": 10000,
+        "nodeId": "N00024",
+        "grid": [
+          ["House1", "House2", "House1", "House1", "House1"],
+          ["House1", "House1", "House1", "House2", "House2"],
+          ["House2", "House2", "Market1", "ref-", "House1"],
+          ["House1", "House2", "ref-", "ref-", "House1"],
+          ["House1", "House2", "House2", "House1", "House1"]
+        ]
+      },
+      {
+        "LocID": "C0005",
+        "Name": "Valencia",
+        "latitude": 39.4623,
+        "longitude": -0.3833,
+        "buildings": [],
+        "cityInventoryID": "CV0005",
+        "PoorPopulation": 7000, 
+        "MidPopulation": 2000, 
+        "RichPopulation": 1000, 
+        "poorLifestyleID": "C1", 
+        "midLifestyleID": "C2", 
+        "richLifestyleID": "C4", 
+        "BuildPoints": 10000,
+        "nodeId": "N00025",
+        "grid": [
+          ["House1", "House2", "Market1", "StoneRoad1", "House1"],
+          ["House1", "House1", "House1", "StoneRoad1", "House2"],
+          ["House2", "House2", "House1", "StoneRoad1", "House1"],
+          ["House1", "House2", "House2", "Market1", "House1"]
+        ]
+      }
+    ]
+  }
+  

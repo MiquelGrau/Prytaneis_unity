@@ -28,7 +28,7 @@ public class CityData : Location
     public string PoliticalStatus { get; set; }
     
     // Economic
-    public string CityInventoryID;
+    public string CityInventoryID { get; set; }
     public string[][] Grid;
     public float BuildPoints { get; set; } 
     
@@ -36,10 +36,11 @@ public class CityData : Location
     public CityData(string locationID, string name, string nodeID, string cityInventoryID, 
                     int poorPop, int midPop, int richPop, 
                     string poorID, string midID, string richID, 
-                    float buildPoints, string politicalStatus, string ownerID,  
-                    string[][] grid )
+                    float buildPoints, string politicalStatus, string ownerID )
         : base(name, locationID, nodeID)  // Crida al constructor de Location
     {
+    
+    
         PoorPopulation = poorPop;
         MidPopulation = midPop;
         RichPopulation = richPop;
@@ -55,6 +56,8 @@ public class CityData : Location
         Longitude = 0f;
         Buildings = new List<Building>();
         Grid = null;
+
+        
     }
 
 }
