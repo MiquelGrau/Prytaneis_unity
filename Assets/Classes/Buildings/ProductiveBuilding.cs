@@ -4,13 +4,29 @@ using UnityEngine;
 
 public class ProductiveBuilding : Building
 {
+    // Refs que venen de Building
+    //public string BuildingID { get; set; }
+    //public string BuildingName { get; set; }
+    //public string BuildingTemplateID { get; set; }
+    //public string BuildingLocation { get; set; }
+    //public string BuildingOwnerID { get; set; }
+    //public string RelatedInventoryID { get; set; }
+    //public string ActivityStatus { get; set; }
+    //public int BuildingSize { get; set; }
+    //public int HPCurrent { get; set; }
+    //public int HPMaximum { get; set; }
     public string ProductionTempID { get; private set; }
     public List<ProductiveFactor> CurrentFactors { get; set; } 
-    public List<string> MethodsAvailable { get; private set; }
+    public List<string> MethodsAvailable { get; set; }
+    // Current production
     public string MethodActive { get; private set; }
-    public string MethodDefault { get; private set; }
+    public string MethodDefault { get; set; }
     public Batch BatchCurrent { get; set; } 
     public List<Batch> BatchBacklog { get; private set; } 
+    public int LastTimeCheck { get; set; }
+    public bool ProdActive { get; set; } = false;
+    
+    // Productivities
     public float LinearOutput { get; set; }
     public float InputEfficiency { get; set; }
     public float OutputEfficiency { get; set; }
@@ -19,6 +35,7 @@ public class ProductiveBuilding : Building
     public int JobsPoor { get; private set; }
     public int JobsMid { get; private set; }
     public int JobsRich { get; private set; }
+    
 
     public ProductiveBuilding(string id, string name, string templateID, string location, string ownerID, string inventoryID,
                               string activity, int size, int hpCurrent, int hpMax,
@@ -35,6 +52,8 @@ public class ProductiveBuilding : Building
         MethodDefault = methodDefault;
         BatchCurrent = batchCurrent;
         BatchBacklog = batchBacklog ?? new List<Batch>();
+        LastTimeCheck = 0;
+        ProdActive = false;
         LinearOutput = linearOutput;
         InputEfficiency = inputEfficiency;
         OutputEfficiency = outputEfficiency;
@@ -43,6 +62,7 @@ public class ProductiveBuilding : Building
         JobsPoor = jobsPoor;
         JobsMid = jobsMid;
         JobsRich = jobsRich;
+        
     }
 
     // Mètode públic per afegir factors

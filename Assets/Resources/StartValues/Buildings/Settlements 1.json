@@ -1,14 +1,14 @@
 { "SettlementBuildings": [
     {
-      "BuildingName": "Chapel", "BuildingTemplateID": "BT003",
+      "BuildingName": "Chapel", "BuildingType": "Civic", "BuildingTemplateID": "BT003",
       "BuildingSize": 2, "BuildingLocation": "S0001", "BuildingOwnerID": "S0001"
     },
     {
-      "BuildingName": "Scribe", "BuildingTemplateID": "BT016",
+      "BuildingName": "Scribe", "BuildingType": "Civic", "BuildingTemplateID": "BT016",
       "BuildingSize": 1, "BuildingLocation": "S0001", "BuildingOwnerID": "S0001"
     },
     {
-      "BuildingName": "Wandering merchant", "BuildingTemplateID": "BT021",
+      "BuildingName": "Wandering merchant", "BuildingType": "Civic", "BuildingTemplateID": "BT021",
       "BuildingSize": 3, "BuildingLocation": "S0001", "BuildingOwnerID": "S0001"
     }
  ]

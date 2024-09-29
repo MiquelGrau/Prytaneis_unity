@@ -3,8 +3,7 @@
       "MethodID": "PM001", "MethodName": "Produce gin",
       "MethodType": "Basic", "CycleTime": 500,
       "Inputs": [
-        { "ResourceID": "R001", "Amount": 10 },
-        { "ResourceType": "Type1", "Amount": 2 }
+        { "ResourceID": "R001", "Amount": 10 }
       ],
       "Outputs": [
         { "ResourceID": "R026", "Amount": 2, "Chance": 100, "Type": "Basic" }

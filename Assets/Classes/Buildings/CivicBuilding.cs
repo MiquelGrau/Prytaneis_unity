@@ -4,6 +4,17 @@ using UnityEngine;
 
 public class CivicBuilding : Building
 {
+    // Refs que venen de Building
+    //public string BuildingID { get; set; }
+    //public string BuildingName { get; set; }
+    //public string BuildingTemplateID { get; set; }
+    //public string BuildingLocation { get; set; }
+    //public string BuildingOwnerID { get; set; }
+    //public string RelatedInventoryID { get; set; }
+    //public string ActivityStatus { get; set; }
+    //public int BuildingSize { get; set; }
+    //public int HPCurrent { get; set; }
+    //public int HPMaximum { get; set; }
     public string Function { get; private set; }
     public int JobsPoor { get; private set; }
     public int JobsMid { get; private set; }
@@ -13,7 +24,8 @@ public class CivicBuilding : Building
 
     public CivicBuilding(string id, string name, string templateID, string location, string ownerID, string inventoryID,
                           string activity, int size, int hpCurrent, int hpMax,
-                          string function, int jobsPoor, int jobsMid, int jobsRich)
+                          string function, int jobsPoor, int jobsMid, int jobsRich,
+                          List<Service> servOffered = null, List<Service> servNeeded = null)
         : base(id, name, templateID, location, ownerID, inventoryID, activity, size, hpCurrent, hpMax)
     {
         Function = function;
@@ -21,8 +33,8 @@ public class CivicBuilding : Building
         JobsMid = jobsMid;
         JobsRich = jobsRich;
 
-        ServOffered = new List<Service>();
-        ServNeeded = new List<Service>();
+        ServOffered = servOffered ?? new List<Service>();
+        ServNeeded = servNeeded ?? new List<Service>();
     }
 }
 

@@ -43,6 +43,16 @@ public class GameManager : MonoBehaviour
         GlobalTime.Instance.OnDayChanged += HandleDayChanged;
         GlobalTime.Instance.OnMonthChanged += HandleMonthChanged;
         GlobalTime.Instance.OnYearChanged += HandleYearChanged;
+
+        // Iterar sobre cada edifici de la ciutat actual
+        foreach (var building in CurrentCity.CityBuildings)
+        {
+            if (building is ProductiveBuilding productiveBuilding)
+            {
+                ProductionManager.Instance.KickstartProductives(productiveBuilding);
+            }
+        }
+        
     }
 
     
@@ -61,9 +71,22 @@ public class GameManager : MonoBehaviour
     private void HandleDayChanged()
     {
         Debug.Log($"Un nou dia ha començat: {GlobalTime.Instance.GetCurrentDate()}");
-        //ProductionManager.Instance.UpdateProduction();
+        ProductionManager.Instance.DebugUpdateProduction();
 
-        markersManager.MoveAllAgents();
+        // Iterar sobre cada edifici de la ciutat actual
+        foreach (var building in CurrentCity.CityBuildings)
+        {
+            if (building is ProductiveBuilding productiveBuilding)
+            {
+                // Calcular els cicles disponibles per a aquest edifici productiu
+                int availableCycles = ProductionManager.Instance.CalculateAvailableProductionCycles(productiveBuilding);
+
+                // Mostrar el resultat en el log
+                Debug.Log($"Edifici: {productiveBuilding.BuildingName}, Cicles disponibles: {availableCycles}");
+            }
+        }
+        
+        //markersManager.MoveAllAgents();
     }
 
     private void HandleMonthChanged()

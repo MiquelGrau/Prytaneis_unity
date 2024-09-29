@@ -29,13 +29,15 @@ public class StartContentImporter : MonoBehaviour
 
     private void Start()
     {
-        ImportBuildings();
         ConnectCityAndCityInv();
         ConnectAgentAndAgentInv();
+        ImportBuildings();
         Debug.Log("Acabada fase Start de l'importador! Connectats inventaris a Ciutats i a Agents");
     }
 
-
+    // #######################################################################################################
+    // GEOGRAFIA HUMANA - ciutats, assentaments, inventaris, governs
+    // #######################################################################################################
     private void LoadCityData()
     {
         //TextAsset cityDataAsset = Resources.Load<TextAsset>("CityData");
@@ -107,6 +109,43 @@ public class StartContentImporter : MonoBehaviour
         Debug.Log("Llistat d'inventaris de ciutat carregats");
     }
     
+    private void ConnectCityAndCityInv()
+    {
+        Debug.Log("ConnectCityAndCityInv: Començant a connectar ciutats");
+        
+        //var cities = dataManager.GetCities();
+        var cities = dataManager.allCityList;
+        if (cities == null || cities.Count == 0)
+        {
+            Debug.LogError("ConnectCityAndCityInv: La llista de ciutats és nul·la o buida.");
+            return;
+        }
+        foreach (var cityData in cities)
+        {
+            //Debug.Log($"ConnectCityAndCityInv: Processant la ciutat {cityData.cityName} amb ID d'inventari {cityData.cityInventoryID}");
+
+            // Troba l'objecte CityInventory que coincideix amb la cityInventoryID de CityData
+            var matchingInventory = dataManager.cityInventories.FirstOrDefault(ci => ci.CityInvID == cityData.cityInventoryID);
+            if (matchingInventory != null)
+            {
+                // Estableix la referència de CityData a CityInventory
+                cityData.CityInventory = matchingInventory;
+
+                // Mostra un missatge indicant que la connexió ha estat exitosa
+                //Debug.Log($"Connexió ciutat-inventari: {cityData.cityID} {cityData.cityName}, Inventari: {matchingInventory.CityInvID}");
+            }
+            else
+            {
+                Debug.LogError($"No s'ha trobat Inventari amb ID {cityData.cityInventoryID}" +
+                    $"per la ciutat {cityData.cityName}");
+            }
+        }
+    }
+
+
+    // #######################################################################################################
+    // POBLACIÓ DEL MÓN - agents, characters, vehicles, items, etc. 
+    // #######################################################################################################
     private void LoadStartAgents()
     {
         //agents = new List<Agent>();
@@ -162,39 +201,7 @@ public class StartContentImporter : MonoBehaviour
         Debug.Log($"Total d'inventaris d'agents carregats: {dataManager.agentInventories.Count}");
     }
 
-    private void ConnectCityAndCityInv()
-    {
-        Debug.Log("ConnectCityAndCityInv: Començant a connectar ciutats");
-        
-        //var cities = dataManager.GetCities();
-        var cities = dataManager.allCityList;
-        if (cities == null || cities.Count == 0)
-        {
-            Debug.LogError("ConnectCityAndCityInv: La llista de ciutats és nul·la o buida.");
-            return;
-        }
-        foreach (var cityData in cities)
-        {
-            //Debug.Log($"ConnectCityAndCityInv: Processant la ciutat {cityData.cityName} amb ID d'inventari {cityData.cityInventoryID}");
-
-            // Troba l'objecte CityInventory que coincideix amb la cityInventoryID de CityData
-            var matchingInventory = dataManager.cityInventories.FirstOrDefault(ci => ci.CityInvID == cityData.cityInventoryID);
-            if (matchingInventory != null)
-            {
-                // Estableix la referència de CityData a CityInventory
-                cityData.CityInventory = matchingInventory;
-
-                // Mostra un missatge indicant que la connexió ha estat exitosa
-                //Debug.Log($"Connexió ciutat-inventari: {cityData.cityID} {cityData.cityName}, Inventari: {matchingInventory.CityInvID}");
-            }
-            else
-            {
-                Debug.LogError($"No s'ha trobat Inventari amb ID {cityData.cityInventoryID}" +
-                    $"per la ciutat {cityData.cityName}");
-            }
-        }
-    }
-
+    
     private void ConnectAgentAndAgentInv()
     {
         Debug.Log("ConnectAgentAndAgentInv: Començant a connectar agents amb els seus inventaris");
@@ -227,122 +234,186 @@ public class StartContentImporter : MonoBehaviour
         }
     }
 
-
-    private void ImportBuildings()
+    // #######################################################################################################
+    // EDIFICIS
+    // #######################################################################################################
+    
+    // Funció principal per gestionar la importació d'edificis
+    public void ImportBuildings()
     {
         string path = "Assets/Resources/StartValues/Buildings";
         foreach (string file in Directory.GetFiles(path, "*.json"))
         {
             string jsonContent = File.ReadAllText(file);
-            ImportCityBuildings(jsonContent);
-            ImportSettlementBuildings(jsonContent);
-        }
-    }
 
-    private void ImportCityBuildings(string jsonContent)
-    {
-        //var wrapper = JsonConvert.DeserializeObject<Dictionary<string, List<Building>>>(jsonContent);
-        //if (wrapper.TryGetValue("CityBuildings", out List<Building> buildings))
-        var wrapper = JsonConvert.DeserializeObject<Dictionary<string, List<Dictionary<string, object>>>>(jsonContent);
-        if (wrapper.TryGetValue("CityBuildings", out List<Dictionary<string, object>> buildings))
-        {
-            foreach (var buildingData in buildings)
+            // Intentem importar segons el tipus de paquet
+            var wrapper = JsonConvert.DeserializeObject<Dictionary<string, List<Dictionary<string, object>>>>(jsonContent);
+
+            // Si el paquet és de CityBuildings
+            if (wrapper.ContainsKey("CityBuildings"))
             {
-                // Recuperar el tipus d’edifici
-                string buildingType = buildingData["BuildingType"] as string;
-
-                Building building = null;
-
-                if (buildingType == "Civic")
+                foreach (var buildingData in wrapper["CityBuildings"])
                 {
-                    // Deserialitzar com a CivicBuilding
-                    CivicBuilding civicBuilding = JsonConvert.DeserializeObject<CivicBuilding>(JsonConvert.SerializeObject(buildingData));
+                    string buildingType = buildingData["BuildingType"] as string;
 
-                    // Buscar el CivicTemplate que correspon a aquest edifici
-                    CivicTemplate template = DataManager.Instance.GetCivicTemplateByID(civicBuilding.BuildingTemplateID);
-                    if (template != null)
+                    // Si és un edifici productiu
+                    if (buildingType == "Productive")
                     {
-                        civicBuilding.ServOffered = new List<Service>(template.ServOffered);
-                        civicBuilding.ServNeeded = new List<Service>(template.ServNeeded);
+                        CityData city = FindCityByID(buildingData["BuildingLocation"].ToString());
+                        if (city != null)
+                        {
+                            ProductiveBuilding building = CreateProductiveBuilding(buildingData, city);
+                            city.CityBuildings.Add(building);
+                            Debug.Log($"Nou edifici productiu a {city.cityName}: {building.BuildingName}, ID {building.BuildingID}");
+                        }
                     }
-
-                    building = civicBuilding;
-                }
-                else if (buildingType == "Productive")
-                {
-                    // Deserialitzar com a ProductiveBuilding
-                    ProductiveBuilding productiveBuilding = JsonConvert.DeserializeObject<ProductiveBuilding>(JsonConvert.SerializeObject(buildingData));
-                    building = productiveBuilding;
-                }
-
-                if (building != null)
-                {
-                    // Assignar l’ID únic
-                    building.BuildingID = DataManager.Instance.GenerateBuildingID();
-
-                    CityData city = FindCityByID(building.BuildingLocation);
-                    if (city != null)
+                    else if (buildingType == "Civic")
                     {
-                        city.CityBuildings.Add(building);
-                        Debug.Log($"Nou edifici a {city.cityName}: {building.BuildingName}, ID {building.BuildingID}");
+                        CityData city = FindCityByID(buildingData["BuildingLocation"].ToString());
+                        if (city != null)
+                        {
+                            CivicBuilding building = CreateCivicBuilding(buildingData, city);
+                            city.CityBuildings.Add(building);
+                            Debug.Log($"Nou edifici cívic a {city.cityName}: {building.BuildingName}, ID {building.BuildingID}");
+                        }
                     }
-                }
-                else
-                {
-                    Debug.LogWarning($"No s'ha pogut crear un edifici del tipus: {buildingType}");
                 }
             }
-
-            
-            /* foreach (var building in buildings)
+            // Si el paquet és de SettlementBuildings
+            else if (wrapper.ContainsKey("SettlementBuildings"))
             {
-                building.BuildingID = DataManager.Instance.GenerateBuildingID();
-                CityData city = FindCityByID(building.BuildingLocation);
-                if (city != null)
+                foreach (var buildingData in wrapper["SettlementBuildings"])
                 {
-                    // Si l'edifici és un CivicBuilding, busquem la seva plantilla
-                    if (building is CivicBuilding civicBuilding)
+                    string buildingType = buildingData["BuildingType"] as string;
+
+                    // Si és un edifici productiu
+                    if (buildingType == "Productive")
                     {
-                        // Buscar el CivicTemplate que correspon a aquest edifici
-                        CivicTemplate template = DataManager.Instance.GetCivicTemplateByID(civicBuilding.BuildingTemplateID);
-
-                        if (template != null)
+                        /* Settlement settlement = FindSettlementByID(buildingData["BuildingLocation"].ToString());
+                        if (settlement != null)
                         {
-                            // Copiar els serveis oferts i necessaris de la plantilla a l'edifici
-                            civicBuilding.ServOffered = new List<Service>(template.ServOffered);
-                            civicBuilding.ServNeeded = new List<Service>(template.ServNeeded);
-                            
-                            Debug.Log($"Serveis copiat per edifici {civicBuilding.BuildingName} basat en template {template.TemplateID}");
-                        }
-                        else
-                        {
-                            Debug.LogWarning($"No s'ha trobat la plantilla CivicTemplate amb ID: {civicBuilding.BuildingTemplateID}");
-                        }
+                            ProductiveBuilding building = CreateProductiveBuilding(buildingData, settlement);
+                            settlement.SettlementBuildings.Add(building);
+                            Debug.Log($"Nou edifici productiu a {settlement.settlementName}: {building.BuildingName}");
+                        } */
                     }
-                    
-                    city.CityBuildings.Add(building);
-                    Debug.Log($"Nou edifici a {city.cityName}: {building.BuildingName}, ID {building.BuildingID}");
-                }
-            } */
-        }
-    }
-    private void ImportSettlementBuildings(string jsonContent)
-    {
-        var wrapper = JsonConvert.DeserializeObject<Dictionary<string, List<Building>>>(jsonContent);
-        if (wrapper.TryGetValue("SettlementBuildings", out List<Building> buildings))
-        {
-            foreach (var building in buildings)
-            {
-                building.BuildingID = DataManager.Instance.GenerateBuildingID();
-                Settlement settlement = FindSettlementByID(building.BuildingLocation);
-                if (settlement != null)
-                {
-                    settlement.SettlBuildings.Add(building);
-                    Debug.Log($"Building added to settlement {settlement.settlementName}: {building.BuildingName}");
+                    else if (buildingType == "Civic")
+                    {
+                        // Placeholder per Civic buildings
+                        // Implementarem més endavant
+                    }
                 }
             }
         }
     }
+
+    private ProductiveBuilding CreateProductiveBuilding(Dictionary<string, object> buildingData, CityData city)
+    {
+        string buildingName = buildingData["BuildingName"].ToString();
+        string buildingTemplateID = buildingData["BuildingTemplateID"].ToString(); // Recuperem el template ID
+
+        // Buscar el ProductiveTemplate associat al BuildingTemplateID
+        ProductiveTemplate template = DataManager.Instance.productiveTemplates
+            .FirstOrDefault(t => t.TemplateID == buildingTemplateID);
+
+        if (template == null)
+        {
+            Debug.LogError($"No s'ha trobat el ProductiveTemplate amb ID: {buildingTemplateID}");
+            return null;
+        }
+
+        // Crear una llista de factors des del template
+        List<ProductiveFactor> factors = new List<ProductiveFactor>();
+        foreach (var factorID in template.Factors)
+        {
+            TemplateFactor factorTemplate = DataManager.Instance.GetFactorById(factorID);
+            if (factorTemplate != null)
+            {
+                // Afegir el factor adequat a la llista
+                factors.Add(new ProductiveFactor(factorTemplate, template.TemplateID));
+            }
+            else
+            {
+                Debug.LogWarning($"No s'ha trobat el factor amb ID: {factorID} al template {template.TemplateID}");
+            }
+        }
+
+        // Crear un nou ProductiveBuilding amb les propietats transferides
+        ProductiveBuilding building = new ProductiveBuilding(
+            id: DataManager.Instance.GenerateBuildingID(),
+            name: buildingName,
+            templateID: buildingTemplateID,
+            location: city.cityID,
+            ownerID: buildingData["BuildingOwnerID"].ToString(),
+            inventoryID: city.cityInventoryID,
+            activity: "Idle", // Establir l'estat inicial
+            size: int.Parse(buildingData["BuildingSize"].ToString()),
+            hpCurrent: 100,
+            hpMax: 100,
+            productionTempID: template.TemplateID,
+            currentFactors: factors, // Factors transferits
+            methodsAvailable: new List<string>(template.PossibleMethods), // Copiar els possibles mètodes
+            methodActive: null, // No hi ha cap mètode actiu inicialment
+            methodDefault: template.DefaultMethod, // Assignar el mètode per defecte
+            batchCurrent: null, // Inicialitzar sense batch
+            batchBacklog: new List<Batch>(), // Inicialitzar sense backlog
+            linearOutput: 1f, // Inicialitzar amb els valors predeterminats
+            inputEfficiency: 1f,
+            outputEfficiency: 1f,
+            cycleEfficiency: 1f,
+            salaryEfficiency: 1f,
+            jobsPoor: 0, // Inicialitzar llocs de treball
+            jobsMid: 0,
+            jobsRich: 0
+        );
+        // Log general
+        //Debug.Log($"ProductiveBuilding creat: {building.BuildingName}, Template: {template.TemplateID}");
+
+        return building;
+    }
+
+    
+    private CivicBuilding CreateCivicBuilding(Dictionary<string, object> buildingData, CityData city)
+    {
+        string buildingName = buildingData["BuildingName"].ToString();
+        string buildingTemplateID = buildingData["BuildingTemplateID"].ToString(); // Recuperem el template ID
+
+        // Buscar el CivicTemplate associat al BuildingTemplateID
+        CivicTemplate template = DataManager.Instance.civicTemplates
+            .FirstOrDefault(t => t.TemplateID == buildingTemplateID);
+
+        if (template == null)
+        {
+            Debug.LogError($"No s'ha trobat el CivicTemplate amb ID: {buildingTemplateID}");
+            return null;
+        }
+
+        // Crear el CivicBuilding i transferir propietats del CivicTemplate
+        CivicBuilding civicBuilding = new CivicBuilding(
+            id: DataManager.Instance.GenerateBuildingID(),
+            name: buildingName,
+            templateID: buildingTemplateID,
+            location: city.cityID,
+            ownerID: buildingData["BuildingOwnerID"].ToString(),
+            inventoryID: city.cityInventoryID,  // Si és necessari associar un inventari
+            activity: "Idle",  // Estat inicial
+            size: int.Parse(buildingData["BuildingSize"].ToString()),
+            hpCurrent: 100,
+            hpMax: 100,
+            function: template.Function,
+            jobsPoor: template.JobsPoor,
+            jobsMid: template.JobsMid,
+            jobsRich: template.JobsRich,
+            servOffered: new List<Service>(template.ServOffered),  
+            servNeeded: new List<Service>(template.ServNeeded)     
+        );
+
+        Debug.Log($"CivicBuilding creat: {civicBuilding.BuildingName}, Template: {template.TemplateID}");
+
+        return civicBuilding;
+    }
+
+    
 
     private CityData FindCityByID(string id)
     {
@@ -351,8 +422,13 @@ public class StartContentImporter : MonoBehaviour
 
     private Settlement FindSettlementByID(string id)
     {
-        return DataManager.Instance.allSettlementList.FirstOrDefault(s => s.settlementID == id);
+        return DataManager.Instance.allSettlementList.FirstOrDefault(s => s.SettlID == id);
     }
+
+
+    // #######################################################################################################
+    // BLOC DE MINERIA
+    // #######################################################################################################
 
     public void ImportMineralResources()
     {

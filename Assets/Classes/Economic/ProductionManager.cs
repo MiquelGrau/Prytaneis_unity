@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class ProductionManager : MonoBehaviour
 {
@@ -80,7 +81,7 @@ public class ProductionManager : MonoBehaviour
                 $"CycleEfficiency: {building.CycleEfficiency}, SalaryEfficiency: {building.SalaryEfficiency}");
     }
 
-    public void UpdateProduction()
+    public void DebugUpdateProduction()
     {
         if (GameManager.Instance.CurrentCity != null)
         {
@@ -190,6 +191,130 @@ public class ProductionManager : MonoBehaviour
         }
 
         Debug.Log($"New batch set up for Building: {building.BuildingName} with Method: {method.MethodName}");
+    }
+
+    public void KickstartProductives(ProductiveBuilding building)
+    {
+        // Obtenir l'inventari associat a l'edifici
+        CityInventory cityInventory = DataManager.Instance.cityInventories
+            .FirstOrDefault(inv => inv.CityInvID == building.RelatedInventoryID);
+
+        if (cityInventory == null)
+        {
+            Debug.LogError($"No s'ha trobat l'inventari per l'edifici: {building.BuildingName}");
+            return;
+        }
+
+        // Identificar el mètode de producció per defecte
+        var methodDefault = building.MethodDefault;
+        if (string.IsNullOrEmpty(methodDefault))
+        {
+            Debug.LogError($"No hi ha cap MethodDefault per a l'edifici: {building.BuildingName}");
+            return;
+        }
+
+        var method = DataManager.Instance.GetProductionMethodByID(methodDefault);
+        if (method == null)
+        {
+            Debug.LogError($"No s'ha trobat ProductionMethod amb ID: {methodDefault}");
+            return;
+        }
+
+        Debug.Log($"Iniciant producció a l'edifici: {building.BuildingName}. MethodDefault: {method.MethodName}");
+
+
+        // Comprovació dels inputs i disponibilitat en l'inventari
+        foreach (var input in method.Inputs)
+        {
+            var inventoryResource = cityInventory.InventoryResources
+                .FirstOrDefault(res => res.ResourceID == input.ResourceID);
+
+            if (inventoryResource == null || inventoryResource.Quantity < input.Amount)
+            {
+                Debug.Log($"No hi ha prou quantitat de {input.ResourceID} per a l'edifici {building.BuildingName}.");
+                return; // Aturem si no hi ha prou recursos
+            }
+            Debug.Log($"Revisant recurs: {input.ResourceID}. Requerit: {input.Amount}, Disponible: {inventoryResource.Quantity}");
+        }
+
+        // Si tot està correcte, crear un nou batch i començar la producció
+        SetupNewBatch(methodDefault, building);
+
+        // Restar els recursos de l'inventari i actualitzar els valors
+        foreach (var batchInput in building.BatchCurrent.BatchInputs)
+        {
+            var inventoryResource = cityInventory.InventoryResources
+                .FirstOrDefault(res => res.ResourceID == batchInput.InputResource.ResourceID);
+
+            if (inventoryResource != null)
+            {
+                Debug.Log($"Consumint {batchInput.InputAmount} del recurs {inventoryResource.ResourceID}. " +
+                $"Quantitat restant abans de restar: {inventoryResource.Quantity}");
+
+                // Restar la quantitat consumida de l'inventari
+                inventoryResource.Quantity -= batchInput.InputAmount;
+                
+                // Transferir el CurrentValue de l'inventari a InputUnitValue del BatchInput
+                //batchInput.InputUnitValue = inventoryResource.CurrentValue;
+            }
+        }
+
+        // Activar la producció
+        building.ProdActive = true;
+
+        Debug.Log($"Producció iniciada a l'edifici {building.BuildingName} amb el mètode {method.MethodName}. "+
+        $"Batch creat amb {building.BatchCurrent.BatchInputs.Count} inputs de diferents recursos.");
+    }
+
+
+
+    // Funció per calcular quants cicles de producció es poden fer
+    public int CalculateAvailableProductionCycles(ProductiveBuilding building)
+    {
+        // Comprovem si la producció està activa
+        if (!building.ProdActive)
+        {
+            return 0; // Si no està activa, no es pot produir
+        }
+
+        // Obtenim el batch actual
+        Batch currentBatch = building.BatchCurrent;
+        if (currentBatch == null || currentBatch.BatchInputs == null)
+        {
+            return 0; // Si no hi ha cap batch, no es pot produir
+        }
+
+        // Obtenim l'inventari relacionat amb l'edifici des de DataManager
+        CityInventory cityInventory = DataManager.Instance.cityInventories
+            .FirstOrDefault(inv => inv.CityInvID == building.RelatedInventoryID);
+
+        if (cityInventory == null)
+        {
+            return 0; // Si no hi ha inventari, no es pot produir
+        }
+
+        int maxCycles = 999; // El màxim nombre de cicles que es poden fer és 999
+
+        // Iterem sobre cada recurs input del batch
+        foreach (var input in currentBatch.BatchInputs)
+        {
+            // Busquem la quantitat disponible del recurs a l'inventari
+            var inventoryResource = cityInventory.InventoryResources
+                .FirstOrDefault(res => res.ResourceID == input.InputResource.ResourceID);
+
+            if (inventoryResource == null || inventoryResource.Quantity <= 0)
+            {
+                return 0; // Si no hi ha prou recursos, no es pot fer cap cicle
+            }
+
+            // Calculem quants cicles es poden fer amb el recurs actual
+            int availableCyclesForResource = Mathf.FloorToInt(inventoryResource.Quantity / input.InputAmount);
+
+            // El nombre màxim de cicles es limita al recurs que menys permet
+            maxCycles = Mathf.Min(maxCycles, availableCyclesForResource);
+        }
+
+        return maxCycles;
     }
 
 
