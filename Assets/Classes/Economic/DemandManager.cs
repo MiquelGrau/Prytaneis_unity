@@ -18,8 +18,7 @@ public class DemandManager : MonoBehaviour
     
     private void Start()
     {  
-        Debug.Log("Iniciant DemandManager...");
-        //demandTiers = DataManager.Instance.lifestyleTiers; 
+        //Debug.Log("Iniciant DemandManager...");
         
         // Calcula les demandes basades en la ciutat actual
         foreach (CityData city in DataManager.Instance.allCityList)
@@ -31,7 +30,7 @@ public class DemandManager : MonoBehaviour
         }
         
        
-        Debug.Log("Demandes per població a la ciutat calculades");
+        Debug.Log("[DemandManager] Demandes a totes les ciutats calculades");
         
     }
 
@@ -59,7 +58,7 @@ public class DemandManager : MonoBehaviour
             Debug.LogError("La ciutat passada a GetTierNeedsForCity és null.");
             return;
         }
-        Debug.Log($"Processant la ciutat: {chosenCity.cityName} (ID: {chosenCity.cityID})");
+        //Debug.Log($"Processant la ciutat: {chosenCity.cityName} (ID: {chosenCity.cityID})");
 
         CityInventory chosenCityInventory = chosenCity.CityInventory;
         if (chosenCityInventory == null)
@@ -70,7 +69,7 @@ public class DemandManager : MonoBehaviour
         
         // Netejar les PopDemands existents
         chosenCityInventory.PopDemands.Clear();
-        Debug.Log($"Inventari de ciutat netejat per {chosenCity.cityName}.");
+        //Debug.Log($"Inventari de ciutat netejat per {chosenCity.cityName}.");
 
 
         // Obtenir els LifestyleTiers per a cada grup de població
@@ -124,7 +123,7 @@ public class DemandManager : MonoBehaviour
                 chosenCityInventory.PopDemands.Add(newDemand);
             }
         }
-        Debug.Log($"Processament de demandes complet per la ciutat: {chosenCity.cityName} (ID: {chosenCity.cityID})");
+        //Debug.Log($"Processament de demandes complet per la ciutat: {chosenCity.cityName} (ID: {chosenCity.cityID})");
     }
 
 
@@ -250,7 +249,7 @@ public class DemandManager : MonoBehaviour
             }
         }
         
-        Debug.Log("MarketDemands generades correctament.");
+        //Debug.Log("MarketDemands generades correctament.");
     }
 
     private void CoverCityDemands(CityData city)
@@ -328,7 +327,7 @@ public class DemandManager : MonoBehaviour
         CoverPopulationDemands("Mid");
         CoverPopulationDemands("Poor");
 
-        Debug.Log("Covered city demands correctly.");
+        //Debug.Log("Covered city demands correctly.");
     }
 
     public void CalculateAllCityPrices(CityData city)
@@ -367,7 +366,7 @@ public class DemandManager : MonoBehaviour
     private void GetServiceNeedsForCity(CityData chosenCity)
     {
         
-        Debug.Log($"Processant serveis per a la ciutat: {chosenCity.cityName} (ID: {chosenCity.cityID})");
+        //Debug.Log($"Processant serveis per a la ciutat: {chosenCity.cityName} (ID: {chosenCity.cityID})");
 
         CityInventory chosenCityInventory = chosenCity.CityInventory;
         if (chosenCityInventory == null)
@@ -378,7 +377,7 @@ public class DemandManager : MonoBehaviour
         
         // Netejar els serveis existents
         chosenCityInventory.Services.Clear();
-        Debug.Log($"Inventari de serveis netejat per {chosenCity.cityName}.");
+        //Debug.Log($"Inventari de serveis netejat per {chosenCity.cityName}.");
 
         // Obtenir els LifestyleTiers per a cada grup de població
         var totalPopDemands = new List<LifestyleTier>
@@ -451,14 +450,14 @@ public class DemandManager : MonoBehaviour
         }
         
         // Un cop ha acabat de repassar tots els serveis, fer el Debug.Log per cada servei
-        foreach (var service in chosenCityInventory.Services)
+        /* foreach (var service in chosenCityInventory.Services)
         {
             Debug.Log($"Service: {service.ResourceType}, Demand: {service.Demand}, " +
                     $"Positions: {service.PositionPoor}/{service.PositionMid}/{service.PositionRich}, " +
                     $"Ratio {service.FulfilledRatio}, Min {service.MinRatio}, Opt {service.OptimalRatio}");
-        }
+        } */
         
-        Debug.Log($"Processament de serveis complet per la ciutat: {chosenCity.cityName} (ID: {chosenCity.cityID})");
+        //Debug.Log($"Processament de serveis complet per la ciutat: {chosenCity.cityName} (ID: {chosenCity.cityID})");
     }
 
 

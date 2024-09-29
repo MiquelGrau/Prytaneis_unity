@@ -22,7 +22,7 @@ public class BuildingAllocatorManager : MonoBehaviour
     {
         // Copiar els civicTemplates de DataManager a PossibleBuildingList
         PossibleBuildingList = new List<CivicTemplate>(DataManager.Instance.civicTemplates);
-        Debug.Log($"PossibleBuildingList inicialitzada amb {PossibleBuildingList.Count} templates.");
+        //Debug.Log($"PossibleBuildingList inicialitzada amb {PossibleBuildingList.Count} templates.");
     }
 
     // Funció per modificar els BuildPoints
@@ -128,8 +128,8 @@ public class BuildingAllocatorManager : MonoBehaviour
             else { cityService.FulfilledRatio = cityService.Quantity / cityService.Demand; }
 
             // Mostrar les propietats del CityService amb un Debug.Log
-            Debug.Log($"CityService: {cityService.ResourceType}, Off: {cityService.Quantity}, Dem: {cityService.Demand}, " +
-                    $"Ratios: Real {cityService.FulfilledRatio}, Min: {cityService.MinRatio}, Opt: {cityService.OptimalRatio}");
+            //Debug.Log($"CityService: {cityService.ResourceType}, Off: {cityService.Quantity}, Dem: {cityService.Demand}, " +
+            //        $"Ratios: Real {cityService.FulfilledRatio}, Min: {cityService.MinRatio}, Opt: {cityService.OptimalRatio}");
         }
     }
 
