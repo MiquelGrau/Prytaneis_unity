@@ -13,9 +13,9 @@ public class BuildingAllocatorManager : MonoBehaviour
     {
         
         CopyCivicTemplates();
-        CalculateBuildPointsForCity(GameManager.Instance.CurrentCity);
-        ProcessCityServices(GameManager.Instance.CurrentCity);
-        AllocateMinRatioBuildings(GameManager.Instance.CurrentCity);
+        CalculateBuildPointsForCity(GameManager.Instance.currentCity);
+        ProcessCityServices(GameManager.Instance.currentCity);
+        AllocateMinRatioBuildings(GameManager.Instance.currentCity);
     }
 
     private void CopyCivicTemplates()
@@ -33,7 +33,7 @@ public class BuildingAllocatorManager : MonoBehaviour
             int existingBuildingsCount = 0;
 
             // Comprovar quants edificis del mateix template hi ha a la ciutat
-            foreach (var building in currentCity.CityBuildings)
+            foreach (var building in currentCity.Buildings)
             {
                 if (building.BuildingTemplateID == civicTemplate.TemplateID)
                 {
@@ -52,14 +52,22 @@ public class BuildingAllocatorManager : MonoBehaviour
     // Funció per agregar serveis oferts dels edificis als serveis de la ciutat passada com a input
     public void ProcessCityServices(CityData city)
     {
-        if (city == null || city.CityInventory == null)
+        if (city == null)
         {
-            Debug.LogError("La ciutat o el seu inventari és nul.");
+            Debug.LogError("La ciutat és nul·la.");
+            return;
+        }
+
+        // Obtenim l'inventari de la ciutat utilitzant el nou nom de la funció
+        CityInventory cityInventory = DataManager.Instance.GetCityInvByID(city.CityInventoryID);
+        if (cityInventory == null)
+        {
+            Debug.LogError("L'inventari de la ciutat és nul.");
             return;
         }
 
         // Recorre tots els edificis de la ciutat proporcionada
-        foreach (var building in city.CityBuildings)
+        foreach (var building in city.Buildings)
         {
             if (building is CivicBuilding civicBuilding && civicBuilding.ServOffered != null)
             {
@@ -67,9 +75,11 @@ public class BuildingAllocatorManager : MonoBehaviour
                 foreach (var service in civicBuilding.ServOffered)
                 {
                     // Busca el servei a la llista de serveis de la ciutat segons el tipus de servei
-                    var existingService = city.CityInventory.Services
-                        .FirstOrDefault(s => s.ResourceType == service.ResourceType);
-                    
+                    /* var existingService = city.CityInventory.Services
+                        .FirstOrDefault(s => s.ResourceType == service.ResourceType); */
+                    var existingService = cityInventory.Services
+                    .FirstOrDefault(s => s.ResourceType == service.ResourceType);
+
                     if (existingService != null)
                     {
                         // Si existeix, suma la quantitat de servei ofert a la quantitat del servei de la ciutat
@@ -81,7 +91,8 @@ public class BuildingAllocatorManager : MonoBehaviour
                     {
                         // Si no existeix, crea un nou servei a la llista de serveis de la ciutat
                         var newCityService = new CityService(service.ResourceType, service.Quantity, 0);
-                        city.CityInventory.Services.Add(newCityService);
+                        //city.CityInventory.Services.Add(newCityService);
+                        cityInventory.Services.Add(newCityService);
                         /* Debug.Log($"Edifici ID {building.BuildingID}, {building.BuildingName}, " + 
                         $"[Offer] Afegint nou servei: {newCityService.ResourceType} amb quantitat {newCityService.Quantity}"); */
                     }
@@ -95,7 +106,9 @@ public class BuildingAllocatorManager : MonoBehaviour
                 foreach (var service in civicBuildingNeeded.ServNeeded)
                 {
                     // Busca el servei a la llista de serveis de la ciutat segons el tipus de servei
-                    var existingService = city.CityInventory.Services
+                    /* var existingService = city.CityInventory.Services
+                        .FirstOrDefault(s => s.ResourceType == service.ResourceType); */
+                    var existingService = cityInventory.Services
                         .FirstOrDefault(s => s.ResourceType == service.ResourceType);
 
                     if (existingService != null)
@@ -109,7 +122,8 @@ public class BuildingAllocatorManager : MonoBehaviour
                     {
                         // Si no existeix, crea un nou servei a la llista de serveis de la ciutat
                         var newCityService = new CityService(service.ResourceType, 0, service.Quantity);
-                        city.CityInventory.Services.Add(newCityService);
+                        //city.CityInventory.Services.Add(newCityService);
+                        cityInventory.Services.Add(newCityService);
                         /* Debug.Log($"Edifici ID {building.BuildingID}, {building.BuildingName}, " + 
                         $"[Demand] Afegint nou servei: {newCityService.ResourceType} amb quantitat {newCityService.Quantity}"); */
                     }
@@ -117,11 +131,11 @@ public class BuildingAllocatorManager : MonoBehaviour
             }
         }   
 
-        Debug.Log($"Processats els serveis oferts de tots els edificis per la ciutat: {city.cityName}");
+        Debug.Log($"Processats els serveis oferts de tots els edificis per la ciutat: {city.Name}");
 
 
         // Recorre tots els CityServices de la ciutat proporcionada
-        foreach (var cityService in city.CityInventory.Services)
+        foreach (var cityService in cityInventory.Services)
         {
             // Calcular el FulfilledRatio (Quantity / Demand). Si Demand és 0, fixa FulfilledRatio a 1.00.
             if (cityService.Demand == 0) { cityService.FulfilledRatio = 1.00f; }
@@ -135,13 +149,15 @@ public class BuildingAllocatorManager : MonoBehaviour
 
     public void AllocateMinRatioBuildings(CityData city)
     {
-        if (city == null || city.CityInventory == null)
+        CityInventory cityInventory = DataManager.Instance.GetCityInvByID(city.CityInventoryID);
+
+        if (city == null || cityInventory == null)
         {
             Debug.LogError("La ciutat o el seu inventari és nul.");
             return;
         }
 
-        foreach (var serviceToSatisfy in city.CityInventory.Services
+        foreach (var serviceToSatisfy in cityInventory.Services
             .Where(s => s.FulfilledRatio < s.MinRatio)
             .OrderBy(s => s.FulfilledRatio))  // Prioritzem els que estan més lluny de MinRatio
         {
@@ -159,7 +175,7 @@ public class BuildingAllocatorManager : MonoBehaviour
                 }
                 
                 // Buscar si ja existeix un edifici del mateix tipus a la ciutat
-                var existingBuilding = city.CityBuildings
+                var existingBuilding = city.Buildings
                     .FirstOrDefault(b => b.BuildingTemplateID == buildingToAdd.TemplateID);
                 //float buildPointCost = 0;
 
@@ -190,7 +206,7 @@ public class BuildingAllocatorManager : MonoBehaviour
                 // Actualitzar els serveis oferts per l'edifici
                 foreach (var offeredService in buildingToAdd.ServOffered)
                 {
-                    var existingCityService = city.CityInventory.Services
+                    var existingCityService = cityInventory.Services
                         .FirstOrDefault(s => s.ResourceType == offeredService.ResourceType);
 
                     if (existingCityService != null)

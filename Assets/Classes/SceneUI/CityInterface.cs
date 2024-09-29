@@ -45,7 +45,7 @@ public class CityInterface : MonoBehaviour
             Destroy(child.gameObject); 
         }
 
-        foreach (Building building in currentCity.CityBuildings)
+        foreach (Building building in currentCity.Buildings)
         {
             GameObject newBuildingCell = Instantiate(buildingSimplePrefab, buildingGridPanel);
             newBuildingCell.transform.Find("BBasicID").GetComponent<TMP_Text>().text = building.BuildingID;
@@ -97,7 +97,7 @@ public class CityInterface : MonoBehaviour
         {
             GameObject newAgentCell = Instantiate(agentPrefab, PInfoAgentList);
             string agentName = agent.agentName;
-            if (agent == GameManager.Instance.CurrentAgent)
+            if (agent == GameManager.Instance.currentAgent)
             {
                 agentName += " *";
             }

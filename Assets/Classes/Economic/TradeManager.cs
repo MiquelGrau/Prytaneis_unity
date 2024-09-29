@@ -103,12 +103,12 @@ public class TradeManager : MonoBehaviour
     // Al tanto que ara és "global", farà teleport de la gent si se seleccionen. 
     void FillCityDropdown()
     {
-        var cityNames = dataManager.GetCities().Select(city => city.cityName).ToList();
+        var cityNames = dataManager.GetCities().Select(city => city.Name).ToList();
         cityDropdown.ClearOptions();
         cityDropdown.AddOptions(cityNames);
 
         // Preselecciona la ciutat actual
-        var currentCityIndex = cityNames.FindIndex(name => name == GameManager.Instance.CurrentCity.cityName);
+        var currentCityIndex = cityNames.FindIndex(name => name == GameManager.Instance.currentCity.Name);
         if (currentCityIndex >= 0)
         {
             cityDropdown.SetValueWithoutNotify(currentCityIndex);
@@ -127,7 +127,7 @@ public class TradeManager : MonoBehaviour
         }
         
         CityData selectedCity = cities[index];
-        GameManager.Instance.AssignCurrentCity(selectedCity.cityID);
+        GameManager.Instance.AssignCurrentCity(selectedCity.LocID);
         
         AssignCityInTrade();
         TradeDeskCleanup(); 
@@ -142,7 +142,7 @@ public class TradeManager : MonoBehaviour
         agentDropdown.AddOptions(agentNames);
 
         // Preselecciona l'agent actual
-        var currentAgentIndex = agentNames.FindIndex(name => name == GameManager.Instance.CurrentAgent.agentName);
+        var currentAgentIndex = agentNames.FindIndex(name => name == GameManager.Instance.currentAgent.agentName);
         if (currentAgentIndex >= 0)
         {
             agentDropdown.SetValueWithoutNotify(currentAgentIndex);
@@ -170,7 +170,7 @@ public class TradeManager : MonoBehaviour
     
     public void AssignCityInTrade()
     {
-        currentCityInventory = GameManager.Instance.CurrentCity.CityInventory;
+        currentCityInventory = DataManager.Instance.GetCityInvByID(GameManager.Instance.currentCity.CityInventoryID);
         if (currentCityInventory == null) return;
         
         CurrentTrade.TradePartnerLeft = currentCityInventory.CityID;
@@ -183,8 +183,7 @@ public class TradeManager : MonoBehaviour
     public void AssignAgentInTrade()
     {
         // Crida les dades, guardades a game manager
-        Agent currentAgent = GameManager.Instance.CurrentAgent;
-        //AgentInventory currentAgentInventory = currentAgent?.Inventory;
+        Agent currentAgent = GameManager.Instance.currentAgent;
         currentAgentInventory = currentAgent?.Inventory;
         if (currentAgentInventory == null)
         {
@@ -256,9 +255,9 @@ public class TradeManager : MonoBehaviour
     private void SetUpTradeLines()
     {
         // Obtenir les referències a les dades de la ciutat i de l'agent des de GameManager
-        CityData currentCity = GameManager.Instance.CurrentCity;
-        currentCityInventory = currentCity.CityInventory;
-        Agent currentAgent = GameManager.Instance.CurrentAgent;
+        CityData currentCity = GameManager.Instance.currentCity;
+        currentCityInventory = DataManager.Instance.GetCityInvByID(currentCity.CityInventoryID);
+        Agent currentAgent = GameManager.Instance.currentAgent;
         AgentInventory agentInventory = currentAgent.Inventory;
         
         
@@ -297,7 +296,7 @@ public class TradeManager : MonoBehaviour
             }
             else
             {
-                Debug.LogWarning($"ResourceID buit o nul per un recurs de la ciutat {currentCity.cityName}");
+                Debug.LogWarning($"ResourceID buit o nul per un recurs de la ciutat {currentCity.Name}");
             }
         }
 

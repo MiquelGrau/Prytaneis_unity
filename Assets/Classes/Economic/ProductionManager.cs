@@ -83,9 +83,9 @@ public class ProductionManager : MonoBehaviour
 
     public void DebugUpdateProduction()
     {
-        if (GameManager.Instance.CurrentCity != null)
+        if (GameManager.Instance.currentCity != null)
         {
-            foreach (var building in GameManager.Instance.CurrentCity.CityBuildings)
+            foreach (var building in GameManager.Instance.currentCity.Buildings)
             {
                 if (building is ProductiveBuilding productiveBuilding)
                 {
@@ -118,18 +118,27 @@ public class ProductionManager : MonoBehaviour
 
         if (batch != null && batch.IsCompleted())
         {
+            CityInventory cityInventory = DataManager.Instance.GetCityInvByID(building.RelatedInventoryID);
+            if (cityInventory == null)
+            {
+                Debug.LogError("No s'ha trobat l'inventari de la ciutat.");
+                return;
+            }
+            
             foreach (var output in batch.BatchOutputs)
             {
                 if (Random.Range(0, 100) < output.OutputChance)
                 {
-                    var resource = GameManager.Instance.CurrentCity.CityInventory.InventoryResources.Find(r => r.ResourceID == output.OutputResource.ResourceID);
+                    //var resource = GameManager.Instance.CurrentCity.CityInventory.InventoryResources.Find(r => r.ResourceID == output.OutputResource.ResourceID);
+                    var resource = cityInventory.InventoryResources.Find(r => r.ResourceID == output.OutputResource.ResourceID);
                     if (resource != null)
                     {
                         resource.Quantity += output.OutputAmount;
                     }
                     else
                     {
-                        GameManager.Instance.CurrentCity.CityInventory.InventoryResources.Add(new CityInventoryResource(output.OutputResource.ResourceID, output.OutputAmount, (int)output.OutputUnitValue));
+                        //GameManager.Instance.CurrentCity.CityInventory.InventoryResources.Add(new CityInventoryResource(output.OutputResource.ResourceID, output.OutputAmount, (int)output.OutputUnitValue));
+                        cityInventory.InventoryResources.Add(new CityInventoryResource(output.OutputResource.ResourceID, output.OutputAmount, (int)output.OutputUnitValue));
                     }
                 }
             }

@@ -128,7 +128,7 @@ public class MarkersManager : MonoBehaviour
 
     private void AssignRouteToAgent(List<WorldMapLandPath> routePaths)
     {
-        var currentAgent = GameManager.Instance.CurrentAgent;
+        var currentAgent = GameManager.Instance.currentAgent;
         if (currentAgent != null)
         {
             if (routePaths.Count > 0)
@@ -180,7 +180,7 @@ public class MarkersManager : MonoBehaviour
         {
             PathID = path.landpathId,
             LengthTotal = lengthTotal,
-            DaysTotal = lengthTotal / GameManager.Instance.CurrentAgent.speed
+            DaysTotal = lengthTotal / GameManager.Instance.currentAgent.speed
         };
         return travel;
     }

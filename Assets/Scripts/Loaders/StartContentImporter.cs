@@ -41,7 +41,7 @@ public class StartContentImporter : MonoBehaviour
     private void LoadCityData()
     {
         //TextAsset cityDataAsset = Resources.Load<TextAsset>("CityData");
-        string path = "Assets/Resources/StartValues/Places";
+        string path = "Assets/Resources/StartValues/Locations";
         string[] files = Directory.GetFiles(path, "*.json");
 
         dataManager.allCityList = new List<CityData>();
@@ -125,19 +125,19 @@ public class StartContentImporter : MonoBehaviour
             //Debug.Log($"ConnectCityAndCityInv: Processant la ciutat {cityData.cityName} amb ID d'inventari {cityData.cityInventoryID}");
 
             // Troba l'objecte CityInventory que coincideix amb la cityInventoryID de CityData
-            var matchingInventory = dataManager.cityInventories.FirstOrDefault(ci => ci.CityInvID == cityData.cityInventoryID);
+            var matchingInventory = dataManager.cityInventories.FirstOrDefault(ci => ci.CityInvID == cityData.CityInventoryID);
             if (matchingInventory != null)
             {
                 // Estableix la referència de CityData a CityInventory
-                cityData.CityInventory = matchingInventory;
+                //cityData.CityInventory = matchingInventory;
 
                 // Mostra un missatge indicant que la connexió ha estat exitosa
                 //Debug.Log($"Connexió ciutat-inventari: {cityData.cityID} {cityData.cityName}, Inventari: {matchingInventory.CityInvID}");
             }
             else
             {
-                Debug.LogError($"No s'ha trobat Inventari amb ID {cityData.cityInventoryID}" +
-                    $"per la ciutat {cityData.cityName}");
+                Debug.LogError($"No s'ha trobat Inventari amb ID {cityData.CityInventoryID}" +
+                    $"per la ciutat {cityData.Name}");
             }
         }
     }
@@ -263,8 +263,8 @@ public class StartContentImporter : MonoBehaviour
                         if (city != null)
                         {
                             ProductiveBuilding building = CreateProductiveBuilding(buildingData, city);
-                            city.CityBuildings.Add(building);
-                            Debug.Log($"Nou edifici productiu a {city.cityName}: {building.BuildingName}, ID {building.BuildingID}");
+                            city.Buildings.Add(building);
+                            Debug.Log($"Nou edifici productiu a {city.Name}: {building.BuildingName}, ID {building.BuildingID}");
                         }
                     }
                     else if (buildingType == "Civic")
@@ -273,8 +273,8 @@ public class StartContentImporter : MonoBehaviour
                         if (city != null)
                         {
                             CivicBuilding building = CreateCivicBuilding(buildingData, city);
-                            city.CityBuildings.Add(building);
-                            Debug.Log($"Nou edifici cívic a {city.cityName}: {building.BuildingName}, ID {building.BuildingID}");
+                            city.Buildings.Add(building);
+                            Debug.Log($"Nou edifici cívic a {city.Name}: {building.BuildingName}, ID {building.BuildingID}");
                         }
                     }
                 }
@@ -343,9 +343,9 @@ public class StartContentImporter : MonoBehaviour
             id: DataManager.Instance.GenerateBuildingID(),
             name: buildingName,
             templateID: buildingTemplateID,
-            location: city.cityID,
+            location: city.LocID,
             ownerID: buildingData["BuildingOwnerID"].ToString(),
-            inventoryID: city.cityInventoryID,
+            inventoryID: city.CityInventoryID,
             activity: "Idle", // Establir l'estat inicial
             size: int.Parse(buildingData["BuildingSize"].ToString()),
             hpCurrent: 100,
@@ -393,9 +393,9 @@ public class StartContentImporter : MonoBehaviour
             id: DataManager.Instance.GenerateBuildingID(),
             name: buildingName,
             templateID: buildingTemplateID,
-            location: city.cityID,
+            location: city.LocID,
             ownerID: buildingData["BuildingOwnerID"].ToString(),
-            inventoryID: city.cityInventoryID,  // Si és necessari associar un inventari
+            inventoryID: city.CityInventoryID,  // Si és necessari associar un inventari
             activity: "Idle",  // Estat inicial
             size: int.Parse(buildingData["BuildingSize"].ToString()),
             hpCurrent: 100,
@@ -417,12 +417,12 @@ public class StartContentImporter : MonoBehaviour
 
     private CityData FindCityByID(string id)
     {
-        return DataManager.Instance.allCityList.FirstOrDefault(c => c.cityID == id);
+        return DataManager.Instance.allCityList.FirstOrDefault(c => c.LocID == id);
     }
 
     private Settlement FindSettlementByID(string id)
     {
-        return DataManager.Instance.allSettlementList.FirstOrDefault(s => s.SettlID == id);
+        return DataManager.Instance.allSettlementList.FirstOrDefault(s => s.LocID == id);
     }
 
 

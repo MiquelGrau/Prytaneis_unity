@@ -7,10 +7,10 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance { get; private set; }
 
     // ús intern a moltes funcions
-    public CityData CurrentCity { get; private set; }
-    public CityInventory CurrentCityInventory { get; private set; }
-    public Agent CurrentAgent { get; private set; }
-    public AgentInventory CurrentAgentInventory { get; private set; }
+    public CityData currentCity { get; private set; }
+    public CityInventory currentCityInventory { get; private set; }
+    public Agent currentAgent { get; private set; }
+    public AgentInventory currentAgentInventory { get; private set; }
 
     // Referencies a managers
     public MarkersManager markersManager;
@@ -45,7 +45,7 @@ public class GameManager : MonoBehaviour
         GlobalTime.Instance.OnYearChanged += HandleYearChanged;
 
         // Iterar sobre cada edifici de la ciutat actual
-        foreach (var building in CurrentCity.CityBuildings)
+        foreach (var building in currentCity.Buildings)
         {
             if (building is ProductiveBuilding productiveBuilding)
             {
@@ -74,7 +74,7 @@ public class GameManager : MonoBehaviour
         ProductionManager.Instance.DebugUpdateProduction();
 
         // Iterar sobre cada edifici de la ciutat actual
-        foreach (var building in CurrentCity.CityBuildings)
+        foreach (var building in currentCity.Buildings)
         {
             if (building is ProductiveBuilding productiveBuilding)
             {
@@ -101,30 +101,30 @@ public class GameManager : MonoBehaviour
     
     public void AssignCurrentCity(string cityID)
     {
-        CurrentCity = DataManager.Instance.GetCityDataByID(cityID);
-        if (CurrentCity != null)
+        currentCity = DataManager.Instance.GetCityDataByID(cityID);
+        if (currentCity != null)
         {
-            Debug.Log($"La ciutat assignada és '{CurrentCity.cityName}'");
+            Debug.Log($"La ciutat assignada és '{currentCity.Name}'");
         }
-        /* else
+        else
         {
             Debug.LogError($"No s'ha trobat cap ciutat amb l'ID inicial");
-        } */
+        }
     }
     public void AssignCurrentAgent(string agentID)
     {
-        CurrentAgent = DataManager.Instance.GetAgentByID(agentID);
-        if (CurrentAgent != null)
+        currentAgent = DataManager.Instance.GetAgentByID(agentID);
+        if (currentAgent != null)
         {
-            CurrentAgentInventory = CurrentAgent.Inventory;
+            currentAgentInventory = currentAgent.Inventory;
             //Debug.Log($"Agent assignat és '{CurrentAgent.agentName}'");
             
             // Log llarg, per veure que es carrega bé tot. 
-            float totalResourcesQuantity = CurrentAgentInventory.InventoryResources.Sum(resource => resource.Quantity);
-            int resourceLinesCount = CurrentAgentInventory.InventoryResources.Count;
+            float totalResourcesQuantity = currentAgentInventory.InventoryResources.Sum(resource => resource.Quantity);
+            int resourceLinesCount = currentAgentInventory.InventoryResources.Count;
 
-            Debug.Log($"Agent assignat és '{CurrentAgent.agentName}'. " +
-                    $"Diners: {CurrentAgentInventory.InventoryMoney}, " +
+            Debug.Log($"Agent assignat és '{currentAgent.agentName}'. " +
+                    $"Diners: {currentAgentInventory.InventoryMoney}, " +
                     $"Línies de recursos: {resourceLinesCount}, " +
                     $"Suma de quantitat de recursos: {totalResourcesQuantity}");
             }

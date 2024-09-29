@@ -1,8 +1,8 @@
 {
     "cities": [
       {
-        "cityID": "C0001",
-        "cityName": "Barcelona",
+        "LocID": "C0001",
+        "Name": "Barcelona",
         "latitude": 41.3888,
         "longitude": 2.1629,
         "buildings": [],
@@ -23,8 +23,8 @@
         ]
       },
       {
-        "cityID": "C0002",
-        "cityName": "Roma",
+        "LocID": "C0002",
+        "Name": "Roma",
         "latitude": 41.9031,
         "longitude": 12.4742,
         "buildings": [],
@@ -45,8 +45,8 @@
         ]
       },
       {
-        "cityID": "C0003",
-        "cityName": "Firenze",
+        "LocID": "C0003",
+        "Name": "Firenze",
         "latitude": 43.7617,
         "longitude": 11.2904,
         "buildings": [],
@@ -67,8 +67,8 @@
         ]
       },
       {
-        "cityID": "C0004",
-        "cityName": "Marseilles",
+        "LocID": "C0004",
+        "Name": "Marseilles",
         "latitude": 43.2933,
         "longitude": 5.3759,
         "buildings": [],
@@ -90,8 +90,8 @@
         ]
       },
       {
-        "cityID": "C0005",
-        "cityName": "Valencia",
+        "LocID": "C0005",
+        "Name": "Valencia",
         "latitude": 39.4623,
         "longitude": -0.3833,
         "buildings": [],

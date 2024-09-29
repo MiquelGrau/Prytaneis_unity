@@ -20,7 +20,7 @@ public class BuildingManager : MonoBehaviour
     {
         PopulateBuildingDropdown();
         createBuildingButton.onClick.AddListener(CreateNewBuilding);
-        cityInterface.UpdateBuildingGridForCity(gameManager.CurrentCity);
+        cityInterface.UpdateBuildingGridForCity(gameManager.currentCity);
 
         // Agents
         cityInterface.UpdateAgentGrid();
@@ -93,9 +93,9 @@ public class BuildingManager : MonoBehaviour
             DataManager.Instance.GenerateBuildingID(),
             template.ClassName,
             template.TemplateID,
-            gameManager.CurrentCity.cityID,
+            gameManager.currentCity.LocID,
             null, // OwnerID buit
-            gameManager.CurrentCity.cityInventoryID,
+            gameManager.currentCity.CityInventoryID,
             null, // Estat inicial d'activitat
             1, // Mida de l'edifici
             0, // HPCurrent
@@ -124,32 +124,6 @@ public class BuildingManager : MonoBehaviour
         Debug.Log($"Número de ProductionMethods disponibles: {newBuilding.MethodsAvailable.Count}");
     }
 
-    // Antiga Civicbuidling, abans dels serveis
-    /* private void AddCivicBuilding(CivicTemplate template)
-    {
-        // Aquí crearem la lògica per a crear un nou CivicBuilding amb la informació de la template
-        CivicBuilding newBuilding = new CivicBuilding(
-            DataManager.Instance.GenerateBuildingID(),
-            template.ClassName,
-            template.TemplateID,
-            gameManager.CurrentCity.cityID,
-            "", // OwnerID buit
-            gameManager.CurrentCity.cityInventoryID,
-            "Inactive", // Estat inicial d'activitat
-            1, // Mida de l'edifici
-            0, // HPCurrent
-            0, // HPMaximum
-            template.Function,
-            template.JobsPoor,
-            template.JobsMid,
-            template.JobsRich
-        );
-
-        // Aquí es podria afegir el nou edifici a una llista d'edificis dins de la ciutat actual, per exemple
-        AddBuildingToCurrentCity(newBuilding);
-        Debug.Log("Nou edifici cívic creat: " + newBuilding.BuildingName);
-    } */
-
     // Nova funció per CivicBuilding, després d'afegir serveis
     public void AddCivicBuilding(CivicTemplate template)
     {
@@ -158,9 +132,9 @@ public class BuildingManager : MonoBehaviour
             DataManager.Instance.GenerateBuildingID(),  // ID
             template.ClassName,                         // name
             template.TemplateID,                        // templateID
-            gameManager.CurrentCity.cityID,             // location
+            gameManager.currentCity.LocID,             // location
             "", // OwnerID buit                         // ownerID
-            gameManager.CurrentCity.cityInventoryID,    // inventoryID
+            gameManager.currentCity.CityInventoryID,    // inventoryID
             "Inactive", // Estat inicial d'activitat    // Activity
             1, // Mida de l'edifici                     // size
             100, // HPCurrent                           // hp curr
@@ -182,18 +156,18 @@ public class BuildingManager : MonoBehaviour
 
     public void AddBuildingToCurrentCity(Building newBuilding)
     {
-        CityData currentCity = GameManager.Instance.CurrentCity;
+        CityData currentCity = GameManager.Instance.currentCity;
         if (currentCity != null)
         {
             // Si la llista d'edificis de la ciutat és null, inicialitza-la
-            if (currentCity.CityBuildings == null)
+            if (currentCity.Buildings == null)
             {
-                currentCity.CityBuildings = new List<Building>();
+                currentCity.Buildings = new List<Building>();
             }
 
             // Afegeix el nou edifici a la llista
-            currentCity.CityBuildings.Add(newBuilding);
-            Debug.Log($"Edifici afegit a la ciutat {currentCity.cityName}: {newBuilding.BuildingName}");
+            currentCity.Buildings.Add(newBuilding);
+            Debug.Log($"Edifici afegit a la ciutat {currentCity.Name}: {newBuilding.BuildingName}");
             
             // Actualitza la graella d'edificis per la ciutat actual
             if (cityInterface != null)

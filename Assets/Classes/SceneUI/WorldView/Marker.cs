@@ -51,7 +51,7 @@ public class Marker : MonoBehaviour
                 } */
 
                 // Obtenim l'agent actual des de GameManager
-                var currentAgent = GameManager.Instance.CurrentAgent;
+                var currentAgent = GameManager.Instance.currentAgent;
                 if (currentAgent != null)
                 {
                     string startNodeId = currentAgent.LocationNode; 

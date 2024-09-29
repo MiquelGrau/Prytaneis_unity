@@ -126,7 +126,7 @@ public class WorldSceneManager : MonoBehaviour
     // Actualitza valors del ribbon de sota, amb la info compactada
     private void ResetAgentConfigPanel()
     {
-        Agent currConfigAgent = GameManager.Instance.CurrentAgent;
+        Agent currConfigAgent = GameManager.Instance.currentAgent;
 
         if (currConfigAgent != null)
         {

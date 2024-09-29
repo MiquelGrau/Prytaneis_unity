@@ -42,9 +42,9 @@ public class DemandManager : MonoBehaviour
             Debug.Log("Aplicats calculs de demanda a segon 2");
 
             //AssignDemandsToVarieties();
-            GenerateMarketDemands(GameManager.Instance.CurrentCity);  
-            CoverCityDemands(GameManager.Instance.CurrentCity);
-            CalculateAllCityPrices(GameManager.Instance.CurrentCity); 
+            GenerateMarketDemands(GameManager.Instance.currentCity);  
+            CoverCityDemands(GameManager.Instance.currentCity);
+            CalculateAllCityPrices(GameManager.Instance.currentCity); 
             inventoryDisplayText.text = GetCityInventoryDisplayText();
             firstDemand = true;
         }
@@ -60,15 +60,15 @@ public class DemandManager : MonoBehaviour
         }
         //Debug.Log($"Processant la ciutat: {chosenCity.cityName} (ID: {chosenCity.cityID})");
 
-        CityInventory chosenCityInventory = chosenCity.CityInventory;
-        if (chosenCityInventory == null)
+        CityInventory cityInventory = DataManager.Instance.GetCityInvByID(chosenCity.CityInventoryID);
+        if (cityInventory == null)
         {
             Debug.LogError("No s'ha assignat cap inventari de ciutat.");
             return;
         }
         
         // Netejar les PopDemands existents
-        chosenCityInventory.PopDemands.Clear();
+        cityInventory.PopDemands.Clear();
         //Debug.Log($"Inventari de ciutat netejat per {chosenCity.cityName}.");
 
 
@@ -120,7 +120,7 @@ public class DemandManager : MonoBehaviour
                 newDemand.TotalQty = newDemand.ConsumeQty * demand.MonthsTotal;
                 
                 // Afegir a la llista de PopDemands
-                chosenCityInventory.PopDemands.Add(newDemand);
+                cityInventory.PopDemands.Add(newDemand);
             }
         }
         //Debug.Log($"Processament de demandes complet per la ciutat: {chosenCity.cityName} (ID: {chosenCity.cityID})");
@@ -129,8 +129,8 @@ public class DemandManager : MonoBehaviour
 
     private void GenerateMarketDemands(CityData city)
     {
-        CityInventory cityInventory = city.CityInventory;
-
+        CityInventory cityInventory = DataManager.Instance.GetCityInvByID(city.CityInventoryID);
+        
         if (cityInventory == null)
         {
             Debug.LogError("No s'ha assignat cap inventari de ciutat.");
@@ -254,8 +254,8 @@ public class DemandManager : MonoBehaviour
 
     private void CoverCityDemands(CityData city)
     {
-        CityInventory cityInventory = city.CityInventory;
-
+        CityInventory cityInventory = DataManager.Instance.GetCityInvByID(city.CityInventoryID);
+        
         if (cityInventory == null)
         {
             Debug.LogError("No s'ha assignat cap inventari de ciutat.");
@@ -332,8 +332,8 @@ public class DemandManager : MonoBehaviour
 
     public void CalculateAllCityPrices(CityData city)
     {
-        CityInventory cityInventory = city.CityInventory;
-
+        CityInventory cityInventory = DataManager.Instance.GetCityInvByID(city.CityInventoryID);
+        
         foreach (var resline in cityInventory.InventoryResources)
         {
             if (resline.ResourceID != null)
@@ -368,7 +368,7 @@ public class DemandManager : MonoBehaviour
         
         //Debug.Log($"Processant serveis per a la ciutat: {chosenCity.cityName} (ID: {chosenCity.cityID})");
 
-        CityInventory chosenCityInventory = chosenCity.CityInventory;
+        CityInventory chosenCityInventory = DataManager.Instance.GetCityInvByID(chosenCity.CityInventoryID);
         if (chosenCityInventory == null)
         {
             Debug.LogError("No s'ha assignat cap inventari de ciutat.");
@@ -466,8 +466,8 @@ public class DemandManager : MonoBehaviour
 
     private string GetCityInventoryDisplayText()
     {
-        CityData currentCity = GameManager.Instance.CurrentCity;
-        CityInventory currentCityInventory = currentCity.CityInventory;
+        CityData currentCity = GameManager.Instance.currentCity;
+        CityInventory currentCityInventory = DataManager.Instance.GetCityInvByID(currentCity.CityInventoryID);
         
         if (currentCityInventory == null)
         {
@@ -475,7 +475,7 @@ public class DemandManager : MonoBehaviour
         }
 
         StringBuilder displayText = new StringBuilder();
-        displayText.AppendLine($"Inventari de la Ciutat: {currentCity.cityName} (ID: {currentCity.cityID})");
+        displayText.AppendLine($"Inventari de la Ciutat: {currentCity.Name} (ID: {currentCity.LocID})");
         
         displayText.AppendLine("Recursos de l'Inventari:");
         var shownResources = currentCityInventory.InventoryResources

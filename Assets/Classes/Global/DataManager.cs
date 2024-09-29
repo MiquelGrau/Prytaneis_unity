@@ -86,7 +86,13 @@ public class DataManager : MonoBehaviour
     public CityData GetCityDataByID(string cityID)  // Te la demanaran mil vegades, millor tenir això aqui dins
     {
         //return dataItems.cities.FirstOrDefault(city => city.cityID == cityID);
-        return allCityList.FirstOrDefault(city => city.cityID == cityID);
+        return allCityList.FirstOrDefault(city => city.LocID == cityID);
+    }
+
+    public CityInventory GetCityInvByID(string invID)
+    {
+        // Buscar l'inventari associat a una ciutat
+        return cityInventories.FirstOrDefault(inv => inv.CityInvID == invID);
     }
 
     public List<Agent> GetAgents()

@@ -1,7 +1,63 @@
-using System.Collections.Generic;
 using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
 using Newtonsoft.Json;
 using System.Linq;
+
+[System.Serializable]
+public class CityData : Location
+{
+    // Generat a la classe Location
+    // public string Name;
+    // public string LocID;
+    // public string NodeID;
+    // public float Latitude;
+    // public float Longitude;
+    // public List<Building> Buildings { get; set; } = new List<Building>();
+    
+    
+    // Demografia i politica
+    public int PoorPopulation { get; set; }
+    public int MidPopulation { get; set; }
+    public int RichPopulation { get; set; }
+    public int Population { get { return PoorPopulation + MidPopulation + RichPopulation; } }
+    public string PoorLifestyleID { get; set; }
+    public string MidLifestyleID { get; set; }
+    public string RichLifestyleID { get; set; } 
+    public string OwnerID { get; set; }
+    public string PoliticalStatus { get; set; }
+    
+    // Economic
+    public string CityInventoryID;
+    public string[][] Grid;
+    public float BuildPoints { get; set; } 
+    
+    // Constructor, si venen des del json
+    public CityData(string locationID, string name, string nodeID, string cityInventoryID, 
+                    int poorPop, int midPop, int richPop, 
+                    string poorID, string midID, string richID, 
+                    float buildPoints, string politicalStatus, string ownerID,  
+                    string[][] grid )
+        : base(name, locationID, nodeID)  // Crida al constructor de Location
+    {
+        PoorPopulation = poorPop;
+        MidPopulation = midPop;
+        RichPopulation = richPop;
+        PoorLifestyleID = poorID;
+        MidLifestyleID = midID;
+        RichLifestyleID = richID;
+        OwnerID = ownerID;
+        PoliticalStatus = politicalStatus;
+        CityInventoryID = cityInventoryID;
+        BuildPoints = buildPoints;
+        
+        Latitude = 0f;
+        Longitude = 0f;
+        Buildings = new List<Building>();
+        Grid = null;
+    }
+
+}
 
 [System.Serializable]
 public class CityInventory
@@ -209,4 +265,5 @@ public class CityService : InventoryResource
     }
     
 }
+
 
