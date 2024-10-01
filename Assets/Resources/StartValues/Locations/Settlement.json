@@ -1,0 +1,64 @@
+{ 
+  "Settlement":[ 
+    {
+      "LocID": "S0001", "Name": "Cerdanya", "NodeID": "LN0296", "InvID": "SV0001", "SettlementType": "Mining town",
+      "Population": 3900, "Lifestyle": "C1", "BuildPoints": 390, "PoliticalStatus": "Feudal overlord", "OwnerID": "FP0001"
+    }, 
+    {
+      "LocID": "S0002", "Name": "Alto Aragon", "NodeID": "LN0297", "InvID": "SV0002", "SettlementType": "Mining town ",
+      "Population": 2800, "Lifestyle": "C2", "BuildPoints": 530, "PoliticalStatus": "Feudal overlord", "OwnerID": "FP0002"
+    }, 
+    {
+      "LocID": "S0003", "Name": "Lleida", "NodeID": "LN0302", "InvID": "SV0003", "SettlementType": "Mining town",
+      "Population": 700, "Lifestyle": "C4", "BuildPoints": 230, "PoliticalStatus": "Feudal overlord", "OwnerID": "FP0003"
+    }, 
+    {
+      "LocID": "S0004", "Name": "Teruel", "NodeID": "LN0303", "InvID": "SV0004", "SettlementType": "Trading town",
+      "Population": 500, "Lifestyle": "C3", "BuildPoints": 130, "PoliticalStatus": "Feudal overlord", "OwnerID": "FP0004"
+    }, 
+    {
+      "LocID": "S0005", "Name": "Calatayud", "NodeID": "LN0304", "InvID": "SV0005", "SettlementType": "Trading town",
+      "Population": 100, "Lifestyle": "C1", "BuildPoints": 0, "PoliticalStatus": "Feudal overlord", "OwnerID": "FP0002"
+    }, 
+    {
+      "LocID": "S0006", "Name": "San Sebastian", "NodeID": "LN0305", "InvID": "SV0006", "SettlementType": "Trading town",
+      "Population": 6600, "Lifestyle": "C3", "BuildPoints": 1650, "PoliticalStatus": "Feudal overlord", "OwnerID": "FP0002"
+    }, 
+    {
+      "LocID": "S0007", "Name": "Briviesca", "NodeID": "LN0306", "InvID": "SV0007", "SettlementType": "Castle town",
+      "Population": 4500, "Lifestyle": "C1", "BuildPoints": 450, "PoliticalStatus": "Feudal overlord", "OwnerID": "FP0001"
+    }, 
+    {
+      "LocID": "S0008", "Name": "Salces", "NodeID": "LN0307", "InvID": "SV0008", "SettlementType": "Castle town",
+      "Population": 1800, "Lifestyle": "C4", "BuildPoints": 590, "PoliticalStatus": "Feudal overlord", "OwnerID": "FP0001"
+    }, 
+    {
+      "LocID": "S0009", "Name": "West Picos de Europa", "NodeID": "LN0308", "InvID": "SV0009", "SettlementType": "Castle town",
+      "Population": 600, "Lifestyle": "C3", "BuildPoints": 150, "PoliticalStatus": "Village comune", "OwnerID": "SP0001"
+    }, 
+    {
+      "LocID": "S0010", "Name": "Campos de Castilla", "NodeID": "LN0309", "InvID": "SV0010", "SettlementType": "Port town",
+      "Population": 400, "Lifestyle": "C1", "BuildPoints": 40, "PoliticalStatus": "Village comune", "OwnerID": "SP0002"
+    }, 
+    {
+      "LocID": "S0011", "Name": "Soria", "NodeID": "LN0310", "InvID": "SV0011", "SettlementType": "Port town",
+      "Population": 2300, "Lifestyle": "C2", "BuildPoints": 430, "PoliticalStatus": "Village comune", "OwnerID": "SP0003"
+    }, 
+    {
+      "LocID": "S0012", "Name": "Ponferrada", "NodeID": "LN0311", "InvID": "SV0012", "SettlementType": "Port town",
+      "Population": 1100, "Lifestyle": "C4", "BuildPoints": 360, "PoliticalStatus": "Religious overlord", "OwnerID": "RP0001"
+    }, 
+    {
+      "LocID": "S0013", "Name": "Santiago de Compostela", "NodeID": "LN0312", "InvID": "SV0013", "SettlementType": "Bishop town",
+      "Population": 3800, "Lifestyle": "C1", "BuildPoints": 380, "PoliticalStatus": "Religious overlord", "OwnerID": "RP0001"
+    }, 
+    {
+      "LocID": "S0014", "Name": "Chaves", "NodeID": "LN0313", "InvID": "SV0014", "SettlementType": "Bishop town",
+      "Population": 1900, "Lifestyle": "C3", "BuildPoints": 480, "PoliticalStatus": "Republic overlord", "OwnerID": "CP0001"
+    }, 
+    {
+      "LocID": "S0015", "Name": "Viseu", "NodeID": "LN0314", "InvID": "SV0015", "SettlementType": "Bishop town",
+      "Population": 800, "Lifestyle": "C5", "BuildPoints": 400, "PoliticalStatus": "Republic overlord", "OwnerID": "CP0002"
+    } 
+  ]
+}
