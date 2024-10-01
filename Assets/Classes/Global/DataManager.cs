@@ -36,10 +36,10 @@ public class DataManager : MonoBehaviour
     public List<Settlement> allSettlementList;
     public List<CityInventory> cityInventories;
     
-    // BBDD d'edificis
+    // Comptadors
     public int buildingCounter = 0;
-        // Edificis guardats a dins de les ciutats i settlements directament
-    
+    private int CVInventoryCounter; // city inventories
+    private int SVInventoryCounter; // settlement inventories
     
     // Classes de agents, merchants, characters, etc
     public List<Agent> agents = new List<Agent>();
@@ -59,12 +59,21 @@ public class DataManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+        InitializeCityInventoryCounters();
         
         // Depuració per a confirmar la càrrega de dades
         //Debug.Log($"Nombre de templates productius carregats: {productiveTemplates.Count}");
         //Debug.Log($"Nombre de templates cívics carregats: {civicTemplates.Count}");
         
     }
+    public void Start()
+    {
+        InitializeCityInventoryCounters();
+
+
+    }
+
+
 
     public void SaveData()
     {
@@ -72,7 +81,54 @@ public class DataManager : MonoBehaviour
         File.WriteAllText(dataPath, json);
     }
     
-    
+    private void InitializeCityInventoryCounters()
+    {
+        // Inicialitzar el comptador segons els IDs existents a cityInventories
+        CVInventoryCounter = cityInventories
+            .Where(inv => inv.CityInvID.StartsWith("CV"))
+            .Select(inv => int.Parse(inv.CityInvID.Substring(2)))
+            .DefaultIfEmpty(0)
+            .Max();
+
+        SVInventoryCounter = cityInventories
+            .Where(inv => inv.CityInvID.StartsWith("SV"))
+            .Select(inv => int.Parse(inv.CityInvID.Substring(2)))
+            .DefaultIfEmpty(0)
+            .Max();
+    }
+
+    public CityInventory CreateNewCityInventory(bool isCity, string locationID)
+    {
+        string newInventoryID;
+
+        if (isCity)
+        {
+            // Incrementar el comptador de ciutats
+            CVInventoryCounter++;
+            newInventoryID = $"CV{CVInventoryCounter:D4}";
+        }
+        else
+        {
+            // Incrementar el comptador de settlements
+            SVInventoryCounter++;
+            newInventoryID = $"SV{SVInventoryCounter:D4}";
+        }
+
+        // Crear el nou inventari amb valors per defecte (Money = 0, Resources = nova llista buida)
+        CityInventory newInventory = new CityInventory(
+            newInventoryID,   // ID de l'inventari
+            locationID,       // ID de la localització (City o Settlement)
+            0,                // CityInvMoney inicial a 0
+            new List<CityInventoryResource>() // Nova llista buida de recursos
+        );
+
+        // Afegir-lo a la llista d'inventaris
+        cityInventories.Add(newInventory);
+
+        Debug.Log($"Creat un nou CityInventory amb ID {newInventoryID}");
+
+        return newInventory;
+    }
     
     //////////////
     // BUSCADORS

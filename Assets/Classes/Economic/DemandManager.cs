@@ -28,6 +28,10 @@ public class DemandManager : MonoBehaviour
             CalculateAllCityPrices(city);
             GetServiceNeedsForCity(city);
         }
+        foreach (Settlement settlm in DataManager.Instance.allSettlementList)
+        {
+            GetServiceNeedsForSettlement(settlm);
+        }
         
        
         Debug.Log("[DemandManager] Demandes a totes les ciutats calculades");
@@ -460,6 +464,73 @@ public class DemandManager : MonoBehaviour
         
         //Debug.Log($"Processament de serveis complet per la ciutat: {chosenCity.cityName} (ID: {chosenCity.cityID})");
     }
+
+    private void GetServiceNeedsForSettlement(Settlement chosenSettlement)
+    {
+        // Obtenir l'inventari del settlement, o crear-ne un si no té res
+        CityInventory settlementInventory = DataManager.Instance.GetLocInvByID(chosenSettlement.InventoryID);
+        if (settlementInventory == null)
+        {
+            // `false` indica que és un settlement, i posem la ID segons el contador
+            settlementInventory = DataManager.Instance.CreateNewCityInventory(false, chosenSettlement.LocID); 
+            chosenSettlement.InventoryID = settlementInventory.CityInvID; 
+            Debug.Log($"No hi havia inventari, se'n crea un de nou: {chosenSettlement.InventoryID}");
+            
+        }
+
+        // Netejar els serveis existents
+        settlementInventory.Services.Clear();
+        
+        // Obtenir el LifestyleTier per al grup de població únic del settlement
+        LifestyleTier lifestyleTier = DataManager.lifestyleTiers.Find(tier => tier.TierID == chosenSettlement.SettlLifestyleID);
+        if (lifestyleTier == null)
+        {
+            Debug.LogError($"No s'ha trobat LifestyleTier per SettlLifestyleID: {chosenSettlement.SettlLifestyleID}");
+            return;
+        }
+
+        // Calcular la demanda de serveis per a la població única del settlement
+        foreach (var service in lifestyleTier.ServiceDemands)
+        {
+            var existingService = settlementInventory.Services.FirstOrDefault(s => s.ResourceType == service.ResType);
+
+            if (existingService != null)
+            {
+                // Si el servei ja existeix, sumar la demanda
+                existingService.Demand += chosenSettlement.Population * service.MonthlyQty / 1000;
+                existingService.PositionPoor = service.Position;  // Assigna la posició única
+            }
+            else
+            {
+                // Si no existeix, crear un nou servei
+                var newService = new CityService(
+                    service.ResType,
+                    0, // Quantitat actual
+                    chosenSettlement.Population * service.MonthlyQty / 1000  // Demanda calculada
+                )
+                {
+                    PositionPoor = service.Position, // Ús d'una única posició per als settlements
+                    MinRatio = service.Minimum,
+                    OptimalRatio = service.Optimum,
+                    FulfilledRatio = 0  // Potser es calcula més tard
+                };
+
+                // Afegir el nou servei a la llista de serveis del settlement
+                settlementInventory.Services.Add(newService);
+            }
+        }
+
+        // Debug opcional per mostrar els serveis processats
+        /* foreach (var service in settlementInventory.Services)
+        {
+            Debug.Log($"Service: {service.ResourceType}, Demand: {service.Demand}, " +
+                    $"Position: {service.PositionPoor}, " +
+                    $"Ratio {service.FulfilledRatio}, Min {service.MinRatio}, Opt {service.OptimalRatio}");
+        } */
+
+        // Debug.Log($"Processament de serveis complet per al settlement: {chosenSettlement.Name} (ID: {chosenSettlement.LocID})");
+    }
+
 
 
 

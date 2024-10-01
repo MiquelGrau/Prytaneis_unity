@@ -20,6 +20,13 @@ public class BuildingAllocatorManager : MonoBehaviour
             ProcessCityServices(city);
             AllocateMinRatioBuildings(city);
         }
+
+        foreach (Location city in DataManager.Instance.allSettlementList)
+        {
+            CalculateBuildPointsForCity(city);
+            ProcessCityServices(city);
+            AllocateMinRatioBuildings(city);
+        }
     }
 
     private void CopyCivicTemplates()
