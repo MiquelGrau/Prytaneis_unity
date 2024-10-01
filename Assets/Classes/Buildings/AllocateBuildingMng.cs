@@ -13,9 +13,13 @@ public class BuildingAllocatorManager : MonoBehaviour
     {
         
         CopyCivicTemplates();
-        CalculateBuildPointsForCity(GameManager.Instance.currentCity);
-        ProcessCityServices(GameManager.Instance.currentCity);
-        AllocateMinRatioBuildings(GameManager.Instance.currentCity);
+
+        foreach (Location city in DataManager.Instance.allCityList)
+        {
+            CalculateBuildPointsForCity(city);
+            ProcessCityServices(city);
+            AllocateMinRatioBuildings(city);
+        }
     }
 
     private void CopyCivicTemplates()
@@ -26,14 +30,14 @@ public class BuildingAllocatorManager : MonoBehaviour
     }
 
     // Funció per modificar els BuildPoints
-    public void CalculateBuildPointsForCity(CityData currentCity)
+    public void CalculateBuildPointsForCity(Location location)
     {
         foreach (var civicTemplate in PossibleBuildingList)
         {
             int existingBuildingsCount = 0;
 
             // Comprovar quants edificis del mateix template hi ha a la ciutat
-            foreach (var building in currentCity.Buildings)
+            foreach (var building in location.Buildings)
             {
                 if (building.BuildingTemplateID == civicTemplate.TemplateID)
                 {
@@ -50,7 +54,7 @@ public class BuildingAllocatorManager : MonoBehaviour
     }
 
     // Funció per agregar serveis oferts dels edificis als serveis de la ciutat passada com a input
-    public void ProcessCityServices(CityData city)
+    public void ProcessCityServices(Location city)
     {
         if (city == null)
         {
@@ -59,7 +63,7 @@ public class BuildingAllocatorManager : MonoBehaviour
         }
 
         // Obtenim l'inventari de la ciutat utilitzant el nou nom de la funció
-        CityInventory cityInventory = DataManager.Instance.GetCityInvByID(city.CityInventoryID);
+        CityInventory cityInventory = DataManager.Instance.GetLocInvByID(city.InventoryID);
         if (cityInventory == null)
         {
             Debug.LogError("L'inventari de la ciutat és nul.");
@@ -147,9 +151,9 @@ public class BuildingAllocatorManager : MonoBehaviour
         }
     }
 
-    public void AllocateMinRatioBuildings(CityData city)
+    public void AllocateMinRatioBuildings(Location city)
     {
-        CityInventory cityInventory = DataManager.Instance.GetCityInvByID(city.CityInventoryID);
+        CityInventory cityInventory = DataManager.Instance.GetLocInvByID(city.InventoryID);
 
         if (city == null || cityInventory == null)
         {
@@ -190,7 +194,7 @@ public class BuildingAllocatorManager : MonoBehaviour
                 else
                 {
                     // Si no hi ha cap edifici existent, crear-ne un de nou
-                    buildingManager.AddCivicBuilding(buildingToAdd);
+                    buildingManager.AddCivicBuilding(buildingToAdd, city);
                     city.BuildPoints -= buildingToAdd.BuildPointCost;
                     //Debug.Log($"Nou edifici creat: {buildingToAdd.ClassName}, gastat: {buildingToAdd.BuildPointCost}, BP restants: {city.BuildPoints}");
                 }

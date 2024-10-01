@@ -16,6 +16,7 @@ public class TradeManager : MonoBehaviour
     public TMP_Dropdown agentDropdown;
     public DataManager dataManager;
     public TradeInterface tradeInterface;
+    public CityInterface cityInterface;
 
     // Referències als inventaris actuals seleccionats
     public CityInventory currentCityInventory;
@@ -101,7 +102,7 @@ public class TradeManager : MonoBehaviour
     // Dropdowns
     // Usats per seleccionar rapidament diferents agents. 
     // Al tanto que ara és "global", farà teleport de la gent si se seleccionen. 
-    void FillCityDropdown()
+    /* void FillCityDropdown()
     {
         var cityNames = dataManager.GetCities().Select(city => city.Name).ToList();
         cityDropdown.ClearOptions();
@@ -116,8 +117,9 @@ public class TradeManager : MonoBehaviour
             TradeDeskCleanup(); 
             tradeInterface.UpdateTradeInterface();
         }
-    }
-    public void OnCitySelected(int index)
+    } */
+
+    /* public void OnCitySelected(int index)
     {
         var cities = dataManager.GetCities(); // Obtenint la llista des de DataManager
         if (index < 0 || index >= cities.Count)
@@ -133,7 +135,76 @@ public class TradeManager : MonoBehaviour
         TradeDeskCleanup(); 
         tradeInterface.UpdateTradeInterface();
         cityDropdown.Hide();
+    } */
+
+    void FillCityDropdown()
+    {
+        // Combinem ciutats i settlements amb els seus respectius prefixos
+        var locationNames = new List<string>();
+
+        var cities = DataManager.Instance.allCityList;
+        var settlements = DataManager.Instance.allSettlementList;
+
+        foreach (var city in cities)
+        {
+            locationNames.Add("C- " + city.Name);  // Afegir el prefix "C-" per a ciutats
+        }
+
+        foreach (var settlement in settlements)
+        {
+            locationNames.Add("S- " + settlement.Name);  // Afegir el prefix "S-" per a settlements
+        }
+
+        cityDropdown.ClearOptions();
+        cityDropdown.AddOptions(locationNames);
+
+        // Preselecciona la ciutat actual
+        var currentCityIndex = locationNames.FindIndex(name => name.Contains(GameManager.Instance.currentLocation.Name));
+        if (currentCityIndex >= 0)
+        {
+            cityDropdown.SetValueWithoutNotify(currentCityIndex);
+            AssignCityInTrade();
+            TradeDeskCleanup();
+            tradeInterface.UpdateTradeInterface();
+        }
     }
+
+    
+
+    public void OnCitySelected(int index)
+    {
+        var cities = DataManager.Instance.allCityList;
+        var settlements = DataManager.Instance.allSettlementList;
+
+        int totalCities = cities.Count;
+        
+        if (index < 0 || index >= (totalCities + settlements.Count))
+        {
+            Debug.LogError("Índex de localització seleccionada fora de rang.");
+            return;
+        }
+
+        if (index < totalCities)
+        {
+            // S'ha seleccionat una ciutat
+            CityData selectedCity = cities[index];
+            GameManager.Instance.AssignCurrentLocation(selectedCity.LocID);
+        }
+        else
+        {
+            // S'ha seleccionat un settlement
+            Settlement selectedSettlement = settlements[index - totalCities]; // L'index dels settlements ve després de les ciutats
+            GameManager.Instance.AssignCurrentLocation(selectedSettlement.LocID); // Tractar el settlement com si fos una ciutat en aquest cas
+        }
+        
+        // No cal que tinguin una ciutat de input, ja treballen amb la currentcity que ha canviat
+        AssignCityInTrade();
+        TradeDeskCleanup();
+        //tradeInterface.UpdateTradeInterface();
+        cityInterface.UpdateBuildingGridForCity();
+        cityDropdown.Hide();
+    }
+
 
     void FillAgentDropdown()
     {
@@ -170,7 +241,7 @@ public class TradeManager : MonoBehaviour
     
     public void AssignCityInTrade()
     {
-        currentCityInventory = DataManager.Instance.GetCityInvByID(GameManager.Instance.currentCity.CityInventoryID);
+        currentCityInventory = DataManager.Instance.GetLocInvByID(GameManager.Instance.currentLocation.InventoryID);
         if (currentCityInventory == null) return;
         
         CurrentTrade.TradePartnerLeft = currentCityInventory.CityID;
@@ -179,6 +250,26 @@ public class TradeManager : MonoBehaviour
                 
         SetUpTradeLines();
     }
+
+    public void AssignLocationInTrade()
+    {
+        // Obtenim la Location actual (sigui CityData o Settlement)
+        var currentLocation = GameManager.Instance.currentLocation;  // Pot ser CityData o Settlement
+
+        // Obtenim l'inventari associat a aquesta localització
+        currentCityInventory = DataManager.Instance.GetLocInvByID(currentLocation.InventoryID);
+        if (currentCityInventory == null) return;
+        
+        // Assignar dades al TradeDesk
+        CurrentTrade.TradePartnerLeft = currentLocation.LocID;
+        CurrentTrade.LeftMoneyStart = currentCityInventory.CityInvMoney;
+        CurrentTrade.LeftWaresStart = currentCityInventory.InventoryResources
+            .Where(r => !string.IsNullOrEmpty(r.ResourceType))
+            .Sum(r => (int)r.Quantity);
+
+        SetUpTradeLines();
+    }
+
 
     public void AssignAgentInTrade()
     {
@@ -255,8 +346,8 @@ public class TradeManager : MonoBehaviour
     private void SetUpTradeLines()
     {
         // Obtenir les referències a les dades de la ciutat i de l'agent des de GameManager
-        CityData currentCity = GameManager.Instance.currentCity;
-        currentCityInventory = DataManager.Instance.GetCityInvByID(currentCity.CityInventoryID);
+        Location currentLocation = GameManager.Instance.currentLocation;
+        currentCityInventory = DataManager.Instance.GetLocInvByID(currentLocation.InventoryID);
         Agent currentAgent = GameManager.Instance.currentAgent;
         AgentInventory agentInventory = currentAgent.Inventory;
         
@@ -296,7 +387,7 @@ public class TradeManager : MonoBehaviour
             }
             else
             {
-                Debug.LogWarning($"ResourceID buit o nul per un recurs de la ciutat {currentCity.Name}");
+                Debug.LogWarning($"ResourceID buit o nul per un recurs de la ciutat {currentLocation.Name}");
             }
         }
 

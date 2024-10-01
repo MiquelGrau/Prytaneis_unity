@@ -14,6 +14,7 @@ public class TradeInterface : MonoBehaviour
     // Mètode per actualitzar la interfície amb la informació actual de TradeDesk
     public void UpdateTradeInterface()
     {
+        
         if (tradeManager == null || tradeManager.CurrentTrade == null || tradeManager.CurrentTrade.TradeResourceLines == null) 
         {
             Debug.LogError("TradeManager or CurrentTrade or TradeResourceLines is not initialized");

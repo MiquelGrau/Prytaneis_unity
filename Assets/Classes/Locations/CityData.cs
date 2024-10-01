@@ -14,7 +14,8 @@ public class CityData : Location
     // public float Latitude;
     // public float Longitude;
     // public List<Building> Buildings { get; set; } = new List<Building>();
-    
+    //public string InventoryID { get; set; }
+    //public float BuildPoints { get; set; } 
     
     // Demografia i politica
     public int PoorPopulation { get; set; }
@@ -28,16 +29,14 @@ public class CityData : Location
     public string PoliticalStatus { get; set; }
     
     // Economic
-    public string CityInventoryID { get; set; }
     public string[][] Grid;
-    public float BuildPoints { get; set; } 
     
     // Constructor, si venen des del json
-    public CityData(string locationID, string name, string nodeID, string cityInventoryID, 
+    public CityData(string locationID, string name, string nodeID, string inventoryID, 
                     int poorPop, int midPop, int richPop, 
                     string poorID, string midID, string richID, 
                     float buildPoints, string politicalStatus, string ownerID )
-        : base(name, locationID, nodeID)  // Crida al constructor de Location
+        : base(name, locationID, nodeID, inventoryID, buildPoints)  // Prové del constructor de Location
     {
     
     
@@ -49,7 +48,7 @@ public class CityData : Location
         RichLifestyleID = richID;
         OwnerID = ownerID;
         PoliticalStatus = politicalStatus;
-        CityInventoryID = cityInventoryID;
+        //CityInventoryID = cityInventoryID;
         BuildPoints = buildPoints;
         
         Latitude = 0f;

@@ -12,9 +12,12 @@ public class Location
     public float Latitude { get; set; }
     public float Longitude { get; set; }
     public List<Building> Buildings { get; set; }
+    public string InventoryID { get; set; }  
+    public float BuildPoints { get; set; } 
+    
 
     // Constructor per a Location
-    public Location(string name, string locID, string nodeID)
+    /* public Location(string name, string locID, string nodeID)
     {
         Name = name;
         LocID = locID;
@@ -22,5 +25,18 @@ public class Location
         Latitude = 0f;
         Longitude = 0f;
         Buildings = new List<Building>(); // Edificis s'inicialitzen després, sempre en blanc al crear-se. 
+    } */
+    public Location(string name, string locID, string nodeID, string inventoryID, float buildPoints)
+    {
+        Name = name;
+        LocID = locID;
+        NodeID = nodeID;
+        InventoryID = inventoryID;  
+        BuildPoints = buildPoints;
+        
+        Latitude = 0f;
+        Longitude = 0f;
+        Buildings = new List<Building>(); 
+        
     }
 }

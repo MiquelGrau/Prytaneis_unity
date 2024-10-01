@@ -20,7 +20,7 @@ public class BuildingManager : MonoBehaviour
     {
         PopulateBuildingDropdown();
         createBuildingButton.onClick.AddListener(CreateNewBuilding);
-        cityInterface.UpdateBuildingGridForCity(gameManager.currentCity);
+        cityInterface.UpdateBuildingGridForCity();
 
         // Agents
         cityInterface.UpdateAgentGrid();
@@ -48,11 +48,11 @@ public class BuildingManager : MonoBehaviour
         buildingDropdown.AddOptions(buildingNames);
     }
 
-    private void CreateNewBuilding()
+    private void CreateNewBuilding()    // debug, nomes desplegable
     {
         // Assumeix que l'opció seleccionada en el desplegable correspon al índex de la plantilla en la llista combinada de totes les plantilles
         int selectedIndex = buildingDropdown.value;
-        
+            
         // Calcular l'índex real tenint en compte que el llistat combina productius i cívics
         bool isProductive = selectedIndex < DataManager.Instance.productiveTemplates.Count;
         string selectedTemplateID = isProductive ? 
@@ -60,14 +60,17 @@ public class BuildingManager : MonoBehaviour
             DataManager.Instance.civicTemplates[selectedIndex - DataManager.Instance.productiveTemplates.Count].TemplateID;
         
         BuildingTemplate selectedTemplate = FindTemplateByID(selectedTemplateID);
+        Location currentLocation = GameManager.Instance.currentLocation;
 
         if (selectedTemplate is ProductiveTemplate)
         {
-            AddProductiveBuilding(selectedTemplate as ProductiveTemplate);
+            //AddProductiveBuilding(selectedTemplate as ProductiveTemplate);
+            AddProductiveBuilding(selectedTemplate as ProductiveTemplate, currentLocation);
         }
         else if (selectedTemplate is CivicTemplate)
         {
             //AddCivicBuilding(selectedTemplate as CivicTemplate);
+            AddCivicBuilding(selectedTemplate as CivicTemplate, currentLocation);
         }
     } 
 
@@ -86,32 +89,32 @@ public class BuildingManager : MonoBehaviour
     }
 
 
-    public void AddProductiveBuilding(ProductiveTemplate template)
+    public void AddProductiveBuilding(ProductiveTemplate template, Location location)
     {
         // Aquí crearem la lògica per a crear un nou ProductiveBuilding amb la informació de la template
         ProductiveBuilding newBuilding = new ProductiveBuilding(
             DataManager.Instance.GenerateBuildingID(),
             template.ClassName,
             template.TemplateID,
-            gameManager.currentCity.LocID,
-            null, // OwnerID buit
-            gameManager.currentCity.CityInventoryID,
-            null, // Estat inicial d'activitat
-            1, // Mida de l'edifici
-            0, // HPCurrent
-            0, // HPMaximum
+            location.LocID,
+            null,                                   // OwnerID buit
+            location.InventoryID,
+            null,                                   // Estat inicial d'activitat
+            1,                                      // Mida de l'edifici
+            0,                                      // HPCurrent
+            0,                                      // HPMaximum
             template.TemplateID,
-            new List<ProductiveFactor>(), // CurrentFactors com a llistat buit per ara
+            new List<ProductiveFactor>(),           // CurrentFactors com a llistat buit per ara
             template.PossibleMethods,
-            null, // Method Active, no s'està fabricant res encara. 
+            null,                                   // Method Active, no s'està fabricant res encara. 
             template.DefaultMethod,
-            null, // BatchCurrent com a null per ara
-            new List<Batch>(), // BatchBacklog com a llistat buit per ara
-            1.0f, // Linear
-            1.0f, // InputEfficiency
-            1.0f, // OutputEfficiency
-            1.0f, // CycleEfficiency
-            1.0f, // SalaryEfficiency
+            null,                                   // BatchCurrent com a null per ara
+            new List<Batch>(),                      // BatchBacklog com a llistat buit per ara
+            1.0f,   // Linear
+            1.0f,   // InputEfficiency
+            1.0f,   // OutputEfficiency
+            1.0f,   // CycleEfficiency
+            1.0f,   // SalaryEfficiency
             template.JobsPoor,
             template.JobsMid,
             template.JobsRich
@@ -119,22 +122,22 @@ public class BuildingManager : MonoBehaviour
 
         // Aquí es podria afegir el nou edifici a una llista d'edificis dins de la ciutat actual, per exemple
         SetupFactors(newBuilding, template);
-        AddBuildingToCurrentCity(newBuilding);
+        AddBuildingToLocation(newBuilding, location);
         Debug.Log("Nou edifici productiu creat: " + newBuilding.BuildingName);
         Debug.Log($"Número de ProductionMethods disponibles: {newBuilding.MethodsAvailable.Count}");
     }
 
     // Nova funció per CivicBuilding, després d'afegir serveis
-    public void AddCivicBuilding(CivicTemplate template)
+    public void AddCivicBuilding(CivicTemplate template, Location location)
     {
         // Aquí crearem la lògica per a crear un nou CivicBuilding amb la informació de la template
         CivicBuilding newBuilding = new CivicBuilding(
             DataManager.Instance.GenerateBuildingID(),  // ID
             template.ClassName,                         // name
             template.TemplateID,                        // templateID
-            gameManager.currentCity.LocID,             // location
+            location.LocID,                             // location
             "", // OwnerID buit                         // ownerID
-            gameManager.currentCity.CityInventoryID,    // inventoryID
+            location.InventoryID,                       // inventoryID
             "Inactive", // Estat inicial d'activitat    // Activity
             1, // Mida de l'edifici                     // size
             100, // HPCurrent                           // hp curr
@@ -149,42 +152,65 @@ public class BuildingManager : MonoBehaviour
 
 
         // Aquí es podria afegir el nou edifici a una llista d'edificis dins de la ciutat actual, per exemple
-        AddBuildingToCurrentCity(newBuilding);
+        AddBuildingToLocation(newBuilding, location);
         Debug.Log("Nou edifici cívic creat: " + newBuilding.BuildingName);
     }
 
 
-    public void AddBuildingToCurrentCity(Building newBuilding)
+    public void AddBuildingToCurrentCity(Building newBuilding)  // Building nomes a current location
     {
-        CityData currentCity = GameManager.Instance.currentCity;
-        if (currentCity != null)
+        Location currentLocation = GameManager.Instance.currentLocation;
+        if (currentLocation != null)
         {
             // Si la llista d'edificis de la ciutat és null, inicialitza-la
-            if (currentCity.Buildings == null)
+            if (currentLocation.Buildings == null)
             {
-                currentCity.Buildings = new List<Building>();
+                currentLocation.Buildings = new List<Building>();
             }
 
             // Afegeix el nou edifici a la llista
-            currentCity.Buildings.Add(newBuilding);
-            Debug.Log($"Edifici afegit a la ciutat {currentCity.Name}: {newBuilding.BuildingName}");
+            currentLocation.Buildings.Add(newBuilding);
+            Debug.Log($"Edifici afegit a la ciutat {currentLocation.Name}: {newBuilding.BuildingName}");
             
             // Actualitza la graella d'edificis per la ciutat actual
+            if (cityInterface != null) { cityInterface.UpdateBuildingGridForCity(); }
+            else { Debug.LogError("cityInterface no està assignat!"); }
+
+        }
+        else { Debug.LogError("No hi ha cap ciutat seleccionada per afegir l'edifici."); }
+    }
+
+    public void AddBuildingToLocation(Building newBuilding, Location location)  // Building dinamic per localització
+    {
+        if (location != null)
+        {
+            // Si la llista d'edificis de la localització és null, inicialitza-la
+            if (location.Buildings == null)
+            {
+                location.Buildings = new List<Building>();
+            }
+
+            // Afegeix el nou edifici a la llista
+            location.Buildings.Add(newBuilding);
+            Debug.Log($"Edifici afegit a la localització {location.Name}: {newBuilding.BuildingName}");
+            
+            // Actualitza la graella d'edificis per la localització actual
             if (cityInterface != null)
             {
-                cityInterface.UpdateBuildingGridForCity(currentCity);
+                cityInterface.UpdateBuildingGridForCity();
             }
             else
             {
                 Debug.LogError("cityInterface no està assignat!");
             }
-
         }
         else
         {
-            Debug.LogError("No hi ha cap ciutat seleccionada per afegir l'edifici.");
+            Debug.LogError("No s'ha seleccionat cap localització per afegir l'edifici.");
         }
     }
+
+
 
     public void SetupFactors(ProductiveBuilding newBuilding, ProductiveTemplate template)
     {

@@ -19,22 +19,22 @@ public class Settlement : Location
     public string PoliticalStatus { get; set; }   // republic, fief, peasant commune, etc
     public string SettlActivity { get; set; } // Main activity. Castle, Bishop, Trading, Mining, Port...
     // Econòmic
-    public string SettlInventoryID { get; set; } 
-    public float BuildPoints { get; set; } 
+    //public string SettlInventoryID { get; set; } 
+    //public float BuildPoints { get; set; } 
     
     
     // Constructor per a Settlement
-    public Settlement(string name, string locID, string nodeID, string settlInventoryID, 
+    public Settlement(string name, string locID, string nodeID, string inventoryID, 
                       string settlActivity, int population, string settlLifestyleID, 
                       float buildPoints, string politicalStatus, string ownerID )
-        : base(name, locID, nodeID)  // Crida al constructor de Location
+        : base(name, locID, nodeID, inventoryID, buildPoints)  // Crida al constructor de Location
     {
         Population = population;
         SettlLifestyleID = settlLifestyleID;
         OwnerID = ownerID;
         PoliticalStatus = politicalStatus;
         SettlActivity = settlActivity;
-        SettlInventoryID = settlInventoryID;
+        //SettlInventoryID = settlInventoryID;
         BuildPoints = buildPoints;
 
         Latitude = 0f;

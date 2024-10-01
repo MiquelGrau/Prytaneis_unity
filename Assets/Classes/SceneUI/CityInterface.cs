@@ -28,7 +28,8 @@ public class CityInterface : MonoBehaviour
     public Button PInfoToMarketButton;
     public TMP_Text PInfoToMarketTxt;
     private bool isMarketOpen = false;
-    
+
+
     private void Start()    // Start per les interaccions que hi ha només per l'escena
     {
         // Comerç
@@ -38,14 +39,16 @@ public class CityInterface : MonoBehaviour
     
     // DISPLAY PRINCIPAL
     // Funció per actualitzar la graella d'edificis per a una ciutat seleccionada
-    public void UpdateBuildingGridForCity(CityData currentCity)
+    public void UpdateBuildingGridForCity()
     {
+        Location currentLocation = GameManager.Instance.currentLocation;
+        
         foreach (Transform child in buildingGridPanel)
         {
             Destroy(child.gameObject); 
         }
 
-        foreach (Building building in currentCity.Buildings)
+        foreach (Building building in currentLocation.Buildings)
         {
             GameObject newBuildingCell = Instantiate(buildingSimplePrefab, buildingGridPanel);
             newBuildingCell.transform.Find("BBasicID").GetComponent<TMP_Text>().text = building.BuildingID;

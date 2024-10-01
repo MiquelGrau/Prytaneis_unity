@@ -7,6 +7,7 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance { get; private set; }
 
     // ús intern a moltes funcions
+    public Location currentLocation { get; private set; }  
     public CityData currentCity { get; private set; }
     public CityInventory currentCityInventory { get; private set; }
     public Agent currentAgent { get; private set; }
@@ -28,14 +29,14 @@ public class GameManager : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
 
-        AssignCurrentCity("C0001");
+        AssignCurrentLocation("C0001");
         
         
     }
 
     void Start()
     {
-        AssignCurrentCity("C0001");
+        AssignCurrentLocation("C0001");
         AssignCurrentAgent("AG0003");
         Debug.Log($"Començant fase del GameManager");
         
@@ -45,7 +46,7 @@ public class GameManager : MonoBehaviour
         GlobalTime.Instance.OnYearChanged += HandleYearChanged;
 
         // Iterar sobre cada edifici de la ciutat actual
-        foreach (var building in currentCity.Buildings)
+        foreach (var building in currentLocation.Buildings)
         {
             if (building is ProductiveBuilding productiveBuilding)
             {
@@ -74,7 +75,7 @@ public class GameManager : MonoBehaviour
         ProductionManager.Instance.DebugUpdateProduction();
 
         // Iterar sobre cada edifici de la ciutat actual
-        foreach (var building in currentCity.Buildings)
+        foreach (var building in currentLocation.Buildings)
         {
             if (building is ProductiveBuilding productiveBuilding)
             {
@@ -111,6 +112,31 @@ public class GameManager : MonoBehaviour
             Debug.LogError($"No s'ha trobat cap ciutat amb l'ID inicial");
         }
     }
+
+    public void AssignCurrentLocation(string locID)
+    {
+        // Cercar primer a la llista de ciutats
+        currentLocation = DataManager.Instance.allCityList
+            .FirstOrDefault(city => city.LocID == locID);
+
+        // Si no es troba la ciutat, buscar dins la llista de settlements
+        if (currentLocation == null)
+        {
+            currentLocation = DataManager.Instance.allSettlementList
+                .FirstOrDefault(settlement => settlement.LocID == locID);
+        }
+
+        // Si s'ha trobat una localització, mostrar un missatge
+        if (currentLocation != null)
+        {
+            Debug.Log($"La localització assignada és '{currentLocation.Name}' (ID: {currentLocation.LocID})");
+        }
+        else
+        {
+            Debug.LogError($"No s'ha trobat cap localització amb l'ID {locID}");
+        }
+    }
+
     public void AssignCurrentAgent(string agentID)
     {
         currentAgent = DataManager.Instance.GetAgentByID(agentID);

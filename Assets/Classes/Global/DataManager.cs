@@ -89,7 +89,7 @@ public class DataManager : MonoBehaviour
         return allCityList.FirstOrDefault(city => city.LocID == cityID);
     }
 
-    public CityInventory GetCityInvByID(string invID)
+    public CityInventory GetLocInvByID(string invID)
     {
         // Buscar l'inventari associat a una ciutat
         return cityInventories.FirstOrDefault(inv => inv.CityInvID == invID);

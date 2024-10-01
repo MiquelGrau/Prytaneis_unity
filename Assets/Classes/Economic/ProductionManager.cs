@@ -118,7 +118,7 @@ public class ProductionManager : MonoBehaviour
 
         if (batch != null && batch.IsCompleted())
         {
-            CityInventory cityInventory = DataManager.Instance.GetCityInvByID(building.RelatedInventoryID);
+            CityInventory cityInventory = DataManager.Instance.GetLocInvByID(building.RelatedInventoryID);
             if (cityInventory == null)
             {
                 Debug.LogError("No s'ha trobat l'inventari de la ciutat.");
