@@ -3,19 +3,22 @@ using System.Collections.Generic;
 [System.Serializable]
 public class WorldMapNode
 {
+    // Basic reference
     public string id;
     public string name;
     public string cityId;
+    // Geographic features - land
     public float latitude;
     public float longitude;
     public string LandNodeType;
     public string LandContinentId;
     public string LandRegionId;
     public string LandSubregionId;
+    // Geographic - water
     public string WaterNodeType;
     public string WaterNodeRegion;
     public string WaterNodeSubregion;
-    // Natural resources
+    // Mineral and Natural resources
     public List<MineralResource> NodeDeposits { get; set; } = new List<MineralResource>();
     // Climatology
     public Climate NodeClimate { get; set; }

@@ -102,41 +102,7 @@ public class TradeManager : MonoBehaviour
     // Dropdowns
     // Usats per seleccionar rapidament diferents agents. 
     // Al tanto que ara és "global", farà teleport de la gent si se seleccionen. 
-    /* void FillCityDropdown()
-    {
-        var cityNames = dataManager.GetCities().Select(city => city.Name).ToList();
-        cityDropdown.ClearOptions();
-        cityDropdown.AddOptions(cityNames);
-
-        // Preselecciona la ciutat actual
-        var currentCityIndex = cityNames.FindIndex(name => name == GameManager.Instance.currentCity.Name);
-        if (currentCityIndex >= 0)
-        {
-            cityDropdown.SetValueWithoutNotify(currentCityIndex);
-            AssignCityInTrade();
-            TradeDeskCleanup(); 
-            tradeInterface.UpdateTradeInterface();
-        }
-    } */
-
-    /* public void OnCitySelected(int index)
-    {
-        var cities = dataManager.GetCities(); // Obtenint la llista des de DataManager
-        if (index < 0 || index >= cities.Count)
-        {
-            Debug.LogError("Índex de ciutat seleccionada fora de rang.");
-            return;
-        }
-        
-        CityData selectedCity = cities[index];
-        GameManager.Instance.AssignCurrentCity(selectedCity.LocID);
-        
-        AssignCityInTrade();
-        TradeDeskCleanup(); 
-        tradeInterface.UpdateTradeInterface();
-        cityDropdown.Hide();
-    } */
-
+    
     void FillCityDropdown()
     {
         // Combinem ciutats i settlements amb els seus respectius prefixos

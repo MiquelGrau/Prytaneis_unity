@@ -30,7 +30,7 @@ public class StartContentImporter : MonoBehaviour
     private void Start()
     {
         //ConnectCityAndCityInv();
-        ConnectAgentAndAgentInv();
+        //ConnectAgentAndAgentInv();
         ImportBuildings();
         Debug.Log("Acabada fase Start de l'importador! Connectats inventaris a Ciutats i a Agents");
     }
@@ -165,40 +165,7 @@ public class StartContentImporter : MonoBehaviour
         Debug.Log("Llistat d'inventaris de ciutat carregats");
     }
     
-    private void ConnectCityAndCityInv()
-    {
-        Debug.Log("ConnectCityAndCityInv: Començant a connectar ciutats");
-        
-        //var cities = dataManager.GetCities();
-        var cities = dataManager.allCityList;
-        if (cities == null || cities.Count == 0)
-        {
-            Debug.LogError("ConnectCityAndCityInv: La llista de ciutats és nul·la o buida.");
-            return;
-        }
-        foreach (var cityData in cities)
-        {
-            //Debug.Log($"ConnectCityAndCityInv: Processant la ciutat {cityData.cityName} amb ID d'inventari {cityData.cityInventoryID}");
-
-            // Troba l'objecte CityInventory que coincideix amb la cityInventoryID de CityData
-            var matchingInventory = dataManager.cityInventories.FirstOrDefault(ci => ci.CityInvID == cityData.InventoryID);
-            if (matchingInventory != null)
-            {
-                // Estableix la referència de CityData a CityInventory
-                //cityData.CityInventory = matchingInventory;
-
-                // Mostra un missatge indicant que la connexió ha estat exitosa
-                //Debug.Log($"Connexió ciutat-inventari: {cityData.cityID} {cityData.cityName}, Inventari: {matchingInventory.CityInvID}");
-            }
-            else
-            {
-                Debug.LogError($"No s'ha trobat Inventari amb ID {cityData.InventoryID}" +
-                    $"per la ciutat {cityData.Name}");
-            }
-        }
-    }
-
-
+    
     // #######################################################################################################
     // POBLACIÓ DEL MÓN - agents, characters, vehicles, items, etc. 
     // #######################################################################################################
@@ -258,38 +225,6 @@ public class StartContentImporter : MonoBehaviour
     }
 
     
-    private void ConnectAgentAndAgentInv()
-    {
-        Debug.Log("ConnectAgentAndAgentInv: Començant a connectar agents amb els seus inventaris");
-        
-        var agents = dataManager.GetAgents(); 
-        if (agents == null || agents.Count == 0)
-        {
-            Debug.LogError("ConnectAgentAndAgentInv: La llista d'agents és nul·la o buida.");
-            return;
-        }
-
-        foreach (var agent in agents)
-        {
-            //Debug.Log($"ConnectAgentAndAgentInv: Processant l'agent {agent.agentName} amb ID d'inventari {agent.AgentInventoryID}");
-
-            // Troba l'objecte AgentInventory que coincideix amb l'AgentInventoryID de l'Agent
-            var matchingInventory = dataManager.agentInventories.FirstOrDefault(ai => ai.InventoryID == agent.AgentInventoryID);
-            if (matchingInventory != null)
-            {
-                // Estableix la referència d'Agent a AgentInventory
-                agent.Inventory = matchingInventory;
-
-                // Mostra un missatge indicant que la connexió ha estat exitosa
-                //Debug.Log($"Connexió agent-inventari: AgentID={agent.agentID}, AgentNom={agent.agentName}, InventariID={matchingInventory.InventoryID}");
-            }
-            else
-            {
-                Debug.LogError($"No s'ha trobat Inventari amb ID {agent.AgentInventoryID} per l'agent {agent.agentName}");
-            }
-        }
-    }
-
     // #######################################################################################################
     // EDIFICIS
     // #######################################################################################################
