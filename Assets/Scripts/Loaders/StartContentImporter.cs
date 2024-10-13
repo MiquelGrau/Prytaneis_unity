@@ -253,8 +253,8 @@ public class StartContentImporter : MonoBehaviour
                 }
             }
         }
-        dataManager.agentInventories = loadedAgentInventories;
-        Debug.Log($"Total d'inventaris d'agents carregats: {dataManager.agentInventories.Count}");
+        DataManager.Instance.allAgentInvs = loadedAgentInventories;
+        Debug.Log($"Total d'inventaris d'agents carregats: {DataManager.Instance.allAgentInvs.Count}");
     }
 
     
