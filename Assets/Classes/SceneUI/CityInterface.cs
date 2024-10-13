@@ -96,17 +96,18 @@ public class CityInterface : MonoBehaviour
             Destroy(child.gameObject);
         }
 
-        foreach (Agent agent in DataManager.Instance.agents)
+        foreach (Agent agent in DataManager.Instance.allAgentsList)
         {
             GameObject newAgentCell = Instantiate(agentPrefab, PInfoAgentList);
+            AgentInventory agentInv = DataManager.Instance.GetAgInvByID(agent.AgentInventoryID);
             string agentName = agent.agentName;
             if (agent == GameManager.Instance.currentAgent)
             {
                 agentName += " *";
             }
             newAgentCell.transform.Find("PInfoAgentDesc").GetComponent<TMP_Text>().text = agentName;
-            newAgentCell.transform.Find("PInfoAgentMoney").GetComponent<TMP_Text>().text = agent.Inventory.InventoryMoney.ToString();
-            newAgentCell.transform.Find("PInfoAgentWares").GetComponent<TMP_Text>().text = agent.Inventory.InventoryResources.Sum(res => res.Quantity).ToString();
+            newAgentCell.transform.Find("PInfoAgentMoney").GetComponent<TMP_Text>().text = agentInv.InventoryMoney.ToString();
+            newAgentCell.transform.Find("PInfoAgentWares").GetComponent<TMP_Text>().text = agentInv.InventoryResources.Sum(res => res.Quantity).ToString();
 
             // Afegeix un event al clicar per mostrar detalls
             Button agentButton = newAgentCell.transform.Find("PInfoAgentButton").GetComponent<Button>();
