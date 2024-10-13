@@ -205,7 +205,7 @@ public class ProductionManager : MonoBehaviour
     public void KickstartProductives(ProductiveBuilding building)
     {
         // Obtenir l'inventari associat a l'edifici
-        CityInventory cityInventory = DataManager.Instance.cityInventories
+        CityInventory cityInventory = DataManager.Instance.allCityInvs
             .FirstOrDefault(inv => inv.CityInvID == building.RelatedInventoryID);
 
         if (cityInventory == null)
@@ -294,7 +294,7 @@ public class ProductionManager : MonoBehaviour
         }
 
         // Obtenim l'inventari relacionat amb l'edifici des de DataManager
-        CityInventory cityInventory = DataManager.Instance.cityInventories
+        CityInventory cityInventory = DataManager.Instance.allCityInvs
             .FirstOrDefault(inv => inv.CityInvID == building.RelatedInventoryID);
 
         if (cityInventory == null)

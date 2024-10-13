@@ -34,7 +34,7 @@ public class DataManager : MonoBehaviour
     public CityDataList dataItems;  // antic, candidat de borrar
     public List<CityData> allCityList = new List<CityData>(); 
     public List<Settlement> allSettlementList;
-    public List<CityInventory> cityInventories;
+    public List<CityInventory> allCityInvs;
     
     // Comptadors
     public int buildingCounter = 0;
@@ -42,8 +42,8 @@ public class DataManager : MonoBehaviour
     private int SVInventoryCounter; // settlement inventories
     
     // Classes de agents, merchants, characters, etc
-    public List<Agent> agents = new List<Agent>();
-    public List<AgentInventory> agentInventories;
+    public List<Agent> allAgentsList = new List<Agent>();
+    public List<AgentInventory> allAgentInvs;
 
     
 
@@ -84,13 +84,13 @@ public class DataManager : MonoBehaviour
     private void InitializeCityInventoryCounters()
     {
         // Inicialitzar el comptador segons els IDs existents a cityInventories
-        CVInventoryCounter = cityInventories
+        CVInventoryCounter = allCityInvs
             .Where(inv => inv.CityInvID.StartsWith("CV"))
             .Select(inv => int.Parse(inv.CityInvID.Substring(2)))
             .DefaultIfEmpty(0)
             .Max();
 
-        SVInventoryCounter = cityInventories
+        SVInventoryCounter = allCityInvs
             .Where(inv => inv.CityInvID.StartsWith("SV"))
             .Select(inv => int.Parse(inv.CityInvID.Substring(2)))
             .DefaultIfEmpty(0)
@@ -123,7 +123,7 @@ public class DataManager : MonoBehaviour
         );
 
         // Afegir-lo a la llista d'inventaris
-        cityInventories.Add(newInventory);
+        allCityInvs.Add(newInventory);
 
         Debug.Log($"Creat un nou CityInventory amb ID {newInventoryID}");
 
@@ -145,15 +145,20 @@ public class DataManager : MonoBehaviour
         return allCityList.FirstOrDefault(city => city.LocID == cityID);
     }
 
-    public CityInventory GetLocInvByID(string invID)
+    public CityInventory GetLocInvByID(string invID)    // Location inventory (city, settlement, camp)
     {
         // Buscar l'inventari associat a una ciutat
-        return cityInventories.FirstOrDefault(inv => inv.CityInvID == invID);
+        return allCityInvs.FirstOrDefault(inv => inv.CityInvID == invID);
+    }
+    public AgentInventory GetAgInvByID(string invID)    // Agent inventory
+    {
+        // Buscar l'inventari associat a una ciutat
+        return allAgentInvs.FirstOrDefault(inv => inv.InventoryID == invID);
     }
 
     public List<Agent> GetAgents()
     {
-        return agents;
+        return allAgentsList;
     }
 
     public Resource GetResourceByID(string resourceID)
@@ -163,13 +168,7 @@ public class DataManager : MonoBehaviour
     
     public Agent GetAgentByID(string agentID)
     {
-        return agents.FirstOrDefault(agent => agent.agentID == agentID);
-    }
-
-    public string GenerateBuildingID()
-    {
-        buildingCounter++;
-        return $"B{buildingCounter.ToString().PadLeft(5, '0')}";
+        return allAgentsList.FirstOrDefault(agent => agent.agentID == agentID);
     }
 
     public WorldMapNode FindNodeById(string nodeId)

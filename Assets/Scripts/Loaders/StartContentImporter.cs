@@ -134,7 +134,7 @@ public class StartContentImporter : MonoBehaviour
         string path = "Assets/Resources/StartValues/CityInventories";
         string[] files = Directory.GetFiles(path, "*.json");
         
-        dataManager.cityInventories = new List<CityInventory>();
+        DataManager.Instance.allCityInvs = new List<CityInventory>();
     
         foreach (string file in files)
         {   
@@ -145,7 +145,7 @@ public class StartContentImporter : MonoBehaviour
             {
                 foreach (CityInventory cityInventory in wrapper.Items)
                 {
-                    dataManager.cityInventories.Add(cityInventory); // Afegeix cada CityInventory a la llista
+                    DataManager.Instance.allCityInvs.Add(cityInventory); // Afegeix cada CityInventory a la llista
                     
                     int totalResLines = cityInventory.InventoryResources.Count;
                     float totalQuantity = 0;
@@ -225,8 +225,8 @@ public class StartContentImporter : MonoBehaviour
                 }
             }
         }
-        dataManager.agents = loadedAgents;
-        Debug.Log($"Total d'agents carregats: {dataManager.agents.Count}");
+        DataManager.Instance.allAgentsList = loadedAgents;
+        Debug.Log($"Total d'agents carregats: {DataManager.Instance.allAgentsList.Count}");
     }
     
     private void LoadAgentInventories()
@@ -709,15 +709,18 @@ public class CityWrapper
 
     [JsonProperty("RichID")]
     public string RichLifestyleID { get; set; }
+    
+    [JsonProperty("OwnerID")]
+    public string OwnerID { get; set; }
+    
+    [JsonProperty("Political")]
+    public string PoliticalStatus { get; set; }
 
     [JsonProperty("BuildPoints")]
     public float BuildPoints { get; set; }
 
-    [JsonProperty("Political")]
-    public string PoliticalStatus { get; set; }
-
-    [JsonProperty("OwnerID")]
-    public string OwnerID { get; set; }
+    
+    
 }
 
 [System.Serializable]
@@ -750,14 +753,18 @@ public class SettlementWrapper
     [JsonProperty("Lifestyle")]
     public string SettlLifestyleID { get; set; }
 
-    [JsonProperty("BuildPoints")]
-    public float BuildPoints { get; set; }
+    [JsonProperty("OwnerID")]
+    public string OwnerID { get; set; }
 
     [JsonProperty("PoliticalStatus")]
     public string PoliticalStatus { get; set; }
 
-    [JsonProperty("OwnerID")]
-    public string OwnerID { get; set; }
+    [JsonProperty("BuildPoints")]
+    public float BuildPoints { get; set; }
+
+    
+
+    
 }
 
 

@@ -142,7 +142,7 @@ public class GameManager : MonoBehaviour
         currentAgent = DataManager.Instance.GetAgentByID(agentID);
         if (currentAgent != null)
         {
-            currentAgentInventory = currentAgent.Inventory;
+            currentAgentInventory = DataManager.Instance.GetAgInvByID(currentAgent.AgentInventoryID);
             //Debug.Log($"Agent assignat és '{CurrentAgent.agentName}'");
             
             // Log llarg, per veure que es carrega bé tot. 

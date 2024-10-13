@@ -127,6 +127,7 @@ public class WorldSceneManager : MonoBehaviour
     private void ResetAgentConfigPanel()
     {
         Agent currConfigAgent = GameManager.Instance.currentAgent;
+        AgentInventory currConfigAgInv = DataManager.Instance.GetAgInvByID(currConfigAgent.AgentInventoryID);
 
         if (currConfigAgent != null)
         {
@@ -134,9 +135,9 @@ public class WorldSceneManager : MonoBehaviour
             aConfigName.text = currConfigAgent.agentName;
 
             // Composar la informació de la capacitat i diners de l'agent
-            string agentInfo = $"Capacitat {currConfigAgent.Inventory.CurrentCapacity} / " +
-                               $"{currConfigAgent.Inventory.MaxCapacity}, " +
-                               $"Diners: {currConfigAgent.Inventory.InventoryMoney}€";
+            string agentInfo = $"Capacitat {currConfigAgInv.CurrentCapacity} / " +
+                               $"{currConfigAgInv.MaxCapacity}, " +
+                               $"Diners: {currConfigAgInv.InventoryMoney}€";
 
             // Actualitzar el camp de text amb aquesta informació
             configOneData.text = agentInfo;

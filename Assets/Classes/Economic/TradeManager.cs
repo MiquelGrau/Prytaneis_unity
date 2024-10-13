@@ -275,7 +275,8 @@ public class TradeManager : MonoBehaviour
     {
         // Crida les dades, guardades a game manager
         Agent currentAgent = GameManager.Instance.currentAgent;
-        currentAgentInventory = currentAgent?.Inventory;
+        //currentAgentInventory = currentAgent?.Inventory;
+        currentAgentInventory = DataManager.Instance.GetAgInvByID(currentAgent.AgentInventoryID);
         if (currentAgentInventory == null)
         {
             Debug.LogError("No s'ha trobat l'inventari de l'agent actual.");
@@ -349,7 +350,8 @@ public class TradeManager : MonoBehaviour
         Location currentLocation = GameManager.Instance.currentLocation;
         currentCityInventory = DataManager.Instance.GetLocInvByID(currentLocation.InventoryID);
         Agent currentAgent = GameManager.Instance.currentAgent;
-        AgentInventory agentInventory = currentAgent.Inventory;
+        //AgentInventory agentInventory = currentAgent.Inventory;
+        AgentInventory agentInventory = DataManager.Instance.GetAgInvByID(currentAgent.AgentInventoryID);
         
         
         // Aquest diccionari temporal ajudarà a gestionar les TradeResourceLines de manera eficient
