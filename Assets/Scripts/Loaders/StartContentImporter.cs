@@ -71,9 +71,9 @@ public class StartContentImporter : MonoBehaviour
                             cityWrapper.PoorLifestyleID,
                             cityWrapper.MidLifestyleID,
                             cityWrapper.RichLifestyleID,
-                            cityWrapper.BuildPoints,
+                            cityWrapper.OwnerID,    
                             cityWrapper.PoliticalStatus,
-                            cityWrapper.OwnerID
+                            cityWrapper.BuildPoints
                         );
 
                         DataManager.Instance.allCityList.Add(cityData);
@@ -100,9 +100,9 @@ public class StartContentImporter : MonoBehaviour
                             settlementWrapper.SettlActivity,
                             settlementWrapper.Population,
                             settlementWrapper.SettlLifestyleID,
-                            settlementWrapper.BuildPoints,
+                            settlementWrapper.OwnerID,
                             settlementWrapper.PoliticalStatus,
-                            settlementWrapper.OwnerID
+                            settlementWrapper.BuildPoints
                         );
 
                         DataManager.Instance.allSettlementList.Add(settlementData);

@@ -5,28 +5,32 @@
         "agentName": "Morosini",
         "locationNode": "LN0001",
         "agentInventoryID": "AV0001",
-        "mainCharID": "C00001"
+        "mainCharID": "C00001",
+        "OwnerID": "PP0001"
       },
         {
         "agentID": "AG0002",
         "agentName": "Medici",
         "locationNode": "LN0021",
         "agentInventoryID": "AV0002",
-        "mainCharID": "C00002"
+        "mainCharID": "C00002",
+        "OwnerID": "PP0001"
       },
         {
         "agentID": "AG0003",
         "agentName": "de Bruyn",
         "locationNode": "LN0024",
         "agentInventoryID": "AV0003",
-        "mainCharID": "C00003"
+        "mainCharID": "C00003",
+        "OwnerID": "PP0001"
       },
         {
         "agentID": "AG0004",
         "agentName": "Uccello",
         "locationNode": "LN0028",
         "agentInventoryID": "AV0004",
-        "mainCharID": "C00004"
+        "mainCharID": "C00004",
+        "OwnerID": "PP0001"
       }
   ]
 }

@@ -15,6 +15,9 @@ public class Location
     // Content
     public List<Building> Buildings { get; set; }
     public string InventoryID { get; set; }  
+    public List<string> OtherInventories { get; set; }  // IDs de inventaris privats
+    public string OwnerID { get; set; } 
+    public string PoliticalStatus { get; set; }   
     
     // Startup values
     public float BuildPoints { get; set; } 
@@ -28,11 +31,14 @@ public class Location
         LocID = locID;
         NodeID = nodeID;
         InventoryID = inventoryID;  
+        OwnerID = ownerID;
+        PoliticalStatus = politicalStatus;
         BuildPoints = buildPoints;
         
         Latitude = 0f;
         Longitude = 0f;
         Buildings = new List<Building>(); 
+        OtherInventories = new List<string>();
         
     }
 }

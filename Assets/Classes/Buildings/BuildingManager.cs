@@ -48,7 +48,7 @@ public class BuildingManager : MonoBehaviour
         buildingDropdown.AddOptions(buildingNames);
     }
 
-    private void CreateNewBuilding()    // debug, nomes desplegable
+    private void CreateNewBuilding()    // debug, només per el desplegable de la escena CityScene
     {
         // Assumeix que l'opció seleccionada en el desplegable correspon al índex de la plantilla en la llista combinada de totes les plantilles
         int selectedIndex = buildingDropdown.value;
@@ -64,12 +64,10 @@ public class BuildingManager : MonoBehaviour
 
         if (selectedTemplate is ProductiveTemplate)
         {
-            //AddProductiveBuilding(selectedTemplate as ProductiveTemplate);
             AddProductiveBuilding(selectedTemplate as ProductiveTemplate, currentLocation);
         }
         else if (selectedTemplate is CivicTemplate)
         {
-            //AddCivicBuilding(selectedTemplate as CivicTemplate);
             AddCivicBuilding(selectedTemplate as CivicTemplate, currentLocation);
         }
     } 
@@ -127,9 +125,9 @@ public class BuildingManager : MonoBehaviour
         Debug.Log($"Número de ProductionMethods disponibles: {newBuilding.MethodsAvailable.Count}");
     }
 
-    // Nova funció per CivicBuilding, després d'afegir serveis
     public void AddCivicBuilding(CivicTemplate template, Location location)
     {
+        
         // Aquí crearem la lògica per a crear un nou CivicBuilding amb la informació de la template
         CivicBuilding newBuilding = new CivicBuilding(
             DataManager.Instance.GenerateBuildingID(),  // ID
@@ -151,9 +149,42 @@ public class BuildingManager : MonoBehaviour
         newBuilding.ServNeeded = new List<Service>(template.ServNeeded);
 
 
+        
+        // Si la funció és "Office" busquem o creem un PrivateInventory
+        if (template.Function == "Office")
+        {
+            var relatedAgent = GameManager.Instance.currentAgent;
+            
+            // Comprovem si ja hi ha un inventari privat per a aquest OwnerID a la ubicació
+            var privateInventoryID = location.OtherInventories.FirstOrDefault(id =>
+            {
+                var inv = DataManager.Instance.GetPrivInvByID(id) as PrivateInventory;
+                return inv != null && inv.OwnerID == GameManager.Instance.currentAgent.OwnerID;
+            });
+
+            if (privateInventoryID == null)
+            {
+                // Si no hi és, creem un nou PrivateInventory
+                var newPrivateInventory = new PrivateInventory(
+                    DataManager.Instance.GeneratePrivInvID(),
+                    relatedAgent.OwnerID, 
+                    location.LocID
+                );
+                 
+                // Afegir-lo a DataManager i a la ubicació, i debug log
+                DataManager.Instance.allPrivateInvs.Add(newPrivateInventory);
+                location.OtherInventories.Add(newPrivateInventory.InventoryID);
+
+                
+                Debug.Log($"No hi havia inventari, creant-se un de nou. ID {newPrivateInventory.InventoryID}, " + 
+                    $"propietari {newPrivateInventory.OwnerID}, a {location.Name}. ");
+            }
+        }
+
         // Aquí es podria afegir el nou edifici a una llista d'edificis dins de la ciutat actual, per exemple
         AddBuildingToLocation(newBuilding, location);
         Debug.Log("Nou edifici cívic creat: " + newBuilding.BuildingName);
+
     }
 
 

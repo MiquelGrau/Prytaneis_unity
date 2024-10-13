@@ -608,6 +608,22 @@
       "Needs": [
         { "Need": "Visitors", "Amount": 500 }
       ]
+    },
+    {
+      "TemplateID": "BT049", "Name": "Merchant Office", "Function": "Office",
+      "Labour": 30, "HardMat": 5, "LightMat": 15, "SpecialMat": 10,
+      "JobsPoor": 10, "JobsMid": 10, "JobsRich": 5,
+      "Repeat": 1.0, "BuildPoints": 210, "Water": "", "WaterYes": false,
+      "Effects": [
+        { "Effect": "Trade", "Amount": 500 },
+        { "Effect": "Ext goods", "Amount": 250 }
+      ],
+      "Needs": [
+        { "Need": "Visitors", "Amount": 100 },
+        { "Need": "Finance", "Amount": 50 },
+        { "Need": "Light logs", "Amount": 100 },
+        { "Need": "Security", "Amount": 50 }
+      ]
     }
   ]
 }

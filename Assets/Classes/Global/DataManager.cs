@@ -35,9 +35,12 @@ public class DataManager : MonoBehaviour
     public List<CityData> allCityList = new List<CityData>(); 
     public List<Settlement> allSettlementList;
     public List<CityInventory> allCityInvs;
+    public List<PrivateInventory> allPrivateInvs = new List<PrivateInventory>(); // Caldrà canviar'se un cop vagi amb importador
+    
     
     // Comptadors
     public int buildingCounter = 0;
+    public int privInvCounter = 0;
     private int CVInventoryCounter; // city inventories
     private int SVInventoryCounter; // settlement inventories
     
@@ -155,6 +158,11 @@ public class DataManager : MonoBehaviour
         // Buscar l'inventari associat a una ciutat
         return allAgentInvs.FirstOrDefault(inv => inv.InventoryID == invID);
     }
+    public PrivateInventory GetPrivInvByID(string invID)    // Private inventory
+    {
+        // Buscar l'inventari associat a una ciutat
+        return allPrivateInvs.FirstOrDefault(inv => inv.InventoryID == invID);
+    }
 
     public List<Agent> GetAgents()
     {
@@ -221,20 +229,33 @@ public class DataManager : MonoBehaviour
         return null;
     }
 
+    //////////////
+    // CREADORS DE ID
+    //////////////
 
-    
-    /* public List<Agent> GetAgents()
+
+    public string GenerateBuildingID()
     {
-        if (agents is AgentList agentList)
-        {
-            return agentList.agents;
-        }
-        else
-        {
-            Debug.LogError("DataManager no conté una instància de Agents.");
-            return new List<Agent>();
-        }
-    } */
+        buildingCounter++;
+        return $"B{buildingCounter.ToString().PadLeft(5, '0')}";
+    }
+    public string GeneratePrivInvID()
+    {
+        privInvCounter++;
+        return $"PV{privInvCounter.ToString().PadLeft(4, '0')}";
+    }
+
+    //////////////
+    // CREADORS DE REFERENCIES
+    //////////////
+
+
+    public void AddPrivateInventory(PrivateInventory privateInventory)
+    {
+        allPrivateInvs.Add(privateInventory);
+        Debug.Log("Inventari privat afegit a DataManager.");
+    }
+    
 
 
 }

@@ -111,4 +111,32 @@ public class Service : InventoryResource
     }
 }
 
+public class PrivateInventory : Inventory
+{
+    // Comuns
+    //public string InventoryID { get; set; }
+    //public int InventoryMoney { get; set; }
+    //public List<InventoryResource> InventoryResources { get; set; }
+    //public List<InventoryItem> InventoryItems { get; set; }
+    public string OwnerID { get; set; }  // Identifica el propietari de l'inventari
+    public string LocationID { get; set; }  // Identifica la ubicació de l'inventari
+
+    public PrivateInventory(string invID, string ownerID, string locationID)
+    {
+        // Automatic
+        InventoryMoney = 0;
+        InventoryResources = new List<InventoryResource>();
+        InventoryItems = new List<InventoryItem>();
+        
+        // Constructor
+        InventoryID = invID;
+        OwnerID = ownerID;
+        LocationID = locationID;
+        
+    }
+
+    // Pots afegir més mètodes per a interaccions amb agents, transferències, etc.
+}
+
+
 

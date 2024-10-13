@@ -31,24 +31,6 @@ public class Building
         HPMaximum = hpMax;
     }
 
-    // Basic functions
-    public void IdentifyTemplate()
-    {
-        // Logic to identify the building template using the BuildingTemplateID
-    }
-
-    public void IdentifyOwner()
-    {
-        // Logic to identify the owner using the BuildingOwnerID
-    }
-
-    
-    public void UpgradeBuilding(string newTemplateID)
-    {
-        // Logic to upgrade the building
-        BuildingTemplateID = newTemplateID;
-        // Update other properties if necessary...
-    }
 
 }
 

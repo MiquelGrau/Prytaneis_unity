@@ -25,8 +25,8 @@ public class CityData : Location
     public string PoorLifestyleID { get; set; }
     public string MidLifestyleID { get; set; }
     public string RichLifestyleID { get; set; } 
-    public string OwnerID { get; set; }
-    public string PoliticalStatus { get; set; }
+    //public string OwnerID { get; set; }
+    //public string PoliticalStatus { get; set; }
     
     // Economic
     public string[][] Grid;
@@ -35,8 +35,8 @@ public class CityData : Location
     public CityData(string locationID, string name, string nodeID, string inventoryID, 
                     int poorPop, int midPop, int richPop, 
                     string poorID, string midID, string richID, 
-                    float buildPoints, string politicalStatus, string ownerID )
-        : base(name, locationID, nodeID, inventoryID, buildPoints)  // Prové del constructor de Location
+                    string ownerID, string politicalStatus, float buildPoints )
+        : base(name, locationID, nodeID, inventoryID, ownerID, politicalStatus, buildPoints)  // Prové del constructor de Location
     {
     
     
@@ -87,7 +87,7 @@ public class CityInventory
 
 
 [System.Serializable]
-public class CityInventoryResource : InventoryResource // El mateix que el Resource basic, pero amb les demandes i preu
+public class CityInventoryResource : InventoryResource // Com el Resource basic, pero amb les demandes, preu i posicions
 {
     //public string ResourceID { get; set; }
     //public string ResourceType { get; set; }

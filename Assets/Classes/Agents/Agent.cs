@@ -10,13 +10,11 @@ public class Agent
     
     // Propietats relacionals
     public string LocationNode; 
-    // Owner
     
     // Propietats de contingut
     public string AgentInventoryID; 
-    public AgentInventory Inventory; 
     public string MainCharID; 
-    public Character MainCharacter; 
+    public string OwnerID;  // sempre serà el PlayerID del Main Character
     //public List<Character> CompanionCharacters; 
     //public List<Vehicle> AgentVehicles; 
     
@@ -27,21 +25,14 @@ public class Agent
     public List<AgentTravel> NextTravelSteps; 
 
 
-
-    /* public Agent()
-    {
-        CompanionCharacters = new List<Character>();
-        AgentVehicles = new List<Vehicle>();
-    } */
-    public Agent(string agentID, string agentName, string locationNode, string agentInventoryID, string mainCharID) // inputs must agree with JSON definitions
+    public Agent(string agentID, string agentName, string locationNode, string agentInventoryID, string mainCharID, string ownerID)
     {
         this.agentID = agentID;
         this.agentName = agentName;
         this.LocationNode = locationNode;
         this.AgentInventoryID = agentInventoryID;
-        this.Inventory = null; // Es crea linkant després
         this.MainCharID = mainCharID;
-        this.MainCharacter = null; // Es crea linkant després
+        this.OwnerID = ownerID; 
         //this.CompanionCharacters = companionCharacters ?? new List<Character>(); 
         //this.AgentVehicles = agentVehicles ?? new List<Vehicle>(); 
         this.TravelMode = null; // Es calcula
